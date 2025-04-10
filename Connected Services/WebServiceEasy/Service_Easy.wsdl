@@ -1,0 +1,3450 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://tempuri.org/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="cliente_nuevo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="d_cliente" type="tns:dto_Cliente" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="dto_Cliente">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="coa" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_vig" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="referen2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="referen1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dsc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dsc1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ruc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="lib_elec" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="direccion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ubigeo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="distrito" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="provincia" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dpto" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="telef1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="telef2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cod_postal" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="zona_vta" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="contacto" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="tipo" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="cred_solic" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="credito" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="credadi" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="cred_aprob" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fech_aprob" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fchini" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fchfin" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="saldo_cred" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="conpag" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fpago" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="cfpago" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="f_pago" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="porcom" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="vendedor" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cobrador" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="diastol" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="tipo_aval" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="tipo_aval1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="aval1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dir_aval1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ruc_aval1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="le_aval1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="aval2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dir_aval2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ruc_aval2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="le_aval2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nom_rlegal" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="le_rlegal" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_act" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="giro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="oper_fact" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="lst_prec_1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="lst_prec_2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="lst_dcto_1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="lst_dcto_2" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="interes" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="stat" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="coa_ap" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="coa_am" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="coa_nm" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="categoria" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fech_susp" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_m_sus" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_ret" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="tip_local" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="uso_coa" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="diamin" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="diamax" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="stop_p" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fectra" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fecmod" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="coa_nm2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="califica" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="telef_av1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="darr" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="daot" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_inc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="tipper" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="tipdoc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="codper" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="cliente_nuevoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="cliente_nuevoResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cliente_obtener">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="parametrosWhere" type="tns:ArrayOfDto_Parametros" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDto_Parametros">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="dto_Parametros" nillable="true" type="tns:dto_Parametros" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="dto_Parametros">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="parametro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="operador" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="valor" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="cliente_obtenerResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cliente_obtenerResult" type="tns:dto_Cliente" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cliente_obtener_lista">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="parametrosWhere" type="tns:ArrayOfDto_Parametros" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cliente_obtener_listaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cliente_obtener_listaResult" type="tns:ArrayOfDto_Cliente" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDto_Cliente">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="dto_Cliente" nillable="true" type="tns:dto_Cliente" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="cliente_actualiza_vendedor">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_vendedor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="coa" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cliente_actualiza_vendedorResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="cliente_actualiza_vendedorResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cliente_actualiza_estadoLineaCredito">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="coa" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="estado" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cliente_actualiza_estadoLineaCreditoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="cliente_actualiza_estadoLineaCreditoResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cliente_actualiza_lineaCredito">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="coa" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="campo" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="monto" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cliente_actualiza_lineaCreditoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="cliente_actualiza_lineaCreditoResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cliente_actualiza_TelefonoCorreo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="coa" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="telefono" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="correo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cliente_actualiza_TelefonoCorreoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="cliente_actualiza_TelefonoCorreoResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cliente_historial_venta">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tipo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="parametrosWhere" type="tns:ArrayOfDto_Parametros" />
+            <s:element minOccurs="0" maxOccurs="1" name="dtClientes">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cliente_historial_ventaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cliente_historial_ventaResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cliente_historial_Documentos">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="coa" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="codVendedor" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cliente_historial_DocumentosResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cliente_historial_DocumentosResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="producto_obtener">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="parametrosWhere" type="tns:ArrayOfDto_Parametros" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="producto_obtenerResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="producto_obtenerResult" type="tns:dto_Articulo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="dto_Articulo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="articulo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dsc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_lp" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="c_alm" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="c_articu" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_p" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_d" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_stock" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="categor" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="codacab" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="modelo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="marca" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="envase" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="um" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="articulo1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="articulo2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="aplicac" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="proveed_1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="proveed_2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="proveed_3" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="peso" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="volumen" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="inv_frec" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="inv_rot" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="mon_tipo" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="precio_1_1" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="precio_1_2" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="precio_1_3" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="precio_1_4" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="precio_2_1" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="precio_2_2" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="precio_2_3" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="precio_2_4" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="dcto_1" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="dcto_2" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="dcto_3" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="dcto_4" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="dcto_5" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="dcto_6" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="dcto_7" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="dcto_8" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="dcto_d_1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dcto_d_2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dcto_d_3" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dcto_d_4" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dcto_d_5" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dcto_d_6" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dcto_d_7" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dcto_d_8" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_rep" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_u_uc" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="mon_stn" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_stn" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_s_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_s_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_te_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_ue_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_te_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_ue_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="und_te" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="und_vta" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="stock_max" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="stock_min" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="precio_min" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="porcom" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="pto_reord" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_uc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_uv" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="partida" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="arancel_p" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="sobret_p" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="impto_sl_p" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="seguros_p" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="flete_p" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="flete_um" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="c_est_art" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="stat" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="c_control" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_fexp" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ubicacion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="aplica_alm" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="c_material" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nro_parte" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="codref" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="clase" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="sub_clase" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_b_s" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="c_anteri" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="p_a" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="rubro_p" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_ur_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_ur_mof" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_prc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="usr_prc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_prc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="um2" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="facval" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="facgal" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="cta_d" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cta_h" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_fisc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="codenv" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="codetq" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="codcaj" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="undcaj" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="galnet" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="densid" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="indorig" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="i_afeper" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="tiptop" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="topimp" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="topcan" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="grupo_art" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="producto_obtener_lista">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="parametrosWhere" type="tns:ArrayOfDto_Parametros" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="producto_obtener_listaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="producto_obtener_listaResult" type="tns:ArrayOfDto_Articulo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDto_Articulo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="dto_Articulo" nillable="true" type="tns:dto_Articulo" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="cliente_ValidaVenta">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="LstCoas" type="tns:ArrayOfString" />
+            <s:element minOccurs="1" maxOccurs="1" name="montoventa" type="s:double" />
+            <s:element minOccurs="1" maxOccurs="1" name="montoVentaPendiente" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="cliente_ValidaVentaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cliente_ValidaVentaResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="facturaCabecera_obtener">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="parametrosWhere" type="tns:ArrayOfDto_Parametros" />
+            <s:element minOccurs="0" maxOccurs="1" name="anio_mes_yymm" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="facturaCabecera_obtenerResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="facturaCabecera_obtenerResult" type="tns:ArrayOfDto_FacturaCabecera" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDto_FacturaCabecera">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="dto_FacturaCabecera" nillable="true" type="tns:dto_FacturaCabecera" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="dto_FacturaCabecera">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="sec_nro" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_inc" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="area" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_serie" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_nro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_f_g" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_ref" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_ref_s" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_ref_n" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_ref_1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nro_pl" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_com" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="stop1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="stop2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_fch" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="coa" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="coa_des" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="coa_dsc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="coa_dir" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="coa_ruc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dsc1" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="credito" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="saldo_cred" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="oper_fact" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="t_cambio" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="t_cambio1" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="conpag" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fpago" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="mon" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="mon_dsc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="mon_sigla" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="plazo_0" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_venc" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="cuotas" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="rec_let" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="plazo_1" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="plazos" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="p_interes" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="tipo_cuota" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="lts_gen" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ind_lst_p" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="lst_prec" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="por_cuotai" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="lst_dcto" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="t_aplica" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="orden_c" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="num_cot" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="almacen" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="oper_log" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="cuota_ini" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cuotai_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cuotai_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_let" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_letmof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_letcon" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_b" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_b_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_b_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_d1" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_d2" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_d" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_d_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_d_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_n" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_n_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_n_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_o" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_o_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_o_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_f" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_f_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_f_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_e" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_e_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_e_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_l" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_l_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_l_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_s" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_s_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_s_con" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_finanz" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="por_impto" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_i" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_i_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_i_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_t" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_t_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_t_mof" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="zona" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="vendedor" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="por_atn" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_cont" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_logist" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_factur" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_estad" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_prn" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_cuotas" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="term_nro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="stat" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_act" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="usr" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="hora" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="emp" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_ref_d" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="regto" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ind_lst_d" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cod_proc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cod_sunat" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="t_pago" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="dias_01" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="dias_02" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="dias_03" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="dias_04" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="dias_02a" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="dias_03a" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="dias_04a" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="transp" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="transp_n" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="glosa" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="numcot" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="tc_com" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="peso_t" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="reg_com" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="c_comis" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_bpsi" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_bp" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="i_vtacon" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="i_loccom" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="distrito_c" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="lst_guia_m" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="facturaCabecera_actualiza">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="parametrosUpdate" type="tns:ArrayOfDto_Parametros" />
+            <s:element minOccurs="0" maxOccurs="1" name="parametrosWhere" type="tns:ArrayOfDto_Parametros" />
+            <s:element minOccurs="0" maxOccurs="1" name="anio_mes_yymm" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="facturaCabecera_actualizaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="facturaCabecera_actualizaResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="facturaCabecera_inserta">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="factura_cabecera" type="tns:dto_FacturaCabecera" />
+            <s:element minOccurs="0" maxOccurs="1" name="anio_mes_yymm" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="facturaCabecera_insertaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="facturaCabecera_insertaResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="factura_transferir_cuenta">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="historial" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="codVendedor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="documento" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tipo_ejeuecion" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="factura_transferir_cuentaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="factura_transferir_cuentaResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="documento">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="codDocumneto" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="codVendedor" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="documentoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="documentoResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="documentoDetalle">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="codDocumneto" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mmyy" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="codVendedor" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="documentoDetalleResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="documentoDetalleResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getDataxPlanillaOperacionDocumento">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="nro_pl" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="oper" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="nro_sec" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="documento" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getDataxPlanillaOperacionDocumentoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getDataxPlanillaOperacionDocumentoResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="documentos">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Fecha_Inicio" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="Fecha_Fin" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TipoDoc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Serie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Cod_Vendedor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Cod_Cliente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Cancelado" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Anulado" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Excluir_Cod_Vendedor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Errado" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="conGuia" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CodVendedor" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="documentosResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="documentosResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="documentos_detalle">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="Fecha_Inicio" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="Fecha_Fin" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="TipoDoc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Serie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Cod_Vendedor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Cod_Cliente" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Anulado" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Articulo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Lote" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Excluir_Cod_Vendedor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="conGuia" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CodVendedor" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="documentos_detalleResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="documentos_detalleResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cuentaCorriente_obtener">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="parametrosWhere" type="tns:ArrayOfDto_Parametros" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cuentaCorriente_obtenerResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cuentaCorriente_obtenerResult" type="tns:ArrayOfDto_CuentaCorriente" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDto_CuentaCorriente">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="dto_CuentaCorriente" nillable="true" type="tns:dto_CuentaCorriente" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="dto_CuentaCorriente">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="coa" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="num_cot" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="custodio" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_serie" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_nro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_fch" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="oper_fin" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nro_sec" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="area" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="operacion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nro_pl" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cobrador" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="bco" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="mon" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="cargo_mn" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="abono_mn" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cargo_me" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="abono_me" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cargo_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="abono_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="t_cambio" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_bp" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="numfac" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_let" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ubic_ant" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ubic_act" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_fch_vc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="file_nro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="compr_nro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="stat_canc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_canc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="reg_com" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="imp_com" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="reg_coma" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="stat" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="usr" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="vendedor" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="regto" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="glosa" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_plbco" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_plbco" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="sit_bco" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="agencia" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nro_bco" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="zona" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_act" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="hora" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_sys" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flag_c_p" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_desc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="emp" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="mon_prov" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="stat_job" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="usrw" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="total_ventas_obtener">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anio_mes" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="cod_vendedor" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="total_ventas_obtenerResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="total_ventas_obtenerResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="update_Sld_existe">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="undti" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="undmi" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="articulo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="lote" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="update_Sld_existeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="update_Sld_existeResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="updateNumStock">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="numdoc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="serie" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="updateNumStockResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="updateNumStockResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="insert_02C">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="d_02c" type="tns:dto_02C" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="dto_02C">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ejercicio" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="mes" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="almacen" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="oper_log" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="serie" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="numero" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fecha" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="cantidad" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="costo" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="costoUs" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="tc" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="referencia" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fechaRef" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="proveedor" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fechaAct" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="empresa" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fechatras" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="insert_02CResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="insert_02CResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="insert_02L">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="d_02l" type="tns:dto_02L" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="dto_02L">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="trans_nro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ej" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="mes" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="almacen" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="oper_log" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_nro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_fch" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="articulo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="articulo_d" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="lote" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_exp" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="und" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_t_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="t_cambio" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_u_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_t_con" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_ref" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_doc_rf" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="flg_errs" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="usr" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="clase" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_serie" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="emp" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="sub_clase" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="insert_02LResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="insert_02LResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="insert_Movo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="d_movo" type="tns:dto_Movo" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="dto_Movo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="trans_nro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ej" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="mes" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="almacen" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="oper_log" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_serie" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_nro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_fch" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="articulo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="lote" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_exp" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="und_i" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_u_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_ti_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_ti_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="und_ta" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_ta_mof" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_ta_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_ua_con" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="doc_ref" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_doc_rf" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="usr" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="clase" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="sub_clase" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="insert_MovoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="insert_MovoResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="insert_Sld">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="d_sld" type="tns:dto_Sld" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="dto_Sld">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="almacen" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="articulo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="artic_dsc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="lote" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="und_ti" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="und_mi" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_u_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_ti_mof" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_ti_con" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_mi_mof" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="cos_mi_con" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_exp" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="coa" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fch_act" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="clase" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="sub_clase" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="insert_SldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="insert_SldResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="delete_02C">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="doc_serie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="doc_nro" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="delete_02CResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="delete_02CResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="delete_02L">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="doc_serie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="doc_nro" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="delete_02LResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="delete_02LResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="delete_Movo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="doc_serie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="doc_nro" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="delete_MovoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="delete_MovoResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="sotckAlmacen">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="almacen" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="articulo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="sotckAlmacenResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sotckAlmacenResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="sotckAlmacenGeneral">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="articulo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="sotckAlmacenGeneralResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sotckAlmacenGeneralResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="sotckArticulosAlmacen">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="almacen" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="sotckArticulosAlmacenResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="sotckArticulosAlmacenResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="kardexArticulosAlmacen">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="almacen" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="articulo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="kardexArticulosAlmacenResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="kardexArticulosAlmacenResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_updatePrintGuia">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="documento" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_updatePrintGuiaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_updatePrintGuiaResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_updatePrintGuiaTrans">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="documento" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_updatePrintGuiaTransResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_updatePrintGuiaTransResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_updatePrintDocumento">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="documento" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_updatePrintDocumentoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_updatePrintDocumentoResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_updateNumeroDoc">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="documento" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="serie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="doc_nro" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_updateNumeroDocResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_updateNumeroDocResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_updateCabGuiaConFactura">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="documento_g" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="serie_g" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="numero_g" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="documento_f" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="serie_f" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="numero_f" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="flg_factur" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="docu" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_updateCabGuiaConFacturaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_updateCabGuiaConFacturaResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_updateDetGuiaConFactura">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="doc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="serie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="nro" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="articulo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="lote" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="valor" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="docu" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="docu1" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="docu2" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_updateDetGuiaConFacturaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_updateDetGuiaConFacturaResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_update_sld">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="almacen" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="articulo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="lote" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="cantidad" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="fecha" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_update_sldResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_update_sldResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_update_sld_ing">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="almacen" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="articulo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="lote" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="cantidad" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="fecha" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_update_sld_ingResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_update_sld_ingResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_saldo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dt">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_saldoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_insert_saldoResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_cabGuia">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dt">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_cabGuiaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_insert_cabGuiaResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_detGuia">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dt">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_detGuiaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_insert_detGuiaResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_Movo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dt">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_MovoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_insert_MovoResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_MovoSat">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dt">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_MovoSatResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_insert_MovoSatResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_02C">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dt">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_02CResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_insert_02CResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_02L">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dt">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_02LResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_insert_02LResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_cabDocumento">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dt">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_cabDocumentoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_insert_cabDocumentoResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_detDocumento">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dt">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_detDocumentoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_insert_detDocumentoResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_ctacte">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="dt">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_insert_ctacteResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_insert_ctacteResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_updateZonaVenta">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="documento" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="serie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="doc_nro" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="codVendedor" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="zonaVenta" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_updateZonaVentaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_updateZonaVentaResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_update03lAnticipos">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="doc" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="doc_serie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="doc_nro" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="appFactur_update03lAnticiposResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="appFactur_update03lAnticiposResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="vendedor">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="vendedorResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="vendedorResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cobrador">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cobradorResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cobradorResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="comisiones_Ventas">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="usuario" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="anioMes" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="codVendedor" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="comisiones_VentasResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="comisiones_VentasResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="cliente_nuevoSoapIn">
+    <wsdl:part name="parameters" element="tns:cliente_nuevo" />
+  </wsdl:message>
+  <wsdl:message name="cliente_nuevoSoapOut">
+    <wsdl:part name="parameters" element="tns:cliente_nuevoResponse" />
+  </wsdl:message>
+  <wsdl:message name="cliente_obtenerSoapIn">
+    <wsdl:part name="parameters" element="tns:cliente_obtener" />
+  </wsdl:message>
+  <wsdl:message name="cliente_obtenerSoapOut">
+    <wsdl:part name="parameters" element="tns:cliente_obtenerResponse" />
+  </wsdl:message>
+  <wsdl:message name="cliente_obtener_listaSoapIn">
+    <wsdl:part name="parameters" element="tns:cliente_obtener_lista" />
+  </wsdl:message>
+  <wsdl:message name="cliente_obtener_listaSoapOut">
+    <wsdl:part name="parameters" element="tns:cliente_obtener_listaResponse" />
+  </wsdl:message>
+  <wsdl:message name="cliente_actualiza_vendedorSoapIn">
+    <wsdl:part name="parameters" element="tns:cliente_actualiza_vendedor" />
+  </wsdl:message>
+  <wsdl:message name="cliente_actualiza_vendedorSoapOut">
+    <wsdl:part name="parameters" element="tns:cliente_actualiza_vendedorResponse" />
+  </wsdl:message>
+  <wsdl:message name="cliente_actualiza_estadoLineaCreditoSoapIn">
+    <wsdl:part name="parameters" element="tns:cliente_actualiza_estadoLineaCredito" />
+  </wsdl:message>
+  <wsdl:message name="cliente_actualiza_estadoLineaCreditoSoapOut">
+    <wsdl:part name="parameters" element="tns:cliente_actualiza_estadoLineaCreditoResponse" />
+  </wsdl:message>
+  <wsdl:message name="cliente_actualiza_lineaCreditoSoapIn">
+    <wsdl:part name="parameters" element="tns:cliente_actualiza_lineaCredito" />
+  </wsdl:message>
+  <wsdl:message name="cliente_actualiza_lineaCreditoSoapOut">
+    <wsdl:part name="parameters" element="tns:cliente_actualiza_lineaCreditoResponse" />
+  </wsdl:message>
+  <wsdl:message name="cliente_actualiza_TelefonoCorreoSoapIn">
+    <wsdl:part name="parameters" element="tns:cliente_actualiza_TelefonoCorreo" />
+  </wsdl:message>
+  <wsdl:message name="cliente_actualiza_TelefonoCorreoSoapOut">
+    <wsdl:part name="parameters" element="tns:cliente_actualiza_TelefonoCorreoResponse" />
+  </wsdl:message>
+  <wsdl:message name="cliente_historial_ventaSoapIn">
+    <wsdl:part name="parameters" element="tns:cliente_historial_venta" />
+  </wsdl:message>
+  <wsdl:message name="cliente_historial_ventaSoapOut">
+    <wsdl:part name="parameters" element="tns:cliente_historial_ventaResponse" />
+  </wsdl:message>
+  <wsdl:message name="cliente_historial_DocumentosSoapIn">
+    <wsdl:part name="parameters" element="tns:cliente_historial_Documentos" />
+  </wsdl:message>
+  <wsdl:message name="cliente_historial_DocumentosSoapOut">
+    <wsdl:part name="parameters" element="tns:cliente_historial_DocumentosResponse" />
+  </wsdl:message>
+  <wsdl:message name="producto_obtenerSoapIn">
+    <wsdl:part name="parameters" element="tns:producto_obtener" />
+  </wsdl:message>
+  <wsdl:message name="producto_obtenerSoapOut">
+    <wsdl:part name="parameters" element="tns:producto_obtenerResponse" />
+  </wsdl:message>
+  <wsdl:message name="producto_obtener_listaSoapIn">
+    <wsdl:part name="parameters" element="tns:producto_obtener_lista" />
+  </wsdl:message>
+  <wsdl:message name="producto_obtener_listaSoapOut">
+    <wsdl:part name="parameters" element="tns:producto_obtener_listaResponse" />
+  </wsdl:message>
+  <wsdl:message name="cliente_ValidaVentaSoapIn">
+    <wsdl:part name="parameters" element="tns:cliente_ValidaVenta" />
+  </wsdl:message>
+  <wsdl:message name="cliente_ValidaVentaSoapOut">
+    <wsdl:part name="parameters" element="tns:cliente_ValidaVentaResponse" />
+  </wsdl:message>
+  <wsdl:message name="facturaCabecera_obtenerSoapIn">
+    <wsdl:part name="parameters" element="tns:facturaCabecera_obtener" />
+  </wsdl:message>
+  <wsdl:message name="facturaCabecera_obtenerSoapOut">
+    <wsdl:part name="parameters" element="tns:facturaCabecera_obtenerResponse" />
+  </wsdl:message>
+  <wsdl:message name="facturaCabecera_actualizaSoapIn">
+    <wsdl:part name="parameters" element="tns:facturaCabecera_actualiza" />
+  </wsdl:message>
+  <wsdl:message name="facturaCabecera_actualizaSoapOut">
+    <wsdl:part name="parameters" element="tns:facturaCabecera_actualizaResponse" />
+  </wsdl:message>
+  <wsdl:message name="facturaCabecera_insertaSoapIn">
+    <wsdl:part name="parameters" element="tns:facturaCabecera_inserta" />
+  </wsdl:message>
+  <wsdl:message name="facturaCabecera_insertaSoapOut">
+    <wsdl:part name="parameters" element="tns:facturaCabecera_insertaResponse" />
+  </wsdl:message>
+  <wsdl:message name="factura_transferir_cuentaSoapIn">
+    <wsdl:part name="parameters" element="tns:factura_transferir_cuenta" />
+  </wsdl:message>
+  <wsdl:message name="factura_transferir_cuentaSoapOut">
+    <wsdl:part name="parameters" element="tns:factura_transferir_cuentaResponse" />
+  </wsdl:message>
+  <wsdl:message name="documentoSoapIn">
+    <wsdl:part name="parameters" element="tns:documento" />
+  </wsdl:message>
+  <wsdl:message name="documentoSoapOut">
+    <wsdl:part name="parameters" element="tns:documentoResponse" />
+  </wsdl:message>
+  <wsdl:message name="documentoDetalleSoapIn">
+    <wsdl:part name="parameters" element="tns:documentoDetalle" />
+  </wsdl:message>
+  <wsdl:message name="documentoDetalleSoapOut">
+    <wsdl:part name="parameters" element="tns:documentoDetalleResponse" />
+  </wsdl:message>
+  <wsdl:message name="getDataxPlanillaOperacionDocumentoSoapIn">
+    <wsdl:part name="parameters" element="tns:getDataxPlanillaOperacionDocumento" />
+  </wsdl:message>
+  <wsdl:message name="getDataxPlanillaOperacionDocumentoSoapOut">
+    <wsdl:part name="parameters" element="tns:getDataxPlanillaOperacionDocumentoResponse" />
+  </wsdl:message>
+  <wsdl:message name="documentosSoapIn">
+    <wsdl:part name="parameters" element="tns:documentos" />
+  </wsdl:message>
+  <wsdl:message name="documentosSoapOut">
+    <wsdl:part name="parameters" element="tns:documentosResponse" />
+  </wsdl:message>
+  <wsdl:message name="documentos_detalleSoapIn">
+    <wsdl:part name="parameters" element="tns:documentos_detalle" />
+  </wsdl:message>
+  <wsdl:message name="documentos_detalleSoapOut">
+    <wsdl:part name="parameters" element="tns:documentos_detalleResponse" />
+  </wsdl:message>
+  <wsdl:message name="cuentaCorriente_obtenerSoapIn">
+    <wsdl:part name="parameters" element="tns:cuentaCorriente_obtener" />
+  </wsdl:message>
+  <wsdl:message name="cuentaCorriente_obtenerSoapOut">
+    <wsdl:part name="parameters" element="tns:cuentaCorriente_obtenerResponse" />
+  </wsdl:message>
+  <wsdl:message name="total_ventas_obtenerSoapIn">
+    <wsdl:part name="parameters" element="tns:total_ventas_obtener" />
+  </wsdl:message>
+  <wsdl:message name="total_ventas_obtenerSoapOut">
+    <wsdl:part name="parameters" element="tns:total_ventas_obtenerResponse" />
+  </wsdl:message>
+  <wsdl:message name="update_Sld_existeSoapIn">
+    <wsdl:part name="parameters" element="tns:update_Sld_existe" />
+  </wsdl:message>
+  <wsdl:message name="update_Sld_existeSoapOut">
+    <wsdl:part name="parameters" element="tns:update_Sld_existeResponse" />
+  </wsdl:message>
+  <wsdl:message name="updateNumStockSoapIn">
+    <wsdl:part name="parameters" element="tns:updateNumStock" />
+  </wsdl:message>
+  <wsdl:message name="updateNumStockSoapOut">
+    <wsdl:part name="parameters" element="tns:updateNumStockResponse" />
+  </wsdl:message>
+  <wsdl:message name="insert_02CSoapIn">
+    <wsdl:part name="parameters" element="tns:insert_02C" />
+  </wsdl:message>
+  <wsdl:message name="insert_02CSoapOut">
+    <wsdl:part name="parameters" element="tns:insert_02CResponse" />
+  </wsdl:message>
+  <wsdl:message name="insert_02LSoapIn">
+    <wsdl:part name="parameters" element="tns:insert_02L" />
+  </wsdl:message>
+  <wsdl:message name="insert_02LSoapOut">
+    <wsdl:part name="parameters" element="tns:insert_02LResponse" />
+  </wsdl:message>
+  <wsdl:message name="insert_MovoSoapIn">
+    <wsdl:part name="parameters" element="tns:insert_Movo" />
+  </wsdl:message>
+  <wsdl:message name="insert_MovoSoapOut">
+    <wsdl:part name="parameters" element="tns:insert_MovoResponse" />
+  </wsdl:message>
+  <wsdl:message name="insert_SldSoapIn">
+    <wsdl:part name="parameters" element="tns:insert_Sld" />
+  </wsdl:message>
+  <wsdl:message name="insert_SldSoapOut">
+    <wsdl:part name="parameters" element="tns:insert_SldResponse" />
+  </wsdl:message>
+  <wsdl:message name="delete_02CSoapIn">
+    <wsdl:part name="parameters" element="tns:delete_02C" />
+  </wsdl:message>
+  <wsdl:message name="delete_02CSoapOut">
+    <wsdl:part name="parameters" element="tns:delete_02CResponse" />
+  </wsdl:message>
+  <wsdl:message name="delete_02LSoapIn">
+    <wsdl:part name="parameters" element="tns:delete_02L" />
+  </wsdl:message>
+  <wsdl:message name="delete_02LSoapOut">
+    <wsdl:part name="parameters" element="tns:delete_02LResponse" />
+  </wsdl:message>
+  <wsdl:message name="delete_MovoSoapIn">
+    <wsdl:part name="parameters" element="tns:delete_Movo" />
+  </wsdl:message>
+  <wsdl:message name="delete_MovoSoapOut">
+    <wsdl:part name="parameters" element="tns:delete_MovoResponse" />
+  </wsdl:message>
+  <wsdl:message name="sotckAlmacenSoapIn">
+    <wsdl:part name="parameters" element="tns:sotckAlmacen" />
+  </wsdl:message>
+  <wsdl:message name="sotckAlmacenSoapOut">
+    <wsdl:part name="parameters" element="tns:sotckAlmacenResponse" />
+  </wsdl:message>
+  <wsdl:message name="sotckAlmacenGeneralSoapIn">
+    <wsdl:part name="parameters" element="tns:sotckAlmacenGeneral" />
+  </wsdl:message>
+  <wsdl:message name="sotckAlmacenGeneralSoapOut">
+    <wsdl:part name="parameters" element="tns:sotckAlmacenGeneralResponse" />
+  </wsdl:message>
+  <wsdl:message name="sotckArticulosAlmacenSoapIn">
+    <wsdl:part name="parameters" element="tns:sotckArticulosAlmacen" />
+  </wsdl:message>
+  <wsdl:message name="sotckArticulosAlmacenSoapOut">
+    <wsdl:part name="parameters" element="tns:sotckArticulosAlmacenResponse" />
+  </wsdl:message>
+  <wsdl:message name="kardexArticulosAlmacenSoapIn">
+    <wsdl:part name="parameters" element="tns:kardexArticulosAlmacen" />
+  </wsdl:message>
+  <wsdl:message name="kardexArticulosAlmacenSoapOut">
+    <wsdl:part name="parameters" element="tns:kardexArticulosAlmacenResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_updatePrintGuiaSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_updatePrintGuia" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_updatePrintGuiaSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_updatePrintGuiaResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_updatePrintGuiaTransSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_updatePrintGuiaTrans" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_updatePrintGuiaTransSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_updatePrintGuiaTransResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_updatePrintDocumentoSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_updatePrintDocumento" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_updatePrintDocumentoSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_updatePrintDocumentoResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_updateNumeroDocSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_updateNumeroDoc" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_updateNumeroDocSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_updateNumeroDocResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_updateCabGuiaConFacturaSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_updateCabGuiaConFactura" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_updateCabGuiaConFacturaSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_updateCabGuiaConFacturaResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_updateDetGuiaConFacturaSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_updateDetGuiaConFactura" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_updateDetGuiaConFacturaSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_updateDetGuiaConFacturaResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_update_sldSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_update_sld" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_update_sldSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_update_sldResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_update_sld_ingSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_update_sld_ing" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_update_sld_ingSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_update_sld_ingResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_saldoSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_saldo" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_saldoSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_saldoResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_cabGuiaSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_cabGuia" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_cabGuiaSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_cabGuiaResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_detGuiaSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_detGuia" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_detGuiaSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_detGuiaResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_MovoSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_Movo" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_MovoSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_MovoResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_MovoSatSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_MovoSat" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_MovoSatSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_MovoSatResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_02CSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_02C" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_02CSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_02CResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_02LSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_02L" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_02LSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_02LResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_cabDocumentoSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_cabDocumento" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_cabDocumentoSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_cabDocumentoResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_detDocumentoSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_detDocumento" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_detDocumentoSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_detDocumentoResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_ctacteSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_ctacte" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_insert_ctacteSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_insert_ctacteResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_updateZonaVentaSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_updateZonaVenta" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_updateZonaVentaSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_updateZonaVentaResponse" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_update03lAnticiposSoapIn">
+    <wsdl:part name="parameters" element="tns:appFactur_update03lAnticipos" />
+  </wsdl:message>
+  <wsdl:message name="appFactur_update03lAnticiposSoapOut">
+    <wsdl:part name="parameters" element="tns:appFactur_update03lAnticiposResponse" />
+  </wsdl:message>
+  <wsdl:message name="vendedorSoapIn">
+    <wsdl:part name="parameters" element="tns:vendedor" />
+  </wsdl:message>
+  <wsdl:message name="vendedorSoapOut">
+    <wsdl:part name="parameters" element="tns:vendedorResponse" />
+  </wsdl:message>
+  <wsdl:message name="cobradorSoapIn">
+    <wsdl:part name="parameters" element="tns:cobrador" />
+  </wsdl:message>
+  <wsdl:message name="cobradorSoapOut">
+    <wsdl:part name="parameters" element="tns:cobradorResponse" />
+  </wsdl:message>
+  <wsdl:message name="comisiones_VentasSoapIn">
+    <wsdl:part name="parameters" element="tns:comisiones_Ventas" />
+  </wsdl:message>
+  <wsdl:message name="comisiones_VentasSoapOut">
+    <wsdl:part name="parameters" element="tns:comisiones_VentasResponse" />
+  </wsdl:message>
+  <wsdl:portType name="Service_EasySoap">
+    <wsdl:operation name="cliente_nuevo">
+      <wsdl:input message="tns:cliente_nuevoSoapIn" />
+      <wsdl:output message="tns:cliente_nuevoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="cliente_obtener">
+      <wsdl:input message="tns:cliente_obtenerSoapIn" />
+      <wsdl:output message="tns:cliente_obtenerSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="cliente_obtener_lista">
+      <wsdl:input message="tns:cliente_obtener_listaSoapIn" />
+      <wsdl:output message="tns:cliente_obtener_listaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="cliente_actualiza_vendedor">
+      <wsdl:input message="tns:cliente_actualiza_vendedorSoapIn" />
+      <wsdl:output message="tns:cliente_actualiza_vendedorSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="cliente_actualiza_estadoLineaCredito">
+      <wsdl:input message="tns:cliente_actualiza_estadoLineaCreditoSoapIn" />
+      <wsdl:output message="tns:cliente_actualiza_estadoLineaCreditoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="cliente_actualiza_lineaCredito">
+      <wsdl:input message="tns:cliente_actualiza_lineaCreditoSoapIn" />
+      <wsdl:output message="tns:cliente_actualiza_lineaCreditoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="cliente_actualiza_TelefonoCorreo">
+      <wsdl:input message="tns:cliente_actualiza_TelefonoCorreoSoapIn" />
+      <wsdl:output message="tns:cliente_actualiza_TelefonoCorreoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="cliente_historial_venta">
+      <wsdl:input message="tns:cliente_historial_ventaSoapIn" />
+      <wsdl:output message="tns:cliente_historial_ventaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="cliente_historial_Documentos">
+      <wsdl:input message="tns:cliente_historial_DocumentosSoapIn" />
+      <wsdl:output message="tns:cliente_historial_DocumentosSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="producto_obtener">
+      <wsdl:input message="tns:producto_obtenerSoapIn" />
+      <wsdl:output message="tns:producto_obtenerSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="producto_obtener_lista">
+      <wsdl:input message="tns:producto_obtener_listaSoapIn" />
+      <wsdl:output message="tns:producto_obtener_listaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="cliente_ValidaVenta">
+      <wsdl:input message="tns:cliente_ValidaVentaSoapIn" />
+      <wsdl:output message="tns:cliente_ValidaVentaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="facturaCabecera_obtener">
+      <wsdl:input message="tns:facturaCabecera_obtenerSoapIn" />
+      <wsdl:output message="tns:facturaCabecera_obtenerSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="facturaCabecera_actualiza">
+      <wsdl:input message="tns:facturaCabecera_actualizaSoapIn" />
+      <wsdl:output message="tns:facturaCabecera_actualizaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="facturaCabecera_inserta">
+      <wsdl:input message="tns:facturaCabecera_insertaSoapIn" />
+      <wsdl:output message="tns:facturaCabecera_insertaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="factura_transferir_cuenta">
+      <wsdl:input message="tns:factura_transferir_cuentaSoapIn" />
+      <wsdl:output message="tns:factura_transferir_cuentaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="documento">
+      <wsdl:input message="tns:documentoSoapIn" />
+      <wsdl:output message="tns:documentoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="documentoDetalle">
+      <wsdl:input message="tns:documentoDetalleSoapIn" />
+      <wsdl:output message="tns:documentoDetalleSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getDataxPlanillaOperacionDocumento">
+      <wsdl:input message="tns:getDataxPlanillaOperacionDocumentoSoapIn" />
+      <wsdl:output message="tns:getDataxPlanillaOperacionDocumentoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="documentos">
+      <wsdl:input message="tns:documentosSoapIn" />
+      <wsdl:output message="tns:documentosSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="documentos_detalle">
+      <wsdl:input message="tns:documentos_detalleSoapIn" />
+      <wsdl:output message="tns:documentos_detalleSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="cuentaCorriente_obtener">
+      <wsdl:input message="tns:cuentaCorriente_obtenerSoapIn" />
+      <wsdl:output message="tns:cuentaCorriente_obtenerSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="total_ventas_obtener">
+      <wsdl:input message="tns:total_ventas_obtenerSoapIn" />
+      <wsdl:output message="tns:total_ventas_obtenerSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="update_Sld_existe">
+      <wsdl:input message="tns:update_Sld_existeSoapIn" />
+      <wsdl:output message="tns:update_Sld_existeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="updateNumStock">
+      <wsdl:input message="tns:updateNumStockSoapIn" />
+      <wsdl:output message="tns:updateNumStockSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="insert_02C">
+      <wsdl:input message="tns:insert_02CSoapIn" />
+      <wsdl:output message="tns:insert_02CSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="insert_02L">
+      <wsdl:input message="tns:insert_02LSoapIn" />
+      <wsdl:output message="tns:insert_02LSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="insert_Movo">
+      <wsdl:input message="tns:insert_MovoSoapIn" />
+      <wsdl:output message="tns:insert_MovoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="insert_Sld">
+      <wsdl:input message="tns:insert_SldSoapIn" />
+      <wsdl:output message="tns:insert_SldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="delete_02C">
+      <wsdl:input message="tns:delete_02CSoapIn" />
+      <wsdl:output message="tns:delete_02CSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="delete_02L">
+      <wsdl:input message="tns:delete_02LSoapIn" />
+      <wsdl:output message="tns:delete_02LSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="delete_Movo">
+      <wsdl:input message="tns:delete_MovoSoapIn" />
+      <wsdl:output message="tns:delete_MovoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="sotckAlmacen">
+      <wsdl:input message="tns:sotckAlmacenSoapIn" />
+      <wsdl:output message="tns:sotckAlmacenSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="sotckAlmacenGeneral">
+      <wsdl:input message="tns:sotckAlmacenGeneralSoapIn" />
+      <wsdl:output message="tns:sotckAlmacenGeneralSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="sotckArticulosAlmacen">
+      <wsdl:input message="tns:sotckArticulosAlmacenSoapIn" />
+      <wsdl:output message="tns:sotckArticulosAlmacenSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="kardexArticulosAlmacen">
+      <wsdl:input message="tns:kardexArticulosAlmacenSoapIn" />
+      <wsdl:output message="tns:kardexArticulosAlmacenSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updatePrintGuia">
+      <wsdl:input message="tns:appFactur_updatePrintGuiaSoapIn" />
+      <wsdl:output message="tns:appFactur_updatePrintGuiaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updatePrintGuiaTrans">
+      <wsdl:input message="tns:appFactur_updatePrintGuiaTransSoapIn" />
+      <wsdl:output message="tns:appFactur_updatePrintGuiaTransSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updatePrintDocumento">
+      <wsdl:input message="tns:appFactur_updatePrintDocumentoSoapIn" />
+      <wsdl:output message="tns:appFactur_updatePrintDocumentoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updateNumeroDoc">
+      <wsdl:input message="tns:appFactur_updateNumeroDocSoapIn" />
+      <wsdl:output message="tns:appFactur_updateNumeroDocSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updateCabGuiaConFactura">
+      <wsdl:input message="tns:appFactur_updateCabGuiaConFacturaSoapIn" />
+      <wsdl:output message="tns:appFactur_updateCabGuiaConFacturaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updateDetGuiaConFactura">
+      <wsdl:input message="tns:appFactur_updateDetGuiaConFacturaSoapIn" />
+      <wsdl:output message="tns:appFactur_updateDetGuiaConFacturaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_update_sld">
+      <wsdl:input message="tns:appFactur_update_sldSoapIn" />
+      <wsdl:output message="tns:appFactur_update_sldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_update_sld_ing">
+      <wsdl:input message="tns:appFactur_update_sld_ingSoapIn" />
+      <wsdl:output message="tns:appFactur_update_sld_ingSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_saldo">
+      <wsdl:input message="tns:appFactur_insert_saldoSoapIn" />
+      <wsdl:output message="tns:appFactur_insert_saldoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_cabGuia">
+      <wsdl:input message="tns:appFactur_insert_cabGuiaSoapIn" />
+      <wsdl:output message="tns:appFactur_insert_cabGuiaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_detGuia">
+      <wsdl:input message="tns:appFactur_insert_detGuiaSoapIn" />
+      <wsdl:output message="tns:appFactur_insert_detGuiaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_Movo">
+      <wsdl:input message="tns:appFactur_insert_MovoSoapIn" />
+      <wsdl:output message="tns:appFactur_insert_MovoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_MovoSat">
+      <wsdl:input message="tns:appFactur_insert_MovoSatSoapIn" />
+      <wsdl:output message="tns:appFactur_insert_MovoSatSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_02C">
+      <wsdl:input message="tns:appFactur_insert_02CSoapIn" />
+      <wsdl:output message="tns:appFactur_insert_02CSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_02L">
+      <wsdl:input message="tns:appFactur_insert_02LSoapIn" />
+      <wsdl:output message="tns:appFactur_insert_02LSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_cabDocumento">
+      <wsdl:input message="tns:appFactur_insert_cabDocumentoSoapIn" />
+      <wsdl:output message="tns:appFactur_insert_cabDocumentoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_detDocumento">
+      <wsdl:input message="tns:appFactur_insert_detDocumentoSoapIn" />
+      <wsdl:output message="tns:appFactur_insert_detDocumentoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_ctacte">
+      <wsdl:input message="tns:appFactur_insert_ctacteSoapIn" />
+      <wsdl:output message="tns:appFactur_insert_ctacteSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updateZonaVenta">
+      <wsdl:input message="tns:appFactur_updateZonaVentaSoapIn" />
+      <wsdl:output message="tns:appFactur_updateZonaVentaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_update03lAnticipos">
+      <wsdl:input message="tns:appFactur_update03lAnticiposSoapIn" />
+      <wsdl:output message="tns:appFactur_update03lAnticiposSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="vendedor">
+      <wsdl:input message="tns:vendedorSoapIn" />
+      <wsdl:output message="tns:vendedorSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="cobrador">
+      <wsdl:input message="tns:cobradorSoapIn" />
+      <wsdl:output message="tns:cobradorSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="comisiones_Ventas">
+      <wsdl:input message="tns:comisiones_VentasSoapIn" />
+      <wsdl:output message="tns:comisiones_VentasSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Service_EasySoap" type="tns:Service_EasySoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="cliente_nuevo">
+      <soap:operation soapAction="http://tempuri.org/cliente_nuevo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_obtener">
+      <soap:operation soapAction="http://tempuri.org/cliente_obtener" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_obtener_lista">
+      <soap:operation soapAction="http://tempuri.org/cliente_obtener_lista" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_actualiza_vendedor">
+      <soap:operation soapAction="http://tempuri.org/cliente_actualiza_vendedor" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_actualiza_estadoLineaCredito">
+      <soap:operation soapAction="http://tempuri.org/cliente_actualiza_estadoLineaCredito" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_actualiza_lineaCredito">
+      <soap:operation soapAction="http://tempuri.org/cliente_actualiza_lineaCredito" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_actualiza_TelefonoCorreo">
+      <soap:operation soapAction="http://tempuri.org/cliente_actualiza_TelefonoCorreo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_historial_venta">
+      <soap:operation soapAction="http://tempuri.org/cliente_historial_venta" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_historial_Documentos">
+      <soap:operation soapAction="http://tempuri.org/cliente_historial_Documentos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="producto_obtener">
+      <soap:operation soapAction="http://tempuri.org/producto_obtener" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="producto_obtener_lista">
+      <soap:operation soapAction="http://tempuri.org/producto_obtener_lista" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_ValidaVenta">
+      <soap:operation soapAction="http://tempuri.org/cliente_ValidaVenta" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="facturaCabecera_obtener">
+      <soap:operation soapAction="http://tempuri.org/facturaCabecera_obtener" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="facturaCabecera_actualiza">
+      <soap:operation soapAction="http://tempuri.org/facturaCabecera_actualiza" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="facturaCabecera_inserta">
+      <soap:operation soapAction="http://tempuri.org/facturaCabecera_inserta" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="factura_transferir_cuenta">
+      <soap:operation soapAction="http://tempuri.org/factura_transferir_cuenta" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="documento">
+      <soap:operation soapAction="http://tempuri.org/documento" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="documentoDetalle">
+      <soap:operation soapAction="http://tempuri.org/documentoDetalle" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDataxPlanillaOperacionDocumento">
+      <soap:operation soapAction="http://tempuri.org/getDataxPlanillaOperacionDocumento" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="documentos">
+      <soap:operation soapAction="http://tempuri.org/documentos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="documentos_detalle">
+      <soap:operation soapAction="http://tempuri.org/documentos_detalle" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cuentaCorriente_obtener">
+      <soap:operation soapAction="http://tempuri.org/cuentaCorriente_obtener" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="total_ventas_obtener">
+      <soap:operation soapAction="http://tempuri.org/total_ventas_obtener" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="update_Sld_existe">
+      <soap:operation soapAction="http://tempuri.org/update_Sld_existe" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateNumStock">
+      <soap:operation soapAction="http://tempuri.org/updateNumStock" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insert_02C">
+      <soap:operation soapAction="http://tempuri.org/insert_02C" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insert_02L">
+      <soap:operation soapAction="http://tempuri.org/insert_02L" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insert_Movo">
+      <soap:operation soapAction="http://tempuri.org/insert_Movo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insert_Sld">
+      <soap:operation soapAction="http://tempuri.org/insert_Sld" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="delete_02C">
+      <soap:operation soapAction="http://tempuri.org/delete_02C" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="delete_02L">
+      <soap:operation soapAction="http://tempuri.org/delete_02L" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="delete_Movo">
+      <soap:operation soapAction="http://tempuri.org/delete_Movo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sotckAlmacen">
+      <soap:operation soapAction="http://tempuri.org/sotckAlmacen" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sotckAlmacenGeneral">
+      <soap:operation soapAction="http://tempuri.org/sotckAlmacenGeneral" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sotckArticulosAlmacen">
+      <soap:operation soapAction="http://tempuri.org/sotckArticulosAlmacen" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="kardexArticulosAlmacen">
+      <soap:operation soapAction="http://tempuri.org/kardexArticulosAlmacen" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updatePrintGuia">
+      <soap:operation soapAction="http://tempuri.org/appFactur_updatePrintGuia" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updatePrintGuiaTrans">
+      <soap:operation soapAction="http://tempuri.org/appFactur_updatePrintGuiaTrans" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updatePrintDocumento">
+      <soap:operation soapAction="http://tempuri.org/appFactur_updatePrintDocumento" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updateNumeroDoc">
+      <soap:operation soapAction="http://tempuri.org/appFactur_updateNumeroDoc" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updateCabGuiaConFactura">
+      <soap:operation soapAction="http://tempuri.org/appFactur_updateCabGuiaConFactura" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updateDetGuiaConFactura">
+      <soap:operation soapAction="http://tempuri.org/appFactur_updateDetGuiaConFactura" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_update_sld">
+      <soap:operation soapAction="http://tempuri.org/appFactur_update_sld" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_update_sld_ing">
+      <soap:operation soapAction="http://tempuri.org/appFactur_update_sld_ing" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_saldo">
+      <soap:operation soapAction="http://tempuri.org/appFactur_insert_saldo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_cabGuia">
+      <soap:operation soapAction="http://tempuri.org/appFactur_insert_cabGuia" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_detGuia">
+      <soap:operation soapAction="http://tempuri.org/appFactur_insert_detGuia" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_Movo">
+      <soap:operation soapAction="http://tempuri.org/appFactur_insert_Movo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_MovoSat">
+      <soap:operation soapAction="http://tempuri.org/appFactur_insert_MovoSat" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_02C">
+      <soap:operation soapAction="http://tempuri.org/appFactur_insert_02C" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_02L">
+      <soap:operation soapAction="http://tempuri.org/appFactur_insert_02L" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_cabDocumento">
+      <soap:operation soapAction="http://tempuri.org/appFactur_insert_cabDocumento" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_detDocumento">
+      <soap:operation soapAction="http://tempuri.org/appFactur_insert_detDocumento" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_ctacte">
+      <soap:operation soapAction="http://tempuri.org/appFactur_insert_ctacte" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updateZonaVenta">
+      <soap:operation soapAction="http://tempuri.org/appFactur_updateZonaVenta" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_update03lAnticipos">
+      <soap:operation soapAction="http://tempuri.org/appFactur_update03lAnticipos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="vendedor">
+      <soap:operation soapAction="http://tempuri.org/vendedor" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cobrador">
+      <soap:operation soapAction="http://tempuri.org/cobrador" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="comisiones_Ventas">
+      <soap:operation soapAction="http://tempuri.org/comisiones_Ventas" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="Service_EasySoap12" type="tns:Service_EasySoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="cliente_nuevo">
+      <soap12:operation soapAction="http://tempuri.org/cliente_nuevo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_obtener">
+      <soap12:operation soapAction="http://tempuri.org/cliente_obtener" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_obtener_lista">
+      <soap12:operation soapAction="http://tempuri.org/cliente_obtener_lista" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_actualiza_vendedor">
+      <soap12:operation soapAction="http://tempuri.org/cliente_actualiza_vendedor" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_actualiza_estadoLineaCredito">
+      <soap12:operation soapAction="http://tempuri.org/cliente_actualiza_estadoLineaCredito" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_actualiza_lineaCredito">
+      <soap12:operation soapAction="http://tempuri.org/cliente_actualiza_lineaCredito" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_actualiza_TelefonoCorreo">
+      <soap12:operation soapAction="http://tempuri.org/cliente_actualiza_TelefonoCorreo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_historial_venta">
+      <soap12:operation soapAction="http://tempuri.org/cliente_historial_venta" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_historial_Documentos">
+      <soap12:operation soapAction="http://tempuri.org/cliente_historial_Documentos" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="producto_obtener">
+      <soap12:operation soapAction="http://tempuri.org/producto_obtener" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="producto_obtener_lista">
+      <soap12:operation soapAction="http://tempuri.org/producto_obtener_lista" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cliente_ValidaVenta">
+      <soap12:operation soapAction="http://tempuri.org/cliente_ValidaVenta" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="facturaCabecera_obtener">
+      <soap12:operation soapAction="http://tempuri.org/facturaCabecera_obtener" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="facturaCabecera_actualiza">
+      <soap12:operation soapAction="http://tempuri.org/facturaCabecera_actualiza" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="facturaCabecera_inserta">
+      <soap12:operation soapAction="http://tempuri.org/facturaCabecera_inserta" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="factura_transferir_cuenta">
+      <soap12:operation soapAction="http://tempuri.org/factura_transferir_cuenta" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="documento">
+      <soap12:operation soapAction="http://tempuri.org/documento" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="documentoDetalle">
+      <soap12:operation soapAction="http://tempuri.org/documentoDetalle" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDataxPlanillaOperacionDocumento">
+      <soap12:operation soapAction="http://tempuri.org/getDataxPlanillaOperacionDocumento" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="documentos">
+      <soap12:operation soapAction="http://tempuri.org/documentos" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="documentos_detalle">
+      <soap12:operation soapAction="http://tempuri.org/documentos_detalle" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cuentaCorriente_obtener">
+      <soap12:operation soapAction="http://tempuri.org/cuentaCorriente_obtener" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="total_ventas_obtener">
+      <soap12:operation soapAction="http://tempuri.org/total_ventas_obtener" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="update_Sld_existe">
+      <soap12:operation soapAction="http://tempuri.org/update_Sld_existe" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateNumStock">
+      <soap12:operation soapAction="http://tempuri.org/updateNumStock" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insert_02C">
+      <soap12:operation soapAction="http://tempuri.org/insert_02C" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insert_02L">
+      <soap12:operation soapAction="http://tempuri.org/insert_02L" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insert_Movo">
+      <soap12:operation soapAction="http://tempuri.org/insert_Movo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insert_Sld">
+      <soap12:operation soapAction="http://tempuri.org/insert_Sld" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="delete_02C">
+      <soap12:operation soapAction="http://tempuri.org/delete_02C" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="delete_02L">
+      <soap12:operation soapAction="http://tempuri.org/delete_02L" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="delete_Movo">
+      <soap12:operation soapAction="http://tempuri.org/delete_Movo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sotckAlmacen">
+      <soap12:operation soapAction="http://tempuri.org/sotckAlmacen" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sotckAlmacenGeneral">
+      <soap12:operation soapAction="http://tempuri.org/sotckAlmacenGeneral" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sotckArticulosAlmacen">
+      <soap12:operation soapAction="http://tempuri.org/sotckArticulosAlmacen" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="kardexArticulosAlmacen">
+      <soap12:operation soapAction="http://tempuri.org/kardexArticulosAlmacen" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updatePrintGuia">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_updatePrintGuia" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updatePrintGuiaTrans">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_updatePrintGuiaTrans" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updatePrintDocumento">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_updatePrintDocumento" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updateNumeroDoc">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_updateNumeroDoc" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updateCabGuiaConFactura">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_updateCabGuiaConFactura" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updateDetGuiaConFactura">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_updateDetGuiaConFactura" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_update_sld">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_update_sld" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_update_sld_ing">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_update_sld_ing" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_saldo">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_insert_saldo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_cabGuia">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_insert_cabGuia" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_detGuia">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_insert_detGuia" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_Movo">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_insert_Movo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_MovoSat">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_insert_MovoSat" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_02C">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_insert_02C" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_02L">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_insert_02L" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_cabDocumento">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_insert_cabDocumento" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_detDocumento">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_insert_detDocumento" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_insert_ctacte">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_insert_ctacte" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_updateZonaVenta">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_updateZonaVenta" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="appFactur_update03lAnticipos">
+      <soap12:operation soapAction="http://tempuri.org/appFactur_update03lAnticipos" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="vendedor">
+      <soap12:operation soapAction="http://tempuri.org/vendedor" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cobrador">
+      <soap12:operation soapAction="http://tempuri.org/cobrador" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="comisiones_Ventas">
+      <soap12:operation soapAction="http://tempuri.org/comisiones_Ventas" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Service_Easy">
+    <wsdl:port name="Service_EasySoap" binding="tns:Service_EasySoap">
+      <soap:address location="http://192.168.1.97/ServiceMg/Service_Easy.asmx" />
+    </wsdl:port>
+    <wsdl:port name="Service_EasySoap12" binding="tns:Service_EasySoap12">
+      <soap12:address location="http://192.168.1.97/ServiceMg/Service_Easy.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

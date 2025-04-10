@@ -1,0 +1,539 @@
+﻿<link rel="stylesheet" href="~/assets/descargados/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="~/assets/descargados/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="~/assets/descargados/buttons.bootstrap5.min.css">
+<link href="~/assets/descargados/select2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="~/assets/libs/flatpickr/flatpickr.min.css">
+
+
+@{
+    ViewBag.Title = "Agencia";
+    string acRegistrar = ViewData["Editar"].ToString().ToUpper();
+    string acEliminar = ViewData["Eliminar"].ToString().ToUpper();
+}
+
+
+<!-- Start:: row-2 -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card custom-card">
+                <div class="card-header fs-18 fw-semibold mb-0 text-primary">
+                    Gestión de Agencias
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @*<div class="col-xl-4">
+                            <label for="EstadosCbo" class="form-label">Agencias</label>
+                            <select class="js-example-basic-single " id="EstadosCbo" name="EstadosCbo">
+                                <option value="RE">Activos</option>
+                                <option value="ELI">Inactivos</option>
+                                <option value="0">Todos</option>
+                            </select>
+                        </div>*@
+                        <div class="col-xl-4">
+                            @if (acRegistrar == "TRUE")
+                            {
+                                <div id="divButton">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="btnAgregarAgencia" data-bs-target="#exampleModalScrollable3">Agregar Agencia</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" style="padding-top:0px">
+                <div class="table-responsive">
+                    <table id="datatable-basic-Separacion" class="table table-bordered text-nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th class="thMG1">Ruc</th>
+                                <th class="thMG1">Razón Social</th>
+                                <th class="thMG1">Nombre Corto</th>
+                                <th class="thMG1" style="text-align:center !important">Estado</th>
+                                @if (acRegistrar == "TRUE")
+                                {
+                                    <th class="thMG1" style="text-align:center !important">Editar</th>
+                                }
+                                @if (acEliminar == "TRUE")
+                                {
+                                    <th class="thMG1" style="text-align:center !important">Inactivar</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End:: row-2 -->
+
+
+<div class="modal fade" id="exampleModalScrollableAgencias" tabindex="-1" data-bs-backdrop="static"
+     aria-labelledby="exampleModalScrollableAgencias" data-bs-keyboard="false"
+     aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!--<div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel2">
+                    Modal title
+                </h6>
+            </div>-->
+            <div class="modal-body" style="text-align:center">
+                <img src="~/assets/images/loading.gif" />
+                <p>
+                    Estamos cargando la información. Por favor, espere.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModalScrollable3" tabindex="-1" data-bs-backdrop="static"
+     aria-labelledby="exampleModalScrollable3" data-bs-keyboard="false"
+     aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel3">
+                    Registro de Agencias
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card custom-card">
+                            <div class="card-body" id="card-bodyModal" style="padding:0px !important">
+                                <input type="hidden" id="idAgencia" name="idAgencia" value="0">
+
+                                <label for="inputRuc" class="form-label">RUC</label>
+                                <input class="form-control form-control-sm mb-3" type="text" placeholder="" aria-label="" id="inputRuc">
+
+                                <label for="inputRazonSocial" class="form-label">Razón Social</label>
+                                <input class="form-control form-control-sm mb-3" type="text" placeholder="" aria-label="" id="inputRazonSocial">
+
+                                <label for="inputNombreCorto" class="form-label">Nombre Corto</label>
+                                <input class="form-control form-control-sm mb-3" type="text" placeholder="" aria-label="" id="inputNombreCorto">
+
+                            </div>
+                            <div class="card-footer d-none border-top-0">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-light" id="btnCerrar" data-bs-dismiss="modal"> Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnRegistrar">Registrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="EliminarModalScrollable2" tabindex="-1"
+     aria-labelledby="EliminarModalScrollable2" data-bs-keyboard="false"
+     aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title fw-semibold fs-16 text-danger" id="staticBackdropLabel2">
+                    Desactivación de Agencia
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6 class="modal-title">Está seguro de desactivar la agencia:</h6><br />
+                <span class="me-2 text-default fw-semibold">Ruc:</span> <span id="lblRuc"></span><br />
+                <span class="me-2 text-default fw-semibold">Razón Social:</span> <span id="lblRazon"></span><br />
+                <span class="me-2 text-default fw-semibold">Nombre Corto:</span> <span id="lblNombre"></span><br />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnEliminarAgencia">Desactivar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary btn-wave" id="liveToastBtn" style="display:none">toast-ok</button>
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive"
+         aria-atomic="true">
+        <div class="toast-header text-default">
+            <img class="bd-placeholder-img rounded me-2" src="~/assets/images/brand-logos/favicon.ico" alt="...">
+            <strong class="me-auto">Alerta!</strong>
+            <small>Hace un instante</small>
+            <button type="button" id="liveToastBtnCerrar" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="msjRespuesta">
+            Hello, world! This is a toast message.
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/descargados/jquery.dataTables.min.js"></script>
+<script src="~/assets/descargados/dataTables.bootstrap5.min.js"></script>
+<script src="~/assets/descargados/dataTables.responsive.min.js"></script>
+<script src="~/assets/descargados/dataTables.buttons.min.js"></script>
+@*<script src="~/assets/descargados/buttons.print.min.js"></script>*@
+@*<script src="~/assets/descargados/pdfmake.min.js"></script>*@
+@*<script src="~/assets/descargados/vfs_fonts.js"></script>*@
+<script src="~/assets/descargados/buttons.html5.min.js"></script>
+<script src="~/assets/descargados/jszip.min.js"></script>
+
+
+<script src="~/assets/js/Toasts.js"></script>
+
+
+<!-- Select2 Cdn -->
+<script src="~/assets/descargados/select2.min.js"></script>
+
+<!-- Internal Select-2.js -->
+<script src="~/assets/js/select2.js"></script>
+
+
+<!-- Internal Datatables JS -->
+<script src="~/assets/js/datatables.js"></script>
+
+
+<!-- Date & Time Picker JS -->
+<script src="~/assets/libs/flatpickr/flatpickr.min.js"></script>
+<script src="~/assets/js/date&time_pickers.js"></script>
+
+
+<script type="text/javascript">
+
+    var saldo_inicial = 0;
+
+    $(document).ready(function () {
+
+        /*$('.vn0').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });*/
+
+        //$('.js-example-basic-singleModal').select2({ dropdownParent: jQuery('#card-bodyModal') });
+
+        fnConsularAgencia(1);
+    });
+
+
+    //$('#EstadosCbo').on('change', function () {
+        //fnConsularAgencia(1);
+    //});
+
+
+    $("#btnAgregarAgencia").click(function () {
+        $("#liveToastBtnCerrar").click();
+        document.getElementById('staticBackdropLabel3').innerHTML = "Registro de Agencia";
+        $("#idAgencia").val(0);
+        $("#inputRuc").val("");
+        $("#inputRazonSocial").val("");
+        $("#inputNombreCorto").val("");
+        $("#msjValidacion").text("");
+        $("#msjValidacion").css("display", "none");
+    });
+
+    $("#btnRegistrar").click(function () {
+        var res = fnValidaFormulario();
+        if (res == 1) {
+            fnRegistraAgencia();
+        }
+    });
+
+    $("#btnEliminarAgencia").click(function () {
+        fnEliminarAgencia();
+    });
+
+    $("#btnCerrar").click(function () {
+        $("#liveToastBtnCerrar").click();
+    });
+
+
+    function fnValidaFormulario() {
+
+        var msj = "";
+        var res = 1;
+
+
+        if ($("#inputRuc").val() == "") {
+            res = 0;
+            msj += " ruc no válido,";
+        }
+        else {
+            if ($("#inputRuc").val().length != 11) {
+                res = 0;
+                msj += " El ruc debe ser de 11,";
+            }
+        }
+
+        if ($("#inputRazonSocial").val() == "") {
+            res = 0;
+            msj += " razón social no válida,";
+        }
+
+
+        if (res == 0) {
+            $("#msjValidacion").text("Seleccione :" + msj.substring(0, msj.length - 1));
+            $("#msjValidacion").css("display", "block");
+        }
+        else {
+            $("#msjValidacion").text("");
+            $("#msjValidacion").css("display", "none");
+        }
+
+        alert(msj);
+        alert(res);
+        return res;
+    }
+
+    function fnModalEditar(id) {
+        id = "btEditar_" + id;
+        $("#liveToastBtnCerrar").click();
+        $('#exampleModalScrollable3').modal('show');
+
+        var _ruc = $("#" + id).attr("data-ruc");
+        var _razon = $("#" + id).attr("data-razon");
+        var _nombre = $("#" + id).attr("data-nombre");
+        var _idAgencia = id.replace("btEditar_", "");
+
+        $("#msjValidacion").text("");
+        $("#msjValidacion").css("display", "none");
+        document.getElementById('staticBackdropLabel3').innerHTML = 'Edición de Agencia - Id:' + _idAgencia;
+
+        $("#idAgencia").val(_idAgencia);
+        $("#inputRuc").val(_ruc);
+        $("#inputRazonSocial").val(_razon);
+        $("#inputNombreCorto").val(_nombre);
+
+    }
+
+    function fnModalEliminar(id) {
+        id = "btEliminar_" + id;
+        $("#liveToastBtnCerrar").click();
+        $('#EliminarModalScrollable2').modal('show');
+
+        var _ruc = $("#" + id).attr("data-ruc");
+        var _razon = $("#" + id).attr("data-razon");
+        var _nombre = $("#" + id).attr("data-nombre");
+
+        var _idAgencia = id.replace("btEliminar_", "");
+
+        document.getElementById('lblRuc').innerHTML = _ruc;
+        document.getElementById('lblRazon').innerHTML = _razon;
+        document.getElementById('lblNombre').innerHTML = _nombre;
+
+        $("#idAgencia").val(_idAgencia);
+    }
+
+
+    async function fnRegistraAgencia() {
+
+        document.getElementById('msjRespuesta').innerHTML = '';
+        var _opcion = "";
+        if ($("#idAgencia").val() == "0") {
+            _opcion = "CREATE";
+        }
+        else {
+            _opcion = "UPDATE";
+        }
+
+        $.ajax({
+            url: '../Almacen/agencias_gestion',
+            type: 'GET',
+            data: {
+                idAgencia: $("#idAgencia").val(),
+                ruc: $("#inputRuc").val(),
+                razon_social: $("#inputRazonSocial").val(),
+                nombre_corto: $("#inputNombreCorto").val(),
+                opcion: _opcion,
+            },
+            success: function (response) {
+                //console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+                else if (response == "0") {
+                    document.getElementById('msjRespuesta').innerHTML = "<strong class='btn btn-sm btn-danger-light'>El registro no pudo ser procesado</strong>";
+                    $("#liveToastBtn").click();
+                } else {
+                    
+                    fnConsularAgencia(0);
+                    document.getElementById('msjRespuesta').innerHTML = "<strong class='btn btn-sm btn-success-light'>El registro ha sido procesado</strong>";
+                    $("#liveToastBtn").click();
+
+                    if ($("#idAgencia").val() == "0") {
+                        $("#inputRuc").val("");
+                        $("#inputRazonSocial").val("");
+                        $("#inputNombreCorto").val("");
+                    }
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    async function fnEliminarAgencia() {
+
+        $.ajax({
+            url: '../Almacen/agencias_gestion',
+            type: 'GET',
+            data: {
+                idAgencia: $("#idAgencia").val(),
+                ruc: "0",
+                razon_social: "0",
+                nombre_corto: "0",
+                opcion: "DELETE",
+            },
+            success: function (response) {
+                //console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+                else if (response == "0") {
+                    document.getElementById('msjRespuesta').innerHTML = "<strong class='btn btn-sm btn-danger-light'>El registro no pudo ser eliminado</strong>";
+                    $("#liveToastBtn").click();
+                } else {
+                    
+                    fnConsularAgencia(1);
+                    $('#EliminarModalScrollable2').modal('hide');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+
+    async function fnConsularAgencia(tipo) {
+
+        var permisoElimina = "@acEliminar";
+        var tdElimina = "";
+
+        if (tipo == 1) {
+            $('#exampleModalScrollableAgencias').modal('show');
+        }
+
+
+        var table = new DataTable('#datatable-basic-Separacion');
+        var rows = table
+            .rows()
+            .remove()
+            .draw();
+
+        var _estado = "";
+
+        $.ajax({
+            url: '../Almacen/listarAgencias',
+            type: 'GET',
+            data: {},
+            success: function (response) {
+                //console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+                $.each(response, function (key, value) {
+                    //console.log(value.Articulo);
+
+                    if (value.estado == "RE") {
+                        _estado = "Activo";
+
+                        if (permisoElimina == "TRUE") {
+                            tdElimina = '<td class="tdCendter"><button class="btn btn-sm btn-info btn-wave ClsEditar" onclick="fnModalEditar(' + value.idAgencia + ');"  id="btEditar_' + value.idAgencia + '" data-ruc="' + value.ruc + '" data-razon="' + value.razon_social + '" data-nombre="' + value.nombre_corto + '"><i class="ri-edit-line align-middle me-2 d-inline-block"></i>Editar</button></td>' +
+                                '<td class="tdCendter"><button class="btn btn-sm btn-danger btn-wave ClsEliminar"  onclick="fnModalEliminar(' + value.idAgencia + ');" id="btEliminar_' + value.idAgencia + '" data-ruc="' + value.ruc + '" data-razon="' + value.razon_social + '" data-nombre="' + value.nombre_corto + '"><i class="ri-delete-bin-line align-middle me-2 d-inline-block"></i>Inactivar</button></td>';
+                        }
+
+                        $('#datatable-basic-Separacion').DataTable().row.add($('<tr>' +
+                            '<td>' + value.ruc + '</td>' +
+                            '<td>' + value.razon_social + '</td>' +
+                            '<td>' + value.nombre_corto + '</td>' +
+                            '<td class="tdCendter">' + _estado + '</td>' +
+                            tdElimina +
+                            '</tr>')).draw();
+
+                    } else {
+                        _estado = "Inactivo";
+
+                        $('#datatable-basic-Separacion').DataTable().row.add($('<tr>' +
+                            '<td>' + value.ruc + '</td>' +
+                            '<td>' + value.razon_social + '</td>' +
+                            '<td>' + value.nombre_corto + '</td>' +
+                            '<td class="tdCendter">' + _estado + '</td>' +
+                            '<td class="tdCendter"><button class="btn btn-sm btn-info btn-wave ClsEditar" onclick="fnModalEditar(' + value.idAgencia + ');"  id="btEditar_' + value.idAgencia + '" data-ruc="' + value.ruc + '" data-razon="' + value.razon_social + '" data-nombre="' + value.nombre_corto + '"><i class="ri-edit-line align-middle me-2 d-inline-block"></i>Editar</button></td>' +
+                            '<td></dt>' +
+                            '</tr>')).draw();
+                    }
+
+                })
+
+                setTimeout(function () {
+                    if (tipo == 1) {
+                        $("#exampleModalScrollableAgencias").modal('hide');
+                    }
+
+                    //$("#liveToastBtnCerrar").click();
+                   /* $(".ClsEditar").click(function () {
+                        $("#liveToastBtnCerrar").click();
+                        fnModalEditar(this.id);
+                    });
+
+                    $(".ClsEliminar").click(function () {
+                        $("#liveToastBtnCerrar").click();
+                        fnModalEliminar(this.id);
+                    });*/
+
+
+                }, 500);
+
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+
+</script>
+
+<style>
+
+    .choices {
+        margin-bottom: 15px !important;
+    }
+
+    .divFecha {
+        margin-top: 0px !important;
+    }
+
+    .tdCendter {
+        text-align: center !important;
+    }
+
+    .rowRed {
+        background-color: rgba(var(--danger-rgb), .1) !important;
+        color: rgb(var(--danger-rgb)) !important;
+        border-color: rgba(var(--danger-rgb), .1) !important;
+    }
+</style>
+
+@{
+    var usu_data3 = Session["SessionUsuario"] as WebAppMontGroup.Entity.Usuario;
+    if (usu_data3.estiloWeb == "Estilo2")
+    {
+        <link href="~/assets/css/cssMG2.css" rel="stylesheet" />
+    }
+}

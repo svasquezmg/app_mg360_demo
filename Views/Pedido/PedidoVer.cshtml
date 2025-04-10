@@ -1,0 +1,537 @@
+﻿<!-- Start::row-1 -->
+@{
+    if (ViewData["PedidoPorId"] != null)
+    {
+        WebAppMontGroup.Entity.Pedido xPedido = ViewData["PedidoPorId"] as WebAppMontGroup.Entity.Pedido;
+        <div class="row">
+
+            <div class="col-xl-12">
+                <div class="card-body">
+
+                    <div class="alert d-flex justify-content-end align-items-center" role="alert">
+                        <div class="col-xl-8"></div>
+                        <div class="col-xl-2">
+                            <a href="/Pedido/PedidoCrear">
+                                <button type="button" class="btn btn-primary btn-wave waves-effect waves-light ms-2">
+                                    <i class="ti ti-plus me-2"></i> Nuevo Registro de Pedido
+                                </button>
+                            </a>
+                        </div>
+                        <div class="col-xl-2">
+                            <a href="/Pedido/PedidoList">
+                                <button type="button" class="btn btn-success btn-wave waves-effect waves-light ms-2">
+                                    <i class="ti ti-list me-2"></i> Listado de Pedidos
+                                </button>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div><br><br><br>
+            <div class="col-xl-12">
+                <div class="card-body">
+                    @{
+                        string estados = xPedido.Estado + "-" + xPedido.EstadoProducto + "-" + xPedido.EstadoCredito + "-" + xPedido.EstadoAlmacen;
+                        string msjEstado = "";
+                        string divAlerta = "";
+                        /*General - Producto - Credito - Alamcen
+                        1.RE - PE - PE - PE->Pendiente Crédito y Producto
+                        2.RE - PE - APR - PE->Pendiente Producto
+                        3.PE - APR - PE - PE->Pendiente Crédito
+                        4.PE - APR - APR - PE->Pendiente almacén
+                        5.PE - APR - APR - APR->Por facturar
+                        6.FAC - APR - APR - APR->Facturado
+                        7.DES - APR - APR - APR->Desparobado por facturación
+                        IF PE
+                           IF DES -> producto
+                           IF DES -> crédito
+                           IF DES -> almacén*/
+
+                        if (estados == "RE-PE-PE-PE")
+                        {
+                            msjEstado = "Pendiente por crédito y producto";
+                            divAlerta = "1";
+                        }
+                        else if (estados == "RE-APR-PE-PE")
+                        {
+                            msjEstado = "Pendiente por credito";
+                            divAlerta = "1";
+                        }
+                        else if (estados == "RE-PE-APR-PE")
+                        {
+                            msjEstado = "Pendiente por producto";
+                            divAlerta = "1";
+                        }
+                        else if (estados == "PE-APR-APR-PE")
+                        {
+                            msjEstado = "Pendiente por almacén";
+                            divAlerta = "1";
+                        }
+                        else if (estados == "PE-APR-APR-APR")
+                        {
+                            msjEstado = "Por facturar";
+                            divAlerta = "2";
+                        }
+                        else if (estados == "FAC-APR-APR-APR")
+                        {
+                            msjEstado = "Facturado";
+                            divAlerta = "3";
+                        }
+                        else if (estados == "DES-APR-APR-APR")
+                        {
+                            divAlerta = "4";
+                            msjEstado = "Desparobado por facturación";
+                        }
+                        else if (estados == "PE-APR-APR-APR")
+                        {
+                            divAlerta = "4";
+                            msjEstado = "Desparobado por facturación";
+                        }
+
+                        if (divAlerta == "1")
+                        {
+                            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                                <svg class="flex-shrink-0 me-2 svg-primary" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000"><g><rect fill="none" height="24" width="24" /></g><g><g><g><path d="M12,5.99L19.53,19H4.47L12,5.99 M12,2L1,21h22L12,2L12,2z" /><polygon points="13,16 11,16 11,18 13,18" /><polygon points="13,10 11,10 11,15 13,15" /></g></g></g></svg>
+                                <div>
+                                    @msjEstado
+                                </div>
+                            </div>
+                        }
+                        else if (divAlerta == "2")
+                        {
+                            <div class="alert alert-secondary d-flex align-items-center" role="alert">
+                                <svg class="flex-shrink-0 me-2 svg-secondary" xmlns="http://www.w3.org/2000/svg" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" /></svg>
+                                <div>
+                                    @msjEstado
+                                </div>
+                            </div>
+                        }
+                        else if (divAlerta == "3")
+                        {
+                            <div class="alert alert-success d-flex align-items-center" role="alert">
+                                <svg class="flex-shrink-0 me-2 svg-success" xmlns="http://www.w3.org/2000/svg" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000"><path d="M0 0h24v24H0V0zm0 0h24v24H0V0z" fill="none" /><path d="M16.59 7.58L10 14.17l-3.59-3.58L5 12l5 5 8-8zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" /></svg>
+                                <div>
+                                    @msjEstado
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                <svg class="flex-shrink-0 me-2 svg-danger" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000"><g><rect fill="none" height="24" width="24" /></g><g><g><g><path d="M15.73,3H8.27L3,8.27v7.46L8.27,21h7.46L21,15.73V8.27L15.73,3z M19,14.9L14.9,19H9.1L5,14.9V9.1L9.1,5h5.8L19,9.1V14.9z" /><rect height="6" width="2" x="11" y="7" /><rect height="2" width="2" x="11" y="15" /></g></g></g></svg>
+                                <div>
+                                    @msjEstado
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+            </div>
+
+            <div class="col-xl-12">
+                <div class="card-header d-flex justify-content-between" style="padding-left: 10px;">
+
+                </div>
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="card custom-card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    Código Pedido : <span class="text-success">@xPedido.CodigoPedido</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled order-details-list">
+                                    <li>
+                                        <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Coa &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span>@xPedido.Coa</div>
+                                    </li>
+                                    <li>
+                                        <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Cliente : </span>@xPedido.Cliente</div>
+                                    </li>
+                                    <li>
+                                        <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Dirección : </span>@xPedido.DireccionCliente</div>
+                                    </li>
+                                    <li>
+                                        <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Categoría : </span>@xPedido.CodCategoriaCliente</div>
+                                    </li>
+                                    <li>
+                                        <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Tipo Pago : </span>@xPedido.NombreTipoPago</div>
+                                    </li>
+                                    <li>
+                                        <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Tipo Doc : </span>@xPedido.TipoDocumentoFiscal</div>
+                                    </li>
+                                    <li>
+                                        <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Documento : </span><a href="javascript:void(0);" class="text-primary">@xPedido.DocumentoFiscal</a></div>
+                                    </li>
+                                    <li>
+                                        <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Guía Remis : </span><a href="javascript:void(0);" class="text-primary">@xPedido.pedido_guia.Guia</a></div>
+                                    </li>
+                                    <li>
+                                        <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Vendedor : </span>@xPedido.Vendedor</div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="card custom-card overflow-hidden">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    Datos para la entrega
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="p-3">
+                                    <ul class="list-unstyled order-details-list">
+                                        <li>
+                                            <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Fecha Entrega : </span>@xPedido.FechaEntrega</div>
+                                        </li>
+                                        <li>
+                                            <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Orden Compra : </span><a href="javascript:void(0);" class="text-primary">@xPedido.OrdenCompra</a></div>
+                                        </li>
+                                        <li>
+                                            <div class="fs-14 text-muted">
+                                                <span class="me-2 text-default fw-semibold">Documento Orden de Compra:</span><br>
+                                                @if (!string.IsNullOrEmpty(xPedido.DocOrdenCompra))
+                                                {
+                                                    <a href="@Url.Content("~/" + xPedido.DocOrdenCompra)" class="btn btn-success label-btn" download>
+                                                        <i class="ri-file-line label-btn-icon me-2"></i>Descargar Orden de Compra
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-danger">No hay documento disponible.</span>
+                                                }
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Punto Entrega : </span>@xPedido.pedido_guia.GuiaPuntoEntrega</div>
+                                        </li>
+                                        <li>
+                                            <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Dir. Entrega : </span>@xPedido.pedido_guia.GuiaDireccionEntrega</div>
+                                        </li>
+                                        <li>
+                                            <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Tipo Transp : </span>@xPedido.pedido_guia.GuiaTransporte</div>
+                                        </li>
+                                        <li>
+                                            <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Transp Ruc : </span>@xPedido.pedido_guia.GuiaTransporteEmpRuc</div>
+                                        </li>
+                                        <li>
+                                            <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Transp Nom : </span>@xPedido.pedido_guia.GuiaTransporteEmpresa</div>
+                                        </li>
+                                        <li>
+                                            <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Persona Recep : </span>@xPedido.pedido_guia.Dni1 - @xPedido.pedido_guia.Nombre1 - @xPedido.pedido_guia.Telefono1 </div>
+                                        </li>
+                                        <li>
+                                            <div class="fs-14 text-muted"><span class="me-2 text-default fw-semibold">Persona Recep : </span>@xPedido.pedido_guia.Dni2 - @xPedido.pedido_guia.Nombre2 - @xPedido.pedido_guia.Telefono2 </div>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xl-8">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card custom-card">
+
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                            <table class="table text-nowrap">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Productos</th>
+                                                        <th scope="col">Estado</th>
+                                                        <th scope="col">Precio</th>
+                                                        <th scope="col">Cantidad</th>
+                                                        <th scope="col">Descuento</th>
+                                                        <th scope="col">Precio Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        var obsProducto = new List<string>();
+                                                    }
+                                                    @foreach (var data in xPedido.pedido_detalle as IList<WebAppMontGroup.Entity.PedidoDetalle>)
+                                                    {
+                                                        obsProducto.Add($"Código: {data.Articulo} - {data.Observacion}");
+                                                        <tr>
+                                                            <td>
+                                                                <div class="d-flex align-items-center">
+                                                                    <div>
+                                                                        <div class="mb-1 fs-14 fw-semibold">
+                                                                            <a href="javascript:void(0);">@data.ArticuloDesc</a>
+                                                                        </div>
+                                                                        <div class="mb-1">
+                                                                            <span class="me-1">Código:</span><span class="text-muted">@data.Articulo</span>
+                                                                        </div>
+                                                                        <div class="mb-1">
+                                                                            <span class="me-1">Lote:</span><span class="text-muted">@data.Lote @* <span class="badge bg-info ms-3">@data.TipoPromocion</span> *@</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td><a href="javascript:void(0);" class="text-primary">@data.Decision (@data.UsuarioResponsable)</a></td>
+                                                            <td>
+                                                                <span class="fs-15 fw-semibold">S/ @data.Precio</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="fs-15 fw-semibold">@data.Cantidad</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="fs-15 fw-semibold">@data.Descuento</span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="fs-15 fw-semibold">@data.SubTotal</span>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-xl-12">
+                        <div class="card custom-card overflow-hidden">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    Mensajes a Aprobadores
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="p-3">
+                                    <dl class="row mb-0">
+                                        <dt class="col-sm-2">Msj a Almacén :</dt>
+                                        <dd class="col-sm-10">&nbsp;@xPedido.ObservacionAlmacen</dd>
+
+                                        <dt class="col-sm-2">Msj a Crédito :</dt>
+                                        <dd class="col-sm-10">&nbsp;@xPedido.ObservacionCredito</dd>
+
+                                        <dt class="col-sm-2">Msj a Producto :</dt>
+                                        <dd class="col-sm-10">&nbsp;@xPedido.ObservacionPrecio</dd>
+
+                                    </dl>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="col-xl-12">
+                        <div class="card custom-card overflow-hidden">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    Observaciones
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="p-3">
+                                    <dl class="row mb-0">
+                                        <dt class="col-sm-2">Obs. Credito :</dt>
+                                        <dd class="col-sm-10">&nbsp;@xPedido.SeguimientoCredito</dd>
+
+                                        <dt class="col-sm-2">Obs. Producto :</dt>
+                                        <dd class="col-sm-10">&nbsp;@string.Join(" , ", obsProducto)</dd>
+
+                                        <dt class="col-sm-2">Obs. Almacén :</dt>
+                                        <dd class="col-sm-10">&nbsp;</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card custom-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            Resumento de Pago
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class=" fs-14">Total Items</div>
+                                <div class="fw-semibold fs-16">@xPedido.pedido_detalle.Count()</div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class=" fs-14">Sub Total</div>
+                                <div class="fw-semibold fs-16">S/ @xPedido.SubTotal</div>
+                            </div>
+                            @*<div class="d-flex align-items-center justify-content-between mb-3">
+                                    <div class=" fs-14">Applied Coupen</div>
+                                    <div class="badge bg-success-transparent fs-11">SPKFIR</div>
+                                </div>*@
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class=" fs-14">Descuentos</div>
+                                <div class="fw-semibold fs-16 text-success">S/ @xPedido.TotalDescuento</div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class=" fs-14">Sub Total</div>
+                                <div class="fw-semibold fs-16">S/ @xPedido.SubTotal</div>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class=" fs-14">IGV (18%)</div>
+                                <div class="fw-semibold fs-16">S/ @xPedido.Igv</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="fs-18 fw-semibold">Total</div>
+                            <h4 class="fw-semibold">S/ @xPedido.Total</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card custom-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            Seguimiento del pedido
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="order-track">
+                            <div class="accordion" id="basicAccordion">
+
+
+                                <div class="accordion-item border-0 bg-transparent mb-2">
+                                    <div class="accordion-header" id="headingOne">
+                                        <a class="px-0 pt-0" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#basicOne" aria-expanded="true" aria-controls="basicOne">
+                                            <div class="d-flex ">
+                                                <div class="me-3">
+                                                    <span class="avatar avatar-md avatar-rounded bg-light text-muted">
+                                                        <i class="bx bxs-calendar"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <p class="fw-semibold mb-0 fs-14">Fecha Registro</p>
+                                                    <span class="fs-12 text-success">@xPedido.FechaRegistro</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div id="basicOne" class="accordion-collapse collapse show border-top-0" aria-labelledby="headingOne" data-bs-parent="#basicAccordion">
+                                        <div class="accordion-body pt-0 ps-5 ms-2">
+                                            <div class="fs-12">
+                                                <p class="mb-0">Pedido registrado por:<a href="javascript:void(0);" class="font-weight-semibold text-primary"> @xPedido.UsuarioActualizacion</a></p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion" id="basicAccordion2">
+
+                                <div class="accordion-item border-0 bg-transparent mb-2">
+                                    <div class="accordion-header" id="headingThree">
+                                        <a class="px-0 pt-0" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#basicThree" aria-expanded="true" aria-controls="basicThree">
+                                            <div class="d-flex">
+                                                <div class="me-3">
+                                                    <span class="avatar avatar-md avatar-rounded bg-light text-muted">
+                                                        <i class="bx bxs-truck"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="flex-fill">
+                                                    <p class="fw-semibold mb-0 fs-14">Entrega Programada</p>
+                                                    <span class="fs-12 text-success">@xPedido.FechaEntrega</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div id="basicThree" class="accordion-collapse show collapse border-top-0" aria-labelledby="headingThree" data-bs-parent="#basicAccordion2">
+                                        <div class="accordion-body pt-0 ps-5 ms-2">
+                                            <div class="fs-12 mb-3">
+                                                <p class="mb-0">@xPedido.pedido_guia.GuiaDireccionEntrega</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @{
+                                var listaSeguimiento = ViewData["PedidoSeguimiento"] as List<WebAppMontGroup.Entity.PedidoLog> ?? new List<WebAppMontGroup.Entity.PedidoLog>();
+                            }
+
+                            <div class="accordion" id="basicAccordion">
+                                @if (listaSeguimiento.Any())
+                                {
+                                    foreach (var seguimiento in listaSeguimiento)
+                                    {
+                                        var icono = "bx bxs-info-circle"; // Ícono por defecto
+                                        var colorClase = "text-muted"; // Clase de color por defecto
+
+                                        if (seguimiento.Accion == "APROBADO")
+                                        {
+                                            icono = "bx bxs-check-circle";
+                                            colorClase = "text-success"; // Verde
+                                        }
+                                        else if (seguimiento.Accion == "DESAPROBADO")
+                                        {
+                                            icono = "bx bxs-x-circle";
+                                            colorClase = "text-danger"; // Rojo
+                                        }
+                                        else if (seguimiento.Accion == "UPDATE")
+                                        {
+                                            icono = "bx bxs-edit";
+                                            colorClase = "text-warning"; // Naranja
+                                        }
+
+                                        <div class="accordion-item border-0 bg-transparent mb-2">
+                                            <div class="accordion-header">
+                                                <a class="px-0 pt-0" href="javascript:void(0)">
+                                                    <div class="d-flex">
+                                                        <div class="me-3">
+                                                            <span class="avatar avatar-md avatar-rounded bg-light @colorClase">
+                                                                <i class="@icono"></i>
+                                                            </span>
+                                                        </div>
+                                                        <div class="flex-fill">
+                                                            <p class="fw-semibold mb-0 fs-14 @colorClase">@seguimiento.Accion</p>
+                                                            <span class="fs-12">@seguimiento.Fecha.ToString("MMM dd, HH:mm")</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="accordion-collapse show border-top-0">
+
+
+                                                <div class="accordion-body pt-0 ps-5 ms-2">
+                                                    <div class="fs-12">
+                                                        <p class="mb-0"><span class="fw-semibold">Usuario:</span> @seguimiento.Usuario</p>
+                                                        <p class="mb-0"><span class="fw-semibold">Obs:</span> @seguimiento.Obs</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="text-muted">No hay seguimiento disponible.</p>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<!--End::row-1 -->

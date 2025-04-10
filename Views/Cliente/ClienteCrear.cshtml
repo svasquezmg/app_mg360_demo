@@ -1,0 +1,668 @@
+﻿
+<link rel="stylesheet" href="~/assets/descargados/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="~/assets/descargados/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="~/assets/descargados/buttons.bootstrap5.min.css">
+<link href="~/assets/descargados/select2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="~/assets/libs/flatpickr/flatpickr.min.css">
+
+@{
+    ViewBag.Title = "Cliente";
+    string tipoUsuario = ViewData["TipoUsuario"].ToString();
+    string textBtnGuardar = "Registrar Cliente";
+    string xCoaCliente = "",
+           xRucDni = "",
+           xRazonSocial = "",
+           xVendedor = "-1",
+           xCategoria = "-1",
+           xCondicionPago = "-1",
+           xDireccionFiscal = "",
+           xUbigeoFiscal = "-1",
+           xCorreoPrincipal = "",
+           xTelefonoPrincipal = "",
+           xBloqCobVendedor = "",
+           xBloqRucDni = "",
+           xBloqBtnValida = "",
+           xBloqRazonSocial = "",
+           xBloqCategoria = "",
+           xBloqDireccion = "",
+           xBloqUbigeo = "",
+           xBloqCorreo = "",
+           xBloqTelefono = "",
+           xBloqestCredito = "",
+           xBloqLineaCredito = "",
+           xBloqCondPago = "";
+
+    if (ViewBag.id != "0")
+    {
+        xCoaCliente = ViewBag.id;
+        textBtnGuardar = "Editar Cliente";
+        foreach (var cli in ViewData["Cliente"] as IList<WebAppMontGroup.Entity.Cliente>)
+        {
+
+            xRucDni = cli.rucdni;
+            xRazonSocial = cli.razonSocial;
+            xVendedor = cli.codigoVendedor;
+            xCategoria = cli.categoria;
+            xCondicionPago = cli.codPagoTipo;
+        }
+
+        foreach (var dir in ViewData["Direcciones"] as IList<WebAppMontGroup.Entity.ClienteDireccion>)
+        {
+            if (dir.tipo == "Fiscal")
+            {
+                xDireccionFiscal = dir.direccion;
+                xUbigeoFiscal = dir.ubigeo;
+            }
+        }
+
+        foreach (var con in ViewData["Contactos"] as IList<WebAppMontGroup.Entity.ClienteContacto>)
+        {
+            if (con.tipo == "Principal")
+            {
+                xCorreoPrincipal = con.correo;
+                xTelefonoPrincipal = con.telefono;
+            }
+        }
+
+        //Vendedor
+        if (tipoUsuario == "1")
+        {
+            xBloqCobVendedor = "disabled";
+            xBloqRucDni = "disabled";
+            xBloqBtnValida = "disabled";
+            xBloqRazonSocial = "disabled";
+            xBloqCategoria = "disabled";
+            xBloqDireccion = "disabled";
+            xBloqUbigeo = "disabled";
+            xBloqestCredito = "disabled";
+            xBloqLineaCredito = "disabled";
+            xBloqCondPago = "disabled";
+        }
+    }
+    else
+    {
+        if (tipoUsuario == "1")
+        {
+            xBloqRazonSocial = "disabled";
+            xBloqCategoria = "disabled";
+            xBloqestCredito = "disabled";
+            xBloqLineaCredito = "disabled";
+            xBloqCondPago = "disabled";
+        }
+    }
+
+}
+
+<!-- Start:: row-2 -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card custom-card">
+                <div class="card-header fs-18 fw-semibold mb-0 text-primary">
+                    Cliente
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <label for="VendedorCbo" class="form-label">Vendedor</label>
+                            <select class="js-example-basic-single " id="VendedorCbo" @xBloqCobVendedor name="VendedorCbo">
+                                <option value="-1">Seleccione</option>
+                                @{
+                                    var usu_data = ViewData["Usuario"] as WebAppMontGroup.Entity.Usuario;
+                                    <option value="@usu_data.codigovendedor" RValamcen="@usu_data.codigoalmacen">@usu_data.nombres - @usu_data.codigovendedor</option>
+
+                                    foreach (var usu in ViewData["VendedorAsociado"] as IList<WebAppMontGroup.Entity.Usuario>)
+                                    {
+                                        <option value="@usu.codigovendedor" RValamcen="@usu.codigoalmacen">@usu.nombres - @usu.codigovendedor</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-xl-2">
+                            <label for="numCliente" class="form-label">Ruc/ Dni</label>
+                            <input class="form-control" type="text" id="numCliente" value="@xRucDni" @xBloqRucDni placeholder="" aria-label=".form-control-sm example">
+                        </div>
+                        <div class="col-xl-1" style="margin-bottom: 10px;">
+                            <label for="divButton" class="form-label">&nbsp;</label>
+                            <div id="divButton">
+                                <button type="button" class="btn btn-primary" @xBloqBtnValida id="btnBalidarRucDni" onclick="fnConsultaDocumento();">Validar</button>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <label for="nombreCliente" class="form-label">Cliente</label>
+                            <input class="form-control" type="text" id="nombreCliente" value="@xRazonSocial" @xBloqRazonSocial placeholder="" style="text-transform: uppercase" maxlength="200" aria-label=".form-control-sm example">
+                        </div>
+                        <div class="col-xl-3">
+                            <label for="CategoriaCbo" class="form-label">Categoria</label>
+                            <select class="js-example-basic-single " id="CategoriaCbo" name="CategoriaCbo" @xBloqCategoria>
+                                <option value="-1">Seleccione</option>
+                                @{
+                                    var dtCategCliente = ViewData["ClienteCategoria"] as System.Data.DataTable;
+                                    foreach (System.Data.DataRow item in dtCategCliente.Rows)
+                                    {
+                                        <option value="@item["nomCategoria"].ToString()">@item["nomCategoria"].ToString()</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <label for="direccionCliente" class="form-label">Dirección Fiscal</label>
+                            <textarea class="form-control" id="direccionCliente" rows="1" style="text-transform: uppercase" maxlength="200" @xBloqDireccion>@xDireccionFiscal</textarea>
+                        </div>
+                        <div class="col-xl-6">
+                            <label for="UbigeoCbo" class="form-label">Ubigeo</label>
+                            <select class="js-example-basic-single " id="UbigeoCbo" name="UbigeoCbo" @xBloqUbigeo>
+                                <option value="-1">Seleccione Ubigeo</option>
+                                @{
+                                    foreach (var usu in ViewData["Ubigeo"] as IList<WebAppMontGroup.Entity.Ubigeo>)
+                                    {
+                                        <option value="@usu.codigo">@usu.distrito - @usu.provincia - @usu.departamento</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <label for="correoPrincipal" class="form-label">Correo</label>
+                            <input class="form-control" type="text" id="correoPrincipal" value="@xCorreoPrincipal" placeholder="" @xBloqCorreo maxlength="200" aria-label=".form-control-sm example">
+                        </div>
+                        <div class="col-xl-6">
+                            <label for="telefonoPrincipal" class="form-label">Telefono</label>
+                            <input class="form-control" type="text" id="telefonoPrincipal" value="@xTelefonoPrincipal" placeholder="" @xBloqTelefono maxlength="200" aria-label=".form-control-sm example">
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+
+                        <div class="col-xl-3">
+                            <label for="CreditoEstadoCbo" class="form-label">Estado de Credito</label>
+                            <select class="form-select" id="CreditoEstadoCbo" name="CreditoEstadoCbo" @xBloqestCredito>
+                                <option value="X">No habilitado</option>
+                                <option value="">Habilitado</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-3">
+                            <label for="lineaCredito" class="form-label">Linea de Credito</label>
+                            <input class="form-control" type="text" id="lineaCredito" placeholder="" @xBloqLineaCredito aria-label=".form-control-sm example">
+                        </div>
+
+                        <div class="col-xl-6">
+                            <label for="CondicionPagoCbo" class="form-label">Condicón de Pago</label>
+                            <select class="js-example-basic-single " id="CondicionPagoCbo" name="CondicionPagoCbo" @xBloqCondPago>
+                                <option value="-1">Seleccione</option>
+                                @{
+                                    foreach (var data in ViewData["PagoTipo"] as IList<WebAppMontGroup.Entity.PagoTipo>)
+                                    {
+                                        if (data.estado == "1")
+                                        {
+                                            <option value="@data.codigo">@data.descripcion</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-12">
+                    <div class="card-body" style="padding-bottom: 0px !important;">
+                        <div class="btn-list">
+                            <div class="row">
+                                <div class="col-xl-3"></div>
+                                <div class="col-xl-6">
+                                    <div class="d-grid gap-2 mb-4">
+                                        <button class="btn btn-info shadow btn-wave" onclick="fnValidarRegistro();">@textBtnGuardar</button>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if (tipoUsuario == "2")
+                {
+                    <div class="card-body">
+                        <ul class="nav nav-tabs mb-3 border-bottom-0" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" role="tab" href="#contactos"
+                                   aria-selected="true">Contactos</a>
+                            </li>
+                            <!--<li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" role="tab" href="#direcciones"
+                                   aria-selected="false">Direcciones</a>
+                            </li>-->
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" role="tab" href="#clientesRelacionados"
+                                   aria-selected="false">Coa Relacionado</a>
+                            </li>
+
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane show active text-muted" id="contactos" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table text-nowrap table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Tipo</th>
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Documento</th>
+                                                <th scope="col">Telefono</th>
+                                                <th scope="col">Correo</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Principal</th>
+                                                <td></td>
+                                                <td></td>
+                                                <td>99999999</td>
+                                                <td>99999999@correo.com</td>
+                                                <td>
+                                                    <div class="hstack gap-2 fs-15">
+                                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-info-transparent"><i class="ri-edit-line"></i></a>
+                                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-danger-transparent"><i class="ri-delete-bin-line"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Facturación</th>
+                                                <td></td>
+                                                <td></td>
+                                                <td>99999999</td>
+                                                <td>99999999@correo.com</td>
+                                                <td>
+                                                    <div class="hstack gap-2 fs-15">
+                                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-info-transparent"><i class="ri-edit-line"></i></a>
+                                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-danger-transparent"><i class="ri-delete-bin-line"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!--<div class="tab-pane text-muted" id="direcciones" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table text-nowrap table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Tipo</th>
+                                                <th scope="col">Dirección</th>
+                                                <th scope="col">Ubigeo</th>
+                                                <th scope="col">Departamento</th>
+                                                <th scope="col">Provincia</th>
+                                                <th scope="col">Distrito</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Principal</th>
+                                                <td></td>
+                                                <td></td>
+                                                <td>Lima</td>
+                                                <td>Lima</td>
+                                                <td>Lima</td>
+                                                <td>
+                                                    <div class="hstack gap-2 fs-15">
+                                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-info-transparent"><i class="ri-edit-line"></i></a>
+                                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-danger-transparent"><i class="ri-delete-bin-line"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>-->
+                            <div class="tab-pane text-muted" id="clientesRelacionados" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table text-nowrap table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Coa Principal</th>
+                                                <th scope="col">Coa Cliente</th>
+                                                <th scope="col">Cliente</th>
+                                                <th scope="col">Detalle</th>
+                                                <th scope="col">Usuario</th>
+                                                <th scope="col">Estado</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">202020</th>
+                                                <td>1111</td>
+                                                <td>Cliente 1</td>
+                                                <td>Por prueba</td>
+                                                <td>fxx</td>
+                                                <td>Activo</td>
+                                                <td>
+                                                    <div class="hstack gap-2 fs-15">
+                                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-info-transparent"><i class="ri-edit-line"></i></a>
+                                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-danger-transparent"><i class="ri-delete-bin-line"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">202020</th>
+                                                <td>1111</td>
+                                                <td>Cliente 1</td>
+                                                <td>Por prueba</td>
+                                                <td>fxx</td>
+                                                <td>Eliminado</td>
+                                                <td>
+                                                    <div class="hstack gap-2 fs-15">
+                                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-info-transparent"><i class="ri-edit-line"></i></a>
+                                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-danger-transparent"><i class="ri-delete-bin-line"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+
+            </div>
+        </div>
+    </div>
+    <!-- End:: row-2 -->
+
+
+    <div class="modal fade" id="exampleModalScrollableCliente" tabindex="-1" data-bs-backdrop="static"
+         aria-labelledby="exampleModalScrollableCliente" data-bs-keyboard="false"
+         aria-hidden="true">
+        <!-- Scrollable modal -->
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!--<div class="modal-header">
+                    <h6 class="modal-title" id="staticBackdropLabel2">
+                        Modal title
+                    </h6>
+                </div>-->
+                <div id="msjEspera" class="modal-body" style="text-align:center">
+                    <img src="~/assets/images/loading.gif" />
+                    <p>
+                        Estamos cargando la información. Por favor, espere.
+                    </p>
+                </div>
+
+                <div class="col-xxl-12 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="msjError">
+                    <div class="card bg-white border-0">
+                        <div class="alert custom-alert1 alert-danger">
+
+                            <div class="text-center px-5 pb-0">
+                                <svg class="custom-alert-icon svg-danger" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000"><path d="M0 0h24v24H0z" fill="none" /><path d="M15.73 3H8.27L3 8.27v7.46L8.27 21h7.46L21 15.73V8.27L15.73 3zM12 17.3c-.72 0-1.3-.58-1.3-1.3 0-.72.58-1.3 1.3-1.3.72 0 1.3.58 1.3 1.3 0 .72-.58 1.3-1.3 1.3zm1-4.3h-2V7h2v6z" /></svg>
+                                <h5>Alerta!</h5>
+                                <p id="textmsjErrores">..</p>
+                                <div class="">
+                                    <button class="btn btn-sm btn-danger m-1" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-12 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="msjWarning">
+                    <div class="card bg-white border-0">
+                        <div class="alert custom-alert1 alert-warning">
+                            <div class="text-center px-6 pb-0">
+                                <svg class="custom-alert-icon svg-warning" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000"><path d="M0 0h24v24H0z" fill="none" /><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" /></svg>
+                                <h5>Alerta!</h5>
+                                <p id="textmsjWarning">..</p>
+                                <div class="">
+                                    <button class="btn btn-sm btn-warning m-1" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="~/assets/descargados/jquery.dataTables.min.js"></script>
+    <script src="~/assets/descargados/dataTables.bootstrap5.min.js"></script>
+    <script src="~/assets/descargados/dataTables.responsive.min.js"></script>
+    <script src="~/assets/descargados/dataTables.buttons.min.js"></script>
+    @*<script src="~/assets/descargados/buttons.print.min.js"></script>*@
+    @*<script src="~/assets/descargados/pdfmake.min.js"></script>*@
+    @*<script src="~/assets/descargados/vfs_fonts.js"></script>*@
+    <script src="~/assets/descargados/buttons.html5.min.js"></script>
+    <script src="~/assets/descargados/jszip.min.js"></script>
+
+
+    <script src="~/assets/js/Toasts.js"></script>
+
+
+    <!-- Select2 Cdn -->
+    <script src="~/assets/descargados/select2.min.js"></script>
+
+    <!-- Internal Select-2.js -->
+    <script src="~/assets/js/select2.js"></script>
+
+
+    <!-- Internal Datatables JS -->
+    <script src="~/assets/js/datatables.js"></script>
+
+
+    <!-- Date & Time Picker JS -->
+    <script src="~/assets/libs/flatpickr/flatpickr.min.js"></script>
+    <script src="~/assets/js/date&time_pickers.js"></script>
+
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+            $('#VendedorCbo').val('@xVendedor').trigger('change');
+            $('#CategoriaCbo').val('@xCategoria').trigger('change');
+            $('#CondicionPagoCbo').val('@xCondicionPago').trigger('change');
+            $('#UbigeoCbo').val('@xUbigeoFiscal').trigger('change');
+            //$('#exampleModalScrollableCliente').modal('show');
+        });
+
+        function fnValidarRegistro() {
+
+            var mensaje_validacion = "";
+            $("#msjEspera").css('display', 'block');
+            $("#msjError").css('display', 'none');
+            document.getElementById('textmsjErrores').innerHTML = '';
+            $("#msjWarning").css('display', 'none');
+            document.getElementById('textmsjWarning').innerHTML = '';
+
+            $('#exampleModalScrollableCliente').modal('show');
+
+
+            if ($("#VendedorCbo").val() == "-1") {
+                mensaje_validacion += "Seleccione un código de vendedor";
+            }
+
+            if ($("#numCliente").val().trim() == "" || $("#nombreCliente").val().trim() == "") {
+                mensaje_validacion += "<br/>Ingrese el número y nombre del cliente";
+            }
+
+            if ($("#correoPrincipal").val().trim() == "") {
+                mensaje_validacion += "<br/>Ingrese un correo electrónico";
+            }
+
+            if ($("#telefonoPrincipal").val().trim() == "") {
+                mensaje_validacion += "<br/>Ingrese un telefóno electrónico";
+            }
+
+            if ($("#UbigeoCbo").val() == "-1" || $("#direccionCliente").val().trim() == "" ) {
+                mensaje_validacion += "<br/>Ingrese la dirección fiscal y seleccione un ubigeo";
+            }
+
+            //console.log(mensaje_validacion);
+
+            if (mensaje_validacion == "") {
+
+                var ClienteDatos = {
+                    "id_cliente": "0",
+                    "CoaCliente": '@xCoaCliente',
+                    "rucdni": $("#numCliente").val(),
+                    "razonSocial": $("#nombreCliente").val(),
+                    "codigoVendedor": $("#VendedorCbo").val(),
+                    "codPagoTipo": $("#CondicionPagoCbo").val(),
+                    "CoaRelacionado": "",
+                    "categoria": $("#CategoriaCbo").val(),
+                    "UsuarioActualizacion": "",
+                    "Estado": 1
+                }
+
+                let detUbigeo = $("#UbigeoCbo option:selected").text();
+                const detUbigeoArray = detUbigeo.split("-");
+
+                var ClienteDireccion = {
+                    "direccion": $("#direccionCliente").val(),
+                    "departamento": detUbigeoArray[2].trim(),
+                    "provincia": detUbigeoArray[1].trim(),
+                    "distrito": detUbigeoArray[0].trim(),
+                    "ubigeo": $("#UbigeoCbo").val()
+                }
+
+                var ClienteContacto = {
+                    "tipo": "Principal",
+                    "persona": "",
+                    "correo": $("#correoPrincipal").val(),
+                    "telefono": $("#telefonoPrincipal").val(),
+                    "detalle": ""
+                }
+
+                var datos = {
+                    cliente: ClienteDatos,
+                    clienteDireccion: ClienteDireccion,
+                    clienteContacto: ClienteContacto
+                }
+
+                if (mensaje_validacion == "") {
+                    fnDinsertaPedido(datos);
+                }
+                //console.log(JSON.stringify(PedidoDatos));
+            }
+            else {
+                $("#msjEspera").css('display', 'none');
+                $("#msjError").css('display', 'none');
+                $("#msjWarning").css('display', 'block');
+                document.getElementById('textmsjErrores').innerHTML = "";
+                document.getElementById('textmsjWarning').innerHTML = mensaje_validacion;
+            }
+
+        }
+
+
+        async function fnDinsertaPedido(datos) {
+            $.ajax({
+                url: '../Cliente/insertUpdate_Cliente',
+                type: 'POST',
+                data: datos,
+                dataType: 'json',
+                //contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    //console.log(response);
+                    if (parseInt(response.valor_1) < 1 || response.valor_2 != "") {
+                        $("#msjEspera").css('display', 'none');
+                        $("#msjError").css('display', 'block');
+                        document.getElementById('textmsjErrores').innerHTML = response.valor_2;
+                        $('#exampleModalScrollableCliente').modal('show');
+                    }
+                    else {
+                        window.location.href = "../Cliente/ClienteCrear?id=" + response.valor_1;
+                        //$("#exampleModalScrollableStock").modal('hide');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+
+
+        async function fnConsultaDocumento() {
+
+            let NumDocumento = $("#numCliente").val();
+            $("#nombreCliente").val("");
+            $("#direccionCliente").val("");
+            $("#UbigeoCbo").val("-1").trigger('change');
+
+            $.ajax({
+                url: '../Util/ConsultarReniec',
+                type: 'GET',
+                data: { documento: NumDocumento },
+                //dataType: 'json',
+                //contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    if (response.mensaje === "OK" && response.data) {
+                        const datos = JSON.parse(response.data);
+
+                        if (NumDocumento.length == 8) {
+                            $("#nombreCliente").val(datos.nombres + ' ' + datos.apellidoPaterno + ' ' + datos.apellidoMaterno);
+                        }
+                        else {
+                            $("#nombreCliente").val(datos.razonSocial);
+                            try {
+                                $("#direccionCliente").val(datos.direccion);
+                                $("#UbigeoCbo").val(datos.ubigeo).trigger('change');
+                            } catch (err) {
+                                $("#direccionCliente").val("");
+                                $("#UbigeoCbo").val("-1").trigger('change');
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        alert("Datos no encontrado. Por favor, contacte a su asistente");
+                    }
+                    //console.log(response);
+
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+
+    </script>
+
+    <style>
+
+        .choices {
+            margin-bottom: 15px !important;
+        }
+
+        .divFecha {
+            margin-top: 0px !important;
+        }
+
+        .tdCendter {
+            text-align: center !important;
+        }
+
+        .rowRed {
+            background-color: rgba(var(--danger-rgb), .1) !important;
+            color: rgb(var(--danger-rgb)) !important;
+            border-color: rgba(var(--danger-rgb), .1) !important;
+        }
+
+    </style>
+

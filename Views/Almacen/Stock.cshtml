@@ -1,0 +1,247 @@
+﻿<!-- Start:: row-2 -->
+<link href="~/assets/descargados/select2.min.css" rel="stylesheet">
+
+@{
+    ViewBag.Title = "Stock";
+}
+
+
+
+<!-- Start:: row-2 -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card custom-card">
+                <div class="card-header fs-18 fw-semibold mb-0 text-primary">
+                    Mi Stock
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xl-2">
+                            <label for="AnioMesCbo" class="form-label">Seleccione Año-Mes</label>
+                            <select class="form-select" id="AnioMesCbo" name="state">
+                                @{ DateTime f_Actual = DateTime.Now;
+                                    int mes = f_Actual.Month;
+                                    int mes_num = 0;
+
+                                    while (mes_num < 3)
+                                    {
+                                        if (mes_num == 0)
+                                        {
+                                            <option value="@DateTime.Now.AddMonths(mes_num * -1).ToString("yyMM")" selected">@DateTime.Now.AddMonths(mes_num * -1).ToString("yyyy-MM")</option>
+
+                                        }
+                                        else
+                                        {
+                                            <option value="@DateTime.Now.AddMonths(mes_num * -1).ToString("yyMM")">@DateTime.Now.AddMonths(mes_num * -1).ToString("yyyy-MM")</option>
+                                        }
+                                        mes_num++;
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-xl-1">
+                            <label for="AlmacenCbo" class="form-label">Almacén</label>
+                            <select id="AlmacenCbo" class="form-select form-control-sm mb-2">
+                                @{
+                                    var usu_data = Session["SessionUsuario"] as WebAppMontGroup.Entity.Usuario;
+                                    if (usu_data.codigoalmacen != "")
+                                    {
+                                        <option value="@usu_data.codigoalmacen">@usu_data.codigoalmacen</option>
+                                    }
+                                    foreach (var usu in Session["VendedorAsociado"] as IList<WebAppMontGroup.Entity.Usuario>)
+                                    {
+                                        if (usu.codigoalmacen != "")
+                                        {
+                                            <option value="@usu.codigoalmacen">@usu.codigoalmacen</option>
+                                        }
+                                    }
+                                }
+
+                            </select>
+                        </div>
+                        <div class="col-xl-2" style="margin-bottom: 10px;">
+                            <label for="divButton" class="form-label">&nbsp;</label>
+                            <div id="divButton">
+                                <button type="button" class="btn btn-primary btn-wave waves-effect waves-light btnmg" style="width:100%" id="BtnActualizarStock">Mostrar Stock</button>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-7"></div>
+
+                        <div class="col-xl-5">
+                            <label for="searchDocs" class="form-label">Filtrar Producto</label>
+                            <input id="searchDocs" class="form-control" placeholder="Escriba nombre o código del producto" />
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="card-body" style="padding-top:0px">
+                <div class="accordion accordionicon-left accordions-items-seperate"
+                     id="accordioniconLeftStock">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End:: row-2 -->
+
+
+<div class="modal fade" id="exampleModalScrollableStock" tabindex="-1" data-bs-backdrop="static"
+     aria-labelledby="exampleModalScrollableStock" data-bs-keyboard="false"
+     aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!--<div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel2">
+                    Modal title
+                </h6>
+            </div>-->
+            <div class="modal-body" style="text-align:center">
+                <img src="~/assets/images/loading.gif" />
+                <p>
+                    Estamos cargando la información. Por favor, espere.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .my-class-ocultar {
+        display: none !important;
+    }
+</style>
+
+<script src="~/assets/descargados/select2.min.js"></script>
+<!-- Internal Select-2.js -->
+<script src="~/assets/js/select2.js"></script>
+
+<script type="text/javascript">
+
+
+    const host = window.location.host;
+
+    $(document).ready(function () {
+        $('#exampleModalScrollableStock').modal('show');
+        consularStock();
+    });
+
+    $('#BtnActualizarStock').click(function () {
+        $('#exampleModalScrollableStock').modal('show');
+        consularStock();
+        //setTimeout(function () {
+        //$('#exampleModalScrollableStock').modal('toggle');
+        //$("#exampleModalScrollableStock").modal('hide');
+        //}, 1000);
+    });
+
+
+    async function consularStock() {
+        var true_data = false;
+        setTimeout(function () {
+            document.getElementById('accordioniconLeftStock').innerHTML = '';
+            var detalle_stock = "";
+            $.ajax({
+                url: '../Almacen/StockAlmacen',
+                type: 'GET',
+                data: {
+                    aniomes: $("#AnioMesCbo").val(),
+                    almacen: $("#AlmacenCbo").val(),
+                    articulo: ''
+                },
+                success: function (response) {
+                    //console.log(response);
+                    if (response == "-1") {
+                        document.location.href = "/MG360";
+                    }
+                    $.each(response, function (key, value) {
+                        true_data = true;
+                        $.each(value.listaStocks, function (key2, value2) {
+                            //detalle_stock += '<p>Lote: ' + value2.Lote + ', Fecha Exp: ' + value2.FechaVecimiento + ', Cantidad: ' + value2.Cantidad + '</p>';
+
+                            detalle_stock += '<tr>' +
+                                '<td>' + value2.Lote + '</td>' +
+                                '<td>' + value2.FechaVecimiento + '</td>' +
+                                '<td>' + value2.Cantidad + '</td>' +
+                                '</tr>';
+
+                        })
+                        //console.log(value.Articulo);
+                        $('#accordioniconLeftStock').append('<div class="accordion-item docSection" id="fila_stock_' + value.Fila + '">' +
+                            '<h2 class="accordion-header" id="headingleft' + value.Fila + '">' +
+                            '<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseleft' + value.Fila + '" aria-expanded="true" aria-controls="collapseleft' + value.Fila + '"> <div class="col-xl-6" style="width:70%">' +
+                            value.Producto + ' <br/> [Código: ' + value.Articulo + ']</div> <div class="col-xl-6" style="width:30%"><span class="badge bg-success-transparent" style="font-size:15px">Stock: ' + value.Cantidad + '</span></div> ' +
+                            '</button>' +
+                            '</h2>' +
+                            '<div id="collapseleft' + value.Fila + '" class="accordion-collapse collapse" aria-labelledby="headingleft' + value.Fila + '" data-bs-parent="#accordioniconLeftExample">' +
+                            '<div class="accordion-body">' +
+                            '<table class="table table-bordered text-nowrap w-100 dataTable no-footer" style="text-align:center">' +
+                            '<thead>' +
+                            '<tr>' +
+                            '<th scope="col" style="text-align:center !important">LOTE</th>' +
+                            '<th scope="col" style="text-align:center !important">VENCIMIENTO</th>' +
+                            '<th scope="col" style="text-align:center !important">CANTIDAD</th>' +
+                            '</tr>' +
+                            '</thead>' +
+                            '<tbody>' +
+                            detalle_stock +
+                            '</tbody>' +
+                            '</table>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>');
+
+                        detalle_stock = "";
+                    })
+
+                    if (true_data == false) {
+                        $('#accordioniconLeftStock').append("No se encontro información");
+                    }
+
+                    $("#exampleModalScrollableStock").modal('hide');
+
+
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }, 1000);
+    }
+
+
+    const input = document.getElementById("searchDocs");
+    input.addEventListener("input", () => {
+        const value = input.value;
+        const sections = document.querySelectorAll(".docSection");
+        sections.forEach(el => {
+            el.innerHTML = el.innerHTML;
+            var element_id = document.getElementById(el.id);
+            element_id.classList.remove("my-class-ocultar");
+        });
+        if (value.trim() !== "") {
+            sections.forEach(el => {
+                if (!el.innerText.toLowerCase().includes(value.toLowerCase())) {
+                    var element_id = document.getElementById(el.id);
+                    element_id.classList.add("my-class-ocultar");
+                } else {
+                    var element_id = document.getElementById(el.id);
+                    element_id.classList.remove("my-class-ocultar");
+                }
+            });
+        }
+    });
+
+</script>
+
+
+
+<link href="~/assets/css/cssMG.css" rel="stylesheet" />
+
+<!-- End:: row-2 -->

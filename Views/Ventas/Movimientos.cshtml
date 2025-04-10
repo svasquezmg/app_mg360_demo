@@ -1,0 +1,95 @@
+﻿
+@{
+    Layout = null; // No usar ningún layout
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movimientos</title>
+    <link rel="stylesheet" href="~/assets/descargados/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="~/assets/descargados/responsive.bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/descargados/buttons.bootstrap5.min.css">
+    <!-- Favicon -->
+    <link rel="icon" href="~/assets/images/brand-logos/favicon.ico" type="image/x-icon">
+
+    <!-- Choices JS -->
+    <!--<script src="~/assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>-->
+    <!-- Main Theme Js -->
+    <script src="~/assets/js/main.js"></script>
+
+    <!-- Bootstrap Css -->
+    <link id="style" href="~/assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Style Css -->
+    <link href="~/assets/css/styles.min.css" rel="stylesheet">
+
+    <!-- Icons Css -->
+    <link href="~/assets/css/icons.css" rel="stylesheet">
+    <!--Custom Style Css-->
+    @*<link href="~/assets/css/custom.css" rel="stylesheet"> *@
+
+
+</head>
+<body>
+
+
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card custom-card-body">
+                <div class="card-header fs-18 fw-semibold mb-0 text-primary">
+                    Movimientos
+                </div>
+                <div class="custom-card-body">
+                    <div class="table-responsive">
+                        <table id="datatable-movimientos" class="table table-bordered text-nowrap w-200">
+                            <thead>
+                                <tr>
+                                    <th> Código</th>
+                                    <th> Cliente</th>
+                                    <th> Op. Financiera</th>
+                                    <th> Nro. Secuencia</th>
+                                    <th> Importe</th>
+                                    <th> Fecha</th>
+                                    <th> Vendedor</th>
+                                    <th> Cobrador</th>
+                                    <th> Planilla</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Aquí agregarías las filas de la tabla con datos de los movimientos -->
+                                <tr>
+                                    <td> M001</td>
+                                    <td> Cliente 1</td>
+                                    <td> OpFin 1</td>
+                                    <td> 001</td>
+                                    <td> S/ 1000.50</td>
+                                    <td> 01/10/2024</td>
+                                    <td> Vendedor 1</td>
+                                    <td> Cobrador 1</td>
+                                    <td> Planilla 1</td>
+                                </tr>
+                                <!-- Agrega más filas según sea necesario -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/assets/descargados/jquery.dataTables.min.js"></script>
+    <script src="~/assets/descargados/dataTables.bootstrap5.min.js"></script>
+    <script src="~/assets/descargados/dataTables.responsive.min.js"></script>
+    <script src="~/assets/descargados/dataTables.buttons.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#datatable-movimientos').DataTable();
+        });
+    </script>
+</body>
+</html>
+

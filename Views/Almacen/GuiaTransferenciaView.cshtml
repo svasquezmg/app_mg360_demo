@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewBag.Title = "Guia De Transferencia";
+
+    string ubigeo_salida_text = "";
+    string ubigeo_llegada_text = "";
+    int ubigeo_cant = 1;
+    var data_guia = ViewData["mGuia"] as WebAppMontGroup.Entity.GuiaTransferencia;
+    string tipo_traslado = data_guia.tipo_transporte == "02" ? "Movilidad Mont Group" : "Movilidad privada";
+    foreach (var usu in ViewData["ubigeos"] as IList<WebAppMontGroup.Entity.Ubigeo>)
+    {
+        if (ubigeo_cant == 1)
+        {
+            ubigeo_salida_text = @usu.distrito + "-" + @usu.provincia + "-" + @usu.departamento;
+        }
+        else
+        {
+            ubigeo_llegada_text = @usu.distrito + "-" + @usu.provincia + "-" + @usu.departamento;
+        }
+        ubigeo_cant++;
+    }
+
+
+
+    <div class="col-xl-12">
+
+
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card custom-card">
+                                    <div class="card-header d-flex justify-content-between">
+                                        <div class="card-title" style="width:100%">
+                                            <span class="text-primary">Guia Número : @data_guia.serie-@data_guia.numero</span>
+                                            <a class="btn btn-sm btn-success-transparent btn-wave" style="float: right;" href="javascript:consultarGuiaElectronica('@data_guia.serie' ,'@data_guia.numero');"><i class="ri-download-2-line align-middle me-2 d-inline-block"></i>Descargar</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xl-5">
+                                            <div class="card custom-card" style="padding:0px">
+                                                <div class="card-body" style="padding:20px 10px 0px 20px">
+                                                    <ul class="list-unstyled order-details-list">
+                                                        <li>
+                                                            <div class="fs-14 text-muted"><div class="me-2 text-default fw-semibold dViewG1">Cliente </div>@data_guia.cliente_nombre</div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="fs-14 text-muted"><div class="me-2 text-default fw-semibold dViewG1">Coa </div>@data_guia.cliente_documento</div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="fs-14 text-muted"><div class="me-2 text-default fw-semibold dViewG1">F. Emisión</div>@data_guia.fecha_emision.ToString("yyyy-MM-dd")</div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="fs-14 text-muted"><div class="me-2 text-default fw-semibold dViewG1">F. Traslado</div>@data_guia.fecha_traslado.ToString("yyyy-MM-dd")</div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="fs-14 text-muted"><div class="me-2 text-default fw-semibold dViewG1">Movilidad</div>@tipo_traslado</div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="fs-14 text-muted"><div class="me-2 text-default fw-semibold dViewG1">Transporte</div>@data_guia.transportista_nombre</div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="fs-14 text-muted"><div class="me-2 text-default fw-semibold dViewG1">Ruc Transporte</div>@data_guia.transportista_documento_numero</div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-7">
+                                            <div class="card custom-card" style="padding:0px">
+                                                <div class="card-body" style="padding: 20px 10px 0px 20px">
+                                                    <ul class="list-unstyled order-details-list">
+                                                        <li>
+                                                            <div class="fs-14 text-muted"><div class="me-2 text-default fw-semibold dViewG2">Dirección Salida</div><div class="dViewG2_2">@data_guia.punto_de_partida_direccion</div></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="fs-14 text-muted"><div class="me-2 text-default fw-semibold dViewG2">Ubideo Salida</div><div class="dViewG2_2">@ubigeo_salida_text (@data_guia.punto_de_partida_ubigeo)</div></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="fs-14 text-muted"><div class="me-2 text-default fw-semibold dViewG2">Dirección Llegada</div><div class="dViewG2_2">@data_guia.punto_de_llegada_direccion</div></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="fs-14 text-muted"><div class="me-2 text-default fw-semibold dViewG2">Ubideo Llegada</div><div class="dViewG2_2">@ubigeo_llegada_text (@data_guia.punto_de_llegada_ubigeo)</div></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="fs-14 text-muted"><div class="me-2 text-default fw-semibold dViewG2">Contacto 1</div><div class="dViewG2_2">@data_guia.atencion_1 (@data_guia.atencion_dni_1)</div></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="fs-14 text-muted"><div class="me-2 text-default fw-semibold dViewG2">Contacto 2</div><div class="dViewG2_2">@data_guia.atencion_2 (@data_guia.atencion_dni_2)</div></div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="fs-14 text-muted"><div class="me-2 text-default fw-semibold dViewG2">Observaciones </div><div class="dViewG2_2">@data_guia.observaciones</div></div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-header d-flex justify-content-between">
+                                        <div class="card-title">
+                                            Detalle Pedido
+                                        </div>
+                                    </div>
+
+
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                            <table class="table text-nowrap">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Codigo</th>
+                                                        <th scope="col">Producto</th>
+                                                        <th scope="col">Lote</th>
+                                                        <th scope="col">Vencimiento</th>
+                                                        <th scope="col">Cantidad</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        foreach (var data_guia_detalle in data_guia.lst_guiaDetalle)
+                                                        {
+                                                            <tr>
+                                                                <td><a href="javascript:void(0);" class="text-primary">@data_guia_detalle.codigo</a></td>
+                                                                <td>@data_guia_detalle.producto</td>
+                                                                <td>@data_guia_detalle.lote</td>
+                                                                <td>@data_guia_detalle.fecha_vencimiento.ToString("yyyy-MM-dd")</td>
+                                                                <td>@data_guia_detalle.cantidad.ToString()</td>
+                                                            </tr>
+                                                        }
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+}
+
+<link href="~/assets/css/cssMG.css" rel="stylesheet" />

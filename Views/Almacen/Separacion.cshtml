@@ -1,0 +1,603 @@
+﻿
+<link rel="stylesheet" href="~/assets/descargados/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="~/assets/descargados/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="~/assets/descargados/buttons.bootstrap5.min.css">
+<link href="~/assets/descargados/select2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="~/assets/libs/flatpickr/flatpickr.min.css">
+
+@{
+    ViewBag.Title = "Separacion";
+    string acRegistrar = ViewData["Editar"].ToString().ToUpper();
+    string acEliminar = ViewData["Eliminar"].ToString().ToUpper();
+}
+
+
+<!-- Start:: row-2 -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card custom-card">
+                <div class="card-header fs-18 fw-semibold mb-0 text-primary">
+                    Separación de Productos
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xl-4">
+                            <label for="EstadosCbo" class="form-label">Productos</label>
+                            <select class="js-example-basic-single " id="EstadosCbo" name="EstadosCbo">
+                                <option value="RE">Activos</option>
+                                <option value="ELI">Inactivos</option>
+                                <option value="0">Todos</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-3" style="margin-bottom: 10px;">
+                            @if (acRegistrar == "TRUE")
+                            {
+                                <label for="divButton" class="form-label">&nbsp;</label>
+                                <div id="divButton">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="btnAgregarSeparacion" data-bs-target="#exampleModalScrollable3">Agregar Separación</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" style="padding-top:0px">
+                <div class="table-responsive">
+                    <table id="datatable-basic-Separacion" class="table table-bordered text-nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th class="thMG1">Articulo</th>
+                                <th class="thMG1">Producto</th>
+                                <th class="thMG1" style="text-align:center !important">Separación (UND)</th>
+                                <th class="thMG1">Solicitante</th>
+                                <th class="thMG1" style="text-align:center !important">Hasta</th>
+                                <th class="thMG1" style="text-align:center !important">Estado</th>
+                                <!--<th style="background: #f8f9f9;text-align:center !important">Editar</th>-->
+                                @if (acEliminar == "TRUE")
+                                {
+                                    <th class="thMG1" style="text-align:center !important">Eliminar</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End:: row-2 -->
+
+
+<div class="modal fade" id="exampleModalScrollableSeparacion" tabindex="-1" data-bs-backdrop="static"
+     aria-labelledby="exampleModalScrollableSeparacion" data-bs-keyboard="false"
+     aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!--<div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel2">
+                    Modal title
+                </h6>
+            </div>-->
+            <div class="modal-body" style="text-align:center">
+                <img src="~/assets/images/loading.gif" />
+                <p>
+                    Estamos cargando la información. Por favor, espere.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModalScrollable3" tabindex="-1" data-bs-backdrop="static"
+     aria-labelledby="exampleModalScrollable3" data-bs-keyboard="false"
+     aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel3">
+                    Registro de sepración
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card custom-card">
+                            <div class="card-body" id="card-bodyModal" style="padding:0px !important">
+                                <input type="hidden" id="idSeparacion" name="idSeparacion" value="0">
+                                <label for="ProductosCbo" class="form-label">Productos</label>
+                                <select class="js-example-basic-singleModal" name="ProductosCbo" id="ProductosCbo" style="margin-bottom:7px">
+                                    <option value="-1">Seleccione un producto</option>
+                                    @{ System.Data.DataTable dtProductos = ViewData["dtProducctos"] as System.Data.DataTable;
+                                        foreach (System.Data.DataRow row in dtProductos.Rows)
+                                        {
+                                            <option value="@row["codigo"].ToString()">[@row["codigo"].ToString()] @row["dsc"].ToString()</option>
+                                        }
+                                    }
+                                </select>
+
+                                <label for="inputCantidad" class="form-label" style="margin-top:20px">Cantidad</label>
+                                <input class="form-control form-control-sm mb-3 vn0" type="text" placeholder="" aria-label="" id="inputCantidad">
+
+                                <label for="date" class="form-label divFecha" style="margin-top:15px">Fecha Limite</label>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-text text-muted"> <i class="ri-calendar-line"></i> </div>
+                                        <input type="text" class="form-control" id="date" placeholder="Choose date">
+                                    </div>
+                                </div>
+
+                                <label for="inputUsuarioSolicita" class="form-label" style="margin-top:20px">Usuario Solicitante</label>
+                                <input class="form-control form-control-sm mb-3" type="text" placeholder="Usuario que solicita la separación" aria-label="" id="inputUsuarioSolicita">
+
+                                <label for="inputDetalle" class="form-label" style="margin-top:20px">Detalle de la separación</label>
+                                <textarea class="form-control form-control-sm mb-3" id="inputDetalle" placeholder="" required=""></textarea>
+
+                                <label id="msjValidacion" class="fw-semibold fs-16 text-danger" style="margin-top: 20px; font-size: 12px; font-weight: 500 !important;">Cantidad</label>
+                            </div>
+                            <div class="card-footer d-none border-top-0">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-light" id="btnCerrarSeparacion" data-bs-dismiss="modal"> Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnRegistrarSeparacion">Registrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="EliminarModalScrollable2" tabindex="-1"
+     aria-labelledby="EliminarModalScrollable2" data-bs-keyboard="false"
+     aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title fw-semibold fs-16 text-danger" id="staticBackdropLabel2">
+                    Eliminación de Registro
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6 class="modal-title">Está seguro de eliminar la separación:</h6><br />
+                <span class="me-2 text-default fw-semibold">Articulo:</span> <span id="lblArticulo"></span><br />
+                <span class="me-2 text-default fw-semibold">Producto:</span> <span id="lblProducto"></span><br />
+                <span class="me-2 text-default fw-semibold">Cantidad:</span> <span id="lblCantidad"></span><br />
+                <span class="me-2 text-default fw-semibold">F.Limite:</span> <span id="lblFechaLimite"></span><br />
+                <span class="me-2 text-default fw-semibold">Solicita:</span> <span id="lblSolicita"></span><br />
+                <span class="me-2 text-default fw-semibold">Detalle :</span> <span id="lblDetalle"></span><br />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="btnEliminarSeparacion">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary btn-wave" id="liveToastBtn" style="display:none">toast-ok</button>
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive"
+         aria-atomic="true">
+        <div class="toast-header text-default">
+            <img class="bd-placeholder-img rounded me-2" src="~/assets/images/brand-logos/favicon.ico" alt="...">
+            <strong class="me-auto">Alerta!</strong>
+            <small>Hace un instante</small>
+            <button type="button" id="liveToastBtnCerrar" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="msjRespuesta">
+            Hello, world! This is a toast message.
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/descargados/jquery.dataTables.min.js"></script>
+<script src="~/assets/descargados/dataTables.bootstrap5.min.js"></script>
+<script src="~/assets/descargados/dataTables.responsive.min.js"></script>
+<script src="~/assets/descargados/dataTables.buttons.min.js"></script>
+@*<script src="~/assets/descargados/buttons.print.min.js"></script>*@
+@*<script src="~/assets/descargados/pdfmake.min.js"></script>*@
+@*<script src="~/assets/descargados/vfs_fonts.js"></script>*@
+<script src="~/assets/descargados/buttons.html5.min.js"></script>
+<script src="~/assets/descargados/jszip.min.js"></script>
+
+
+<script src="~/assets/js/Toasts.js"></script>
+
+
+<!-- Select2 Cdn -->
+<script src="~/assets/descargados/select2.min.js"></script>
+
+<!-- Internal Select-2.js -->
+<script src="~/assets/js/select2.js"></script>
+
+
+<!-- Internal Datatables JS -->
+<script src="~/assets/js/datatables.js"></script>
+
+
+<!-- Date & Time Picker JS -->
+<script src="~/assets/libs/flatpickr/flatpickr.min.js"></script>
+<script src="~/assets/js/date&time_pickers.js"></script>
+
+
+<script type="text/javascript">
+
+    var saldo_inicial = 0;
+
+    $(document).ready(function () {
+
+        $('.vn0').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        $('.js-example-basic-singleModal').select2({ dropdownParent: jQuery('#card-bodyModal') });
+        // $('#exampleModalScrollableKardex').modal('show');
+        // consularKardex();
+        //
+        fnConsularSeparacion(1);
+    });
+
+    //$("#BtnActualizarMesAnioAlmacen").click(function () {
+    //    $('#exampleModalScrollableKardexGeneral').modal('show');
+    //    consularKardex();
+    //});
+
+
+    $('#EstadosCbo').on('change', function () {
+        fnConsularSeparacion(1);
+    });
+
+
+    $("#btnAgregarSeparacion").click(function () {
+        $("#liveToastBtnCerrar").click();
+        document.getElementById('staticBackdropLabel3').innerHTML = "Registro de Separación";
+        $("#ProductosCbo").val("-1").trigger('change');
+        $("#idSeparacion").val(0);
+        $("#inputCantidad").val("");
+        $("#date").val("");
+        $("#msjValidacion").text("");
+        $("#msjValidacion").css("display", "none");
+    });
+
+    $("#btnRegistrarSeparacion").click(function () {
+        var res = fnValidaFormulario();
+        if (res == 1) {
+            fnRegistraSeparacion();
+        }
+    });
+
+    $("#btnEliminarSeparacion").click(function () {
+        fnEliminarSeparacion();
+    });
+
+    $("#btnCerrarSeparacion").click(function () {
+        $("#liveToastBtnCerrar").click();
+    });
+
+
+    function fnValidaFormulario() {
+
+        var msj = "";
+        var res = 1;
+
+        if ($("#ProductosCbo").val() == "-1") {
+            res = 0;
+            msj = " Un producto,";
+        }
+        if ($("#inputCantidad").val() == "") {
+            res = 0;
+            msj += " una cantidad mayor a 0,";
+        }
+        else {
+            if (parseInt($("#inputCantidad").val()) < 1) {
+                res = 0;
+                msj += " una cantidad mayor a 0,";
+            }
+        }
+
+        if ($("#date").val() == "") {
+            res = 0;
+            msj += " una fecha valida,";
+        }
+        else {
+            const fechaSeparacion = new Date($("#date").val());
+            var today = new Date().getFullYear() + '-' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '-' + ("0" + new Date().getDate()).slice(-2)
+            const startDate = new Date(today);
+            //console.log(fechaSeparacion);
+            //console.log(today);
+            //console.log(startDate);
+            if (fechaSeparacion <= startDate) {
+                res = 0;
+                msj += " una fecha valida,";
+            }
+        }
+
+        if ($("#inputUsuarioSolicita").val() == "") {
+            res = 0;
+            msj += " ingrese el usuario solicitante,";
+        }
+
+        if ($("#inputDetalle").val() == "") {
+            res = 0;
+            msj += " ingrese el detalle de la solicitud,";
+        }
+
+
+        if (res == 0) {
+            $("#msjValidacion").text("Seleccione :" + msj.substring(0, msj.length - 1));
+            $("#msjValidacion").css("display", "block");
+        }
+        else {
+            $("#msjValidacion").text("");
+            $("#msjValidacion").css("display", "none");
+        }
+
+        return res;
+    }
+
+    function fnModalEditar(id) {
+        $('#exampleModalScrollable3').modal('show');
+
+        var _codigo = $("#" + id).attr("data-codigo");
+        var _cantidad = $("#" + id).attr("data-cantidad");
+        var _flimite = $("#" + id).attr("data-flimite");
+        var _solicita = $("#" + id).attr("data-solicitante");
+        var _detalle = $("#" + id).attr("data-detalle");
+        var _idSeparacion = id.replace("btEditar_", "");
+
+        $("#msjValidacion").text("");
+        $("#msjValidacion").css("display", "none");
+        document.getElementById('staticBackdropLabel3').innerHTML = 'Edición de sepración - Id:' + _idSeparacion;
+
+        $("#ProductosCbo").val(_codigo).trigger('change');
+        $("#inputCantidad").val(_cantidad);
+        $("#date").val(_flimite);
+        $("#inputUsuarioSolicita").val(_solicita);
+        $("#inputDetalle").val(_detalle);
+        $("#idSeparacion").val(_idSeparacion);
+
+    }
+
+    function fnModalEliminar(id) {
+        $('#EliminarModalScrollable2').modal('show');
+
+        var _codigo = $("#" + id).attr("data-codigo");
+        var _cantidad = $("#" + id).attr("data-cantidad");
+        var _flimite = $("#" + id).attr("data-flimite");
+        var _dsc = $("#" + id).attr("data-dsc");
+        var _solicita = $("#" + id).attr("data-solicitante");
+        var _detalle = $("#" + id).attr("data-detalle");
+
+        var _idSeparacion = id.replace("btEliminar_", "");
+
+        document.getElementById('lblArticulo').innerHTML = _codigo;
+        document.getElementById('lblProducto').innerHTML = _dsc;
+        document.getElementById('lblCantidad').innerHTML = _cantidad;
+        document.getElementById('lblFechaLimite').innerHTML = _flimite;
+        document.getElementById('lblSolicita').innerHTML = _solicita;
+        document.getElementById('lblDetalle').innerHTML = _detalle;
+
+
+        $("#idSeparacion").val(_idSeparacion);
+    }
+
+
+    async function fnRegistraSeparacion() {
+
+        document.getElementById('msjRespuesta').innerHTML = '';
+        var _opcion = "";
+        if ($("#idSeparacion").val() == "0") {
+            _opcion = "CREATE";
+        }
+        else {
+            _opcion = "UPDATE";
+        }
+
+        $.ajax({
+            url: '../Almacen/Producto_separacion',
+            type: 'GET',
+            data: {
+                idSeparacion: $("#idSeparacion").val(),
+                codigo: $("#ProductosCbo").val(),
+                cantidad: $("#inputCantidad").val(),
+                fechaLimite: $("#date").val(),
+                solicitante: $("#inputUsuarioSolicita").val(),
+                detalle: $("#inputDetalle").val(),
+                opcion: _opcion,
+            },
+            success: function (response) {
+                //console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+                else if (response == "0") {
+                    document.getElementById('msjRespuesta').innerHTML = "<strong class='btn btn-sm btn-danger-light'>El registro no pudo ser procesado</strong>";
+                    $("#liveToastBtn").click();
+                } else {
+                    fnConsularSeparacion(0);
+                    document.getElementById('msjRespuesta').innerHTML = "<strong class='btn btn-sm btn-success-light'>El registro ha sido procesado</strong>";
+                    $("#liveToastBtn").click();
+
+                    if ($("#idSeparacion").val() == "0") {
+                        $("#ProductosCbo").val("-1").trigger('change');
+                        $("#inputCantidad").val("");
+                        $("#date").val("");
+                        $("#inputUsuarioSolicita").val("");
+                        $("#inputDetalle").val("")
+                    }
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    async function fnEliminarSeparacion() {
+
+        $.ajax({
+            url: '../Almacen/Producto_separacion',
+            type: 'GET',
+            data: {
+                idSeparacion: $("#idSeparacion").val(),
+                codigo: "0",
+                cantidad: "0",
+                fechaLimite: "2000-01-01",
+                opcion: "DELETE",
+            },
+            success: function (response) {
+                //console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+                else if (response == "0") {
+                    document.getElementById('msjRespuesta').innerHTML = "<strong class='btn btn-sm btn-danger-light'>El registro no pudo ser eliminado</strong>";
+                    $("#liveToastBtn").click();
+                } else {
+                    fnConsularSeparacion(0);
+                    $('#EliminarModalScrollable2').modal('hide');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+
+    async function fnConsularSeparacion(tipo) {
+
+        var permisoElimina = "@acEliminar";
+        var tdElimina = "";
+
+        if (tipo == 1) {
+            $('#exampleModalScrollableSeparacion').modal('show');
+        }
+
+        var table = new DataTable('#datatable-basic-Separacion');
+        var rows = table
+            .rows()
+            .remove()
+            .draw();
+
+        var _estado = "";
+
+        $.ajax({
+            url: '../Almacen/Producto_separacion_lista',
+            type: 'GET',
+            data: {
+                estado: $("#EstadosCbo").val()
+            },
+            success: function (response) {
+                //console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+                $.each(response, function (key, value) {
+                    //console.log(value.Articulo);
+
+                    if (value.estado == "RE") {
+                        _estado = "Activo";
+
+                        if (permisoElimina == "TRUE") {
+                            tdElimina = '<td class="tdCendter"><button class="btn btn-sm btn-danger btn-wave ClsEliminar" id="btEliminar_' + value.idSeparacion + '" data-codigo="' + value.codigo + '" data-dsc="' + value.dsc + '" data-cantidad="' + value.cantidad + '" data-flimite="' + value.fechaLimite + '" data-solicitante="' + value.UsuarioSolicitante + '" data-detalle="' + value.detalle + '"><i class="ri-delete-bin-line align-middle me-2 d-inline-block"></i>Eliminar</button></td>';
+                        }
+
+                        $('#datatable-basic-Separacion').DataTable().row.add($('<tr>' +
+                            '<td>' + value.codigo + '</td>' +
+                            '<td>' + value.dsc + '</td>' +
+                            '<td class="tdCendter">' + value.cantidad + '</td>' +
+                            '<td>' + value.UsuarioSolicitante + '</td>' +
+                            '<td class="tdCendter">' + value.fechaLimite + '</td>' +
+                            '<td class="tdCendter">' + _estado + '</td>' +
+                            /*'<td class="tdCendter"><button class="btn btn-sm btn-info btn-wave ClsEditar" id="btEditar_' + value.idSeparacion + '" data-codigo="' + value.codigo + '" data-cantidad="' + value.cantidad + '" data-flimite="' + value.fechaLimite + '"><i class="ri-edit-line align-middle me-2 d-inline-block"></i>Editar</button></td>' +*/
+                            tdElimina +
+                            '</tr>')).draw();
+
+                    } else {
+                        _estado = "Inactivo";
+
+                        $('#datatable-basic-Separacion').DataTable().row.add($('<tr>' +
+                            '<td>' + value.codigo + '</td>' +
+                            '<td>' + value.dsc + '</td>' +
+                            '<td class="tdCendter">' + value.cantidad + '</td>' +
+                            '<td>' + value.UsuarioSolicitante + '</td>' +
+                            '<td class="tdCendter">' + value.fechaLimite + '</td>' +
+                            '<td class="tdCendter">' + _estado + '</td>' +
+                            /*'<td class="tdCendter"><button class="btn btn-sm btn-info btn-wave ClsEditar" id="btEditar_' + value.idSeparacion + '" data-codigo="' + value.codigo + '" data-cantidad="' + value.cantidad + '" data-flimite="' + value.fechaLimite + '"><i class="ri-edit-line align-middle me-2 d-inline-block"></i>Editar</button></td>' +*/
+                            '<td></td>' +
+                            '</tr>')).draw();
+                    }
+
+                })
+
+                setTimeout(function () {
+                    if (tipo == 1) {
+                        $("#exampleModalScrollableSeparacion").modal('hide');
+                    }
+                    $(".ClsEditar").click(function () {
+                        $("#liveToastBtnCerrar").click();
+                        fnModalEditar(this.id);
+                    });
+
+                    $(".ClsEliminar").click(function () {
+                        $("#liveToastBtnCerrar").click();
+                        fnModalEliminar(this.id);
+                    });
+
+
+                }, 500);
+
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+
+</script>
+
+<style>
+
+    .choices {
+        margin-bottom: 15px !important;
+    }
+
+    .divFecha {
+        margin-top: 0px !important;
+    }
+
+    .tdCendter {
+        text-align: center !important;
+    }
+
+    .rowRed {
+        background-color: rgba(var(--danger-rgb), .1) !important;
+        color: rgb(var(--danger-rgb)) !important;
+        border-color: rgba(var(--danger-rgb), .1) !important;
+    }
+</style>
+
+@{
+    var usu_data3 = Session["SessionUsuario"] as WebAppMontGroup.Entity.Usuario;
+    if (usu_data3.estiloWeb == "Estilo2")
+    {
+        <link href="~/assets/css/cssMG2.css" rel="stylesheet" />
+    }
+}

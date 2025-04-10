@@ -1,0 +1,576 @@
+﻿
+
+<link rel="stylesheet" href="~/assets/descargados/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="~/assets/descargados/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="~/assets/descargados/buttons.bootstrap5.min.css">
+<link href="~/assets/descargados/select2.min.css" rel="stylesheet">
+
+@{
+    ViewBag.Title = "Historial de Ventas";
+}
+
+<!-- Start:: row-2 -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header fs-18 fw-semibold mb-0 text-primary">
+                Historial
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-2">
+                        <label for="SelectTipoBusqueda" class="form-label">Tipo de Busqueda</label>
+                        <select class="js-example-basic-single" id="SelectTipoBusqueda" name="state">
+                            <option value="1">Ruc</option>
+                            <option value="2">Razón Social</option>
+                        </select>
+                    </div>
+                    <div class="col-xl-2">
+                        <label for="SelectCondicionBusqueda" class="form-label">Condición</label>
+                        <select class="js-example-basic-single" id="SelectCondicionBusqueda" name="state">
+                            <option value="exacto">Exacto</option>
+                            <option value="like">Coincidir</option>
+                        </select>
+                    </div>
+                    <div class="col-xl-3">
+                        <label for="imputDatoCliente" class="form-label">Cliente</label>
+                        <input class="form-control" type="text" id="imputDatoCliente" placeholder="" aria-label=".form-control-sm example">
+                        <span id="txtValidaDatoCliente" class="text-danger" style="font-size:10px;display:none">Se requiere 5 caractenes como mínimo</span>
+                    </div>
+                    <div class="col-xl-2" style="margin-bottom: 10px;">
+                        <label for="divButton" class="form-label">&nbsp;</label>
+                        <div id="divButton">
+                            <button type="button" class="btn btn-primary btn-wave waves-effect waves-light btnmg" style="width:100%" id="btnBuscar">Buscar</button>
+                        </div>
+                    </div>
+                    <div class="col-xl-3" style="margin-bottom: 10px;">&nbsp;</div>
+                    <div class="col-xl-12" style="margin-bottom: 10px;">&nbsp;</div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-xl-9">
+                        <div class="table-responsive">
+                            <table id="datatable-basic-HistVentas" class="table table-bordered text-nowrap w-100">
+                                <thead>
+                                    <tr>
+                                        <th class="txtSizeH thMG1">Coa</th>
+                                        <th style="width:30% !important" class="txtSizeH thMG1">Razón Social</th>
+                                        <th class="txtSizeH thMG1">Teléfono</th>
+                                        <th class="txtSizeH thMG1">Cant. Compras</th>
+                                        <th class="txtSizeH thMG1">Compras Pend.</th>
+                                        <th class="txtSizeH thMG1">Total Compras</th>
+                                        <th class="txtSizeH thMG1">Saldo</th>
+                                        <th class="txtSizeH thMG1">Ult. Compra</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="alert alert-primary d-flex align-items-center" role="alert" style="padding: 5px 10px !important">
+                            <svg class="flex-shrink-0 me-2 svg-primary" xmlns="http://www.w3.org/2000/svg" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M16.59 7.58L10 14.17l-3.59-3.58L5 12l5 5 8-8zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" /></svg>
+                            <div id="divRazonSocial">
+                                Cliente:
+                            </div>
+                        </div>
+                        <div class="table-responsive tabCabeFijo">
+                            <table class="table text-nowrap table-bordered border-light-subtle">
+                                <thead id="theadDocumenos">
+                                    <tr>
+                                        <th scope="col" class="txtSizeB thMG1">Fec. Compra</th>
+                                        <th scope="col" class="txtSizeB thMG1">Vendedor</th>
+                                        <th scope="col" class="txtSizeB thMG1">E</th>
+                                        <th scope="col" class="txtSizeB thMG1">documento</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyDocumenos">
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <span id="txtTotalDocumentos" class="text-primary" style="font-size:12px;">Documentos: 0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End:: row-2 -->
+
+
+<div class="modal fade" id="exampleModalScrollableHisVenta" tabindex="-1" data-bs-backdrop="static"
+     aria-labelledby="exampleModalScrollableHisVenta" data-bs-keyboard="false"
+     aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!--<div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel2">
+                    Modal title
+                </h6>
+            </div>-->
+            <div class="modal-body" style="text-align:center">
+                <img src="~/assets/images/loading.gif" />
+                <p>
+                    Estamos cargando la información. Por favor, espere.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/assets/descargados/jquery.dataTables.min.js"></script>
+<script src="~/assets/descargados/dataTables.bootstrap5.min.js"></script>
+<script src="~/assets/descargados/dataTables.responsive.min.js"></script>
+<script src="~/assets/descargados/dataTables.buttons.min.js"></script>
+@*<script src="~/assets/descargados/buttons.print.min.js"></script>*@
+@*<script src="~/assets/descargados/pdfmake.min.js"></script>*@
+@*<script src="~/assets/descargados/vfs_fonts.js"></script>*@
+<script src="~/assets/descargados/buttons.html5.min.js"></script>
+<script src="~/assets/descargados/jszip.min.js"></script>
+
+<!-- Select2 Cdn -->
+<script src="~/assets/descargados/select2.min.js"></script>
+
+<!-- Internal Select-2.js -->
+<script src="~/assets/js/select2.js"></script>
+
+
+<!-- Internal Datatables JS -->
+<script src="~/assets/js/datatables.js"></script>
+
+<script type="text/javascript">
+
+    var saldo_inicial = 0;
+
+    $(document).ready(function () {
+        //$('#exampleModalScrollableKardex').modal('show');
+        //consularProductosKardex();
+    });
+
+    $("#btnBuscar").click(function () {
+
+        var valorimput = $("#imputDatoCliente").val().trim();
+        var txtMsjValClie = document.getElementById("txtValidaDatoCliente");
+
+        if (valorimput.length < "5") {
+            txtMsjValClie.style.display = "block";
+        } else {
+            txtMsjValClie.style.display = "none";
+            $('#exampleModalScrollableHisVenta').modal('show');
+            consularHistorialVentas();
+            var table = new DataTable('#datatable-basic-HistVentas');
+            var rows = table
+                .rows()
+                .remove()
+                .draw();
+
+            cSocial = $("#imputDatoCliente").val();
+        }
+    });
+
+    //$('#SelectProducto').on('change', function () {
+    //    $('#exampleModalScrollableKardex').modal('show');
+    //    saldo_inicial = 0;
+
+    //    let myPromise1 = new Promise(function (resolve, reject) {
+    //        consularStockInicial();
+    //    });
+    //    setTimeout(function () {
+    //        let myPromise2 = new Promise(function (resolve, reject) {
+    //            consularKardex();
+    //        });
+    //    }, 2000);
+    //});
+
+    //$('#AnioMesCbo').on('change', function () {
+    //    fnLimpiarProductos();
+    //    var table = new DataTable('#file-export');
+    //    var rows = table
+    //        .rows()
+    //        .remove()
+    //        .draw();
+    //});
+
+
+    //$('#AlmacenCbo').on('change', function () {
+    //    fnLimpiarProductos();
+    //    var table = new DataTable('#file-export');
+    //    var rows = table
+    //        .rows()
+    //        .remove()
+    //        .draw();
+    //});
+
+
+
+
+    //function fnLimpiarProductos() {
+    //    $("#SelectProducto").empty();
+    //    $('#SelectProducto').append('<option value="-1">Escriba el nombre o código del producto</option>');
+    //}
+
+    async function consularHistorialVentas() {
+        setTimeout(function () {
+
+            var cSocial = "";
+            var cRuc = "";
+
+            if ($("#SelectTipoBusqueda").val() == "1") {
+                cRuc = $("#imputDatoCliente").val();
+            } else {
+                cSocial = $("#imputDatoCliente").val();
+            }
+
+            $.ajax({
+                url: '../Cliente/getClienteHistorialVentaAdmin',
+                type: 'GET',
+                data: {
+                    tipoBusqueda: $("#SelectCondicionBusqueda").val(),
+                    Razon_Social: cSocial,
+                    Ruc: cRuc
+                },
+                success: function (response) {
+                    //console.log(response);
+                    if (response == "-1") {
+                        document.location.href = "/MG360";
+                    }
+                    $.each(response, function (key, value) {
+                        $('#datatable-basic-HistVentas').DataTable().row.add($('<tr>' +
+                            '<td class="txtSize"><span class="text-primary fn_coaCliente" onClick="fnVerDocumentos(\'' + value.Coa + '\',\'' + value.Razon_Social + '\')">' + value.Coa + '</span></td>' +
+                            '<td class="txtSizeA"><textarea class="form-control aiCliente" rows="1" disabled readonly>' + value.Razon_Social + '</textarea></td>' +
+                            '<td class="txtSize">' + value.Telefono + '</td>' +
+                            '<td class="txtSizeC">' + value.Cant_Compras + '</td>' +
+                            '<td class="txtSizeC">' + value.Compras_Pendientes + '</td>' +
+                            '<td class="txtSizeC">S/ ' + value.Total_Compras.toLocaleString('es-PE') + '</td>' +
+                            '<td class="txtSizeC">S/ ' + value.Saldo.toLocaleString('es-PE') + '</td>' +
+                            '<td class="txtSizeC">' + value.Ultima_fch_Compra + '</td>' +
+                            '</tr>')).draw();
+                    });
+
+                    $("#exampleModalScrollableHisVenta").modal('hide');
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+
+
+
+
+        }, 500);
+    }
+
+    function fnVerDocumentos(coa, razon) {
+        /*alert(coa);
+        alert(razon);*/
+        $('#exampleModalScrollableHisVenta').modal('show');
+        let div = document.getElementById("divRazonSocial");
+        div.innerHTML = razon;
+        consularHistorialDocumentos(coa);
+    }
+
+
+
+    //    $(".fn_coaCliente").on('click', function () {
+    //        alert(this.id);
+    //        /*  $('#exampleModalScrollableHisVenta').modal('show');
+    //  consularHistorialVentas();
+    //  var table = new DataTable('#datatable-basic-HistVentas');
+    //  var rows = table
+    //      .rows()
+    //      .remove()
+    //      .draw();
+    //*/
+    //    });
+
+
+
+
+    async function consularHistorialDocumentos(coa) {
+
+        setTimeout(function () {
+            $("#tbodyDocumenos > tr").remove();
+            var totalDocumentos = 0;
+            var estadoDocumento = "";
+            $.ajax({
+                url: '../Cliente/getClienteHistorialDocumentos',
+                type: 'GET',
+                data: {
+                    coa: coa
+                },
+                success: function (response) {
+                    //console.log(response);
+                    if (response == "-1") {
+                        document.location.href = "/MG360";
+                    }
+                    $.each(response, function (key, value) {
+
+                        if (value.vendedor.includes("INCOBRABLES")) {
+                            estadoDocumento = "I";
+                        } else {
+                            estadoDocumento = value.estado;
+                        }
+                        if (estadoDocumento == "P") {
+
+                            $('#tbodyDocumenos').append(
+                                '<tr>' +
+                                '<td class="txtSizeB  table-active">' + value.fechaText + '</td>' +
+                                '<td class="txtSizeB  table-active"><textarea class="form-control aiDocumento1" rows="1" disabled readonly style="background:#e2e3e5">' + value.vendedor + '</textarea></td>' +
+                                '<td class="txtSizeB  table-active">' + estadoDocumento + '</td>' +
+                                '<td class="txtSizeB  table-active"> <span class="text-primary fn_coaCliente" onClick="fnVerDocumento(\'' + value.documento + '\')">' + value.documento + '</span></td>' +
+                                '</tr>'
+                            );
+                        }
+                        else {
+                            $('#tbodyDocumenos').append(
+                                '<tr>' +
+                                '<td class="txtSizeB">' + value.fechaText + '</td>' +
+                                '<td class="txtSizeB"><textarea class="form-control aiDocumento1" rows="1" disabled readonly style="background:#fff">' + value.vendedor + '</textarea></td>' +
+                                '<td class="txtSizeB">' + estadoDocumento + '</td>' +
+                                '<td class="txtSizeB"> <span class="text-primary fn_coaCliente" onClick="fnVerDocumento(\'' + value.documento + '\')">' + value.documento + '</span></td>' +
+                                '</tr>'
+                            );
+                        }
+                        totalDocumentos++;
+                    })
+
+                    let div = document.getElementById("txtTotalDocumentos");
+                    div.innerHTML = "Total Documentos: " + totalDocumentos;
+
+                    $("#exampleModalScrollableHisVenta").modal('hide');
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }, 500);
+    }
+
+
+
+    function fnVerDocumento(documento) {
+
+        setTimeout(function () {
+            $.ajax({
+                url: '../Ventas/getDocumento',
+                type: 'GET',
+                data: {
+                    documento: documento
+                },
+                success: function (response) {
+                    //console.log(response);
+                    if (response == "-1") {
+                        document.location.href = "/MG360";
+                    }
+                    else {
+                        window.open("../Ventas/Documento/", "_blank", "top=100,left=300,width=1000,height=800");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+
+        }, 200);
+    }
+
+
+
+    //async function consularKardex() {
+
+    //    var saldo = saldo_inicial;
+    //    var fecha = "";
+    //    var fecha_exp = "";
+
+    //    $.ajax({
+    //        url: '../Almacen/KardexAlmacen',
+    //        type: 'GET',
+    //        data: {
+    //            aniomes: $("#AnioMesCbo").val(),
+    //            almacen: $("#AlmacenCbo").val(),
+    //            articulo: $("#SelectProducto").val()
+    //        },
+    //        success: function (response) {
+    //            //console.log(response);
+    //            if (response == "-1") {
+    //                document.location.href = "/MG360";
+    //            }
+    //            $.each(response, function (key, value) {
+    //                //console.log(value.Articulo);
+    //                fecha = value.doc_fch.substring(6, 8) + '/' + value.doc_fch.substring(4, 6) + '/' + value.doc_fch.substring(0, 4)
+    //                fecha_exp = value.fch_exp.substring(6, 8) + '/' + value.fch_exp.substring(4, 6) + '/' + value.fch_exp.substring(0, 4);
+    //                saldo = saldo + parseInt(value.und_i) - parseInt(value.und_s);
+
+    //                if (value.oper_log == "SVT") {
+    //                    $('#file-export').DataTable().row.add($('<tr>' +
+    //                        '<td><a class="fw-semibold text-muted ms-1 text-success" href="javascript:consultarFacturaElectronica(' + "'" + value.doc_ref + "','" + value.doc_serie_ref + "','" + value.doc_nro_ref + "'" + ');">' + value.doc_ref + '-' + value.doc_serie_ref + '-' + value.doc_nro_ref + '</a></td>' +
+    //                        '<td>' + fecha + '</td>' +
+    //                        '<td>' + value.coa_ref + '</td>' +
+    //                        '<td>' + value.coa_dsc_ref + '</td>' +
+    //                        '<td>' + value.lote + '</td>' +
+    //                        '<td>' + fecha_exp + '</td>' +
+    //                        '<td>' + value.und_i + '</td>' +
+    //                        '<td>' + value.und_s + '</td>' +
+    //                        '<td>' + saldo + '</td>' +
+    //                        '</tr>')).draw();
+    //                } else {
+    //                    $('#file-export').DataTable().row.add($('<tr>' +
+    //                        '<td><a class="fw-semibold text-muted ms-1 text-info" href="javascript:consultarGuiaElectronica(' + "'" + value.doc_serie + "','" + value.doc_nro + "'" + ');">' + value.doc_serie + '-' + value.doc_nro + '</a></td>' +
+    //                        '<td>' + fecha + '</td>' +
+    //                        '<td>' + value.coa + '</td>' +
+    //                        '<td>' + 'Transferencia de almacén' + '</td>' +
+    //                        '<td>' + value.lote + '</td>' +
+    //                        '<td>' + fecha_exp + '</td>' +
+    //                        '<td>' + value.und_i + '</td>' +
+    //                        '<td>' + value.und_s + '</td>' +
+    //                        '<td>' + saldo + '</td>' +
+    //                        '</tr>')).draw();
+    //                }
+
+    //            })
+
+    //            $("#exampleModalScrollableKardex").modal('hide');
+    //        },
+    //        error: function (xhr, status, error) {
+    //            console.error(error);
+    //        }
+    //    });
+    //}
+
+    //function consultarFacturaElectronica(doc, ser, num) {
+    //    $.ajax({
+    //        url: '../Almacen/consultarFacturaElectronica',
+    //        type: 'GET',
+    //        data: {
+    //            doc: doc,
+    //            ser: ser,
+    //            num: num
+    //        },
+    //        success: function (response) {
+    //            //console.log(response);
+    //            if (response == "-1") {
+    //                document.location.href = "/MG360";
+    //            }
+    //            window.open(response, "Documento:" + doc + "-" + ser + "-" + num);
+    //            //window.open(response, "Documento:" + doc + "-" + ser + "-" + num, "toolbar = 0, scrollbars = 0, location = 0, statusbar = 0, menubar = 0, resizable = 1, width = 80%, height = 50%,");
+    //        },
+    //        error: function (xhr, status, error) {
+    //            console.error(error);
+    //        }
+    //    });
+    //}
+
+    //function consultarGuiaElectronica(serie, num) {
+    //    $.ajax({
+    //        url: '../Almacen/consultarGuiaElectronica',
+    //        type: 'GET',
+    //        data: {
+    //            serie: serie,
+    //            num: num
+    //        },
+    //        success: function (response) {
+    //            //console.log(response);
+    //            if (response == "-1") {
+    //                document.location.href = "/MG360";
+    //            }
+    //            window.open(response, "Documento:" + serie + "-" + num);
+    //            //window.open(response, "Documento:" + doc + "-" + ser + "-" + num, "toolbar = 0, scrollbars = 0, location = 0, statusbar = 0, menubar = 0, resizable = 1, width = 80%, height = 50%,");
+    //        },
+    //        error: function (xhr, status, error) {
+    //            console.error(error);
+    //        }
+    //    });
+    //}
+
+</script>
+
+<style>
+
+    .tabCabeFijo::-webkit-scrollbar {
+        width: 8px; /* Ancho del scrollbar en vertical */
+        height: 8px; /* Ancho del scrollbar en horizontal */
+    }
+
+    .tabCabeFijo::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.5); /* Color por defecto del thumb (scroll) */
+        border-radius: 10px; /* Bordes redondeados */
+    }
+
+        .tabCabeFijo::-webkit-scrollbar-thumb:hover {
+            background-color: orange; /* Cambia el color del thumb a naranja cuando esté sobre él */
+        }
+
+    .fn_coaCliente {
+        cursor: pointer;
+    }
+
+    .txtSizeH {
+        font-size: 12px !important;
+    }
+
+    .txtSizeC {
+        font-size: 12px !important;
+        padding: 7px 4px !important;
+        text-align: center;
+    }
+
+    .txtSize {
+        font-size: 12px !important;
+        padding: 7px 4px !important;
+    }
+
+    .txtSizeA {
+        font-size: 12px !important;
+        padding: 2px 3px !important;
+    }
+
+    .txtSizeB {
+        font-size: 12px !important;
+        padding: 8px 4px !important;
+    }
+
+    .page-link {
+        font-size: 12px !important;
+    }
+
+    .aiCliente {
+        font-size: 12px;
+        border: 0px;
+        padding: 0px;
+        background: #fff !important;
+        margin-top: 10px;
+    }
+
+    #theadDocumenos th {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 1;
+    }
+
+    .tabCabeFijo {
+        max-height: 403px;
+        overflow-y: scroll;
+    }
+
+    .aiDocumento1 {
+        font-size: 12px;
+        border: 0px;
+        padding: 0px;
+    }
+</style>
+
+<link href="~/assets/css/cssMG.css" rel="stylesheet" />
+@{
+    var usu_data3 = Session["SessionUsuario"] as WebAppMontGroup.Entity.Usuario;
+    if (usu_data3.estiloWeb == "Estilo2")
+    {
+        <link href="~/assets/css/cssMG2.css" rel="stylesheet" />
+    }
+}

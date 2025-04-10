@@ -1,0 +1,277 @@
+﻿
+<link rel="stylesheet" href="~/assets/descargados/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="~/assets/descargados/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="~/assets/descargados/buttons.bootstrap5.min.css">
+<link href="~/assets/descargados/select2.min.css" rel="stylesheet">
+
+
+@{
+    ViewBag.Title = "Guias de Transferencia";
+}
+
+
+<!-- Start:: row-2 -->
+<div class="row">
+    <div class="col-xl-12">
+
+        <input type="hidden" id="tipeUser" name="tipeUser" value="@Session["TipoUsuario"].ToString()">
+        <div class="card custom-card">
+            <div class="card custom-card">
+                <div class="card-header fs-18 fw-semibold mb-0 text-primary">
+                    Lista de Guías de Transferencia
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xl-2">
+                            <label for="AnioMesCbo" class="form-label">Desde :</label>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-text text-muted"> <i class="ri-calendar-line"></i> </div>
+                                    <input type="text" class="form-control" id="date_desde" placeholder="seleccione fecha" value="@DateTime.Now.ToString("yyyy-MM")-01">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-2">
+                            <label for="AlmacenCbo" class="form-label">Hasta :</label>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-text text-muted"> <i class="ri-calendar-line"></i> </div>
+                                    <input type="text" class="form-control" id="date_hasta" placeholder="seleccione fecha" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-2" style="margin-bottom: 10px;">
+                            <label for="divButton" class="form-label">&nbsp;</label>
+                            <div id="divButton">
+                                <button type="button" class="btn btn-primary btn-wave waves-effect waves-light btnmg" style="width:100%" id="BtnActualizar">Buscar Guías</button>
+                            </div>
+                        </div>
+                        <div class="col-xl-2" style="margin-bottom: 10px;">
+                            <label for="divButton" class="form-label">&nbsp;</label>
+                            <div id="divButton">
+                                <button type="button" class="btn btn-primary btn-wave waves-effect waves-light btnmg" style="width:100%" id="BtnNuevaGuia">Generar Nueva Guía</button>
+                            </div>
+                        </div>
+                        <div class="col-xl-4" style="margin-bottom: 10px;">&nbsp;</div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="card-body" style="padding-top:0px">
+                <div class="table-responsive">
+                    <table id="datatable-basic" class="table table-bordered text-nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th style="background: #f8f9f9">Guía</th>
+                                <th style="background: #f8f9f9">Coa Cliente</th>
+                                <th style="background: #f8f9f9">Cliente</th>
+                                <th style="background: #f8f9f9">Estado</th>
+                                <th style="background: #f8f9f9; text-align: center !important">Emisión</th>
+                                <th style="background: #f8f9f9; text-align: center !important">Traslado</th>
+                                <th style="background: #f8f9f9">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End:: row-2 -->
+
+
+<div class="modal fade" id="exampleModalScrollable" tabindex="-1" data-bs-backdrop="static"
+     aria-labelledby="exampleModalScrollable" data-bs-keyboard="false"
+     aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!--<div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel2">
+                    Modal title
+                </h6>
+            </div>-->
+            <div class="modal-body" style="text-align:center">
+                <img src="~/assets/images/loading.gif" />
+                <p>
+                    Estamos cargando la información. Por favor, espere.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/assets/descargados/jquery.dataTables.min.js"></script>
+<script src="~/assets/descargados/dataTables.bootstrap5.min.js"></script>
+<script src="~/assets/descargados/dataTables.responsive.min.js"></script>
+<script src="~/assets/descargados/dataTables.buttons.min.js"></script>
+
+
+<script src="~/assets/libs/flatpickr/flatpickr.min.js"></script>
+<script src="~/assets/js/date&time_pickers.js"></script>
+
+<script src="~/assets/descargados/buttons.html5.min.js"></script>
+<script src="~/assets/descargados/jszip.min.js"></script>
+
+<!-- Select2 Cdn -->
+<script src="~/assets/descargados/select2.min.js"></script>
+
+<!-- Internal Select-2.js -->
+<script src="~/assets/js/select2.js"></script>
+
+
+<!-- Internal Datatables JS -->
+<script src="~/assets/js/datatables.js"></script>
+<script src="~/assets/js/jsMG.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#exampleModalScrollable').modal('show');
+        consularGuias();
+    });
+
+    $("#BtnNuevaGuia").click(function () {
+        window.open('/Almacen/GuiaTransferencia', '_blank');
+    });
+
+    $("#BtnActualizar").click(function () {
+        $('#exampleModalScrollable').modal('show');
+        consularGuias();
+    });
+
+    async function consularGuias() {
+
+        var table = new DataTable('#datatable-basic');
+        var rows = table
+            .rows()
+            .remove()
+            .draw();
+
+        var _estado = "";
+        var _btnDescarga = "";
+        var _textEditarVer = "";
+        var _accion = "";
+
+        $.ajax({
+            url: '../Almacen/listarGuiaTransferencia',
+            type: 'GET',
+            data: {
+                access_pass: "",
+                usuario: "",
+                fecha_inicio: $("#date_desde").val(),
+                fecha_fin: $("#date_hasta").val(),
+                estado: ""
+            },
+            success: function (response) {
+                console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+
+                $.each(response, function (key, value) {
+
+                    _btnDescarga = "";
+                    _textEditarVer = "Editar";
+                    _accion = "GuiaTransferenciaView/?idGuia="
+                    if (value.estado == "RE") {
+                        _estado = "Pendiente";
+                        _accion = "GuiaTransferencia/?idGuia="
+                    }
+                    else if (value.estado = "ENV") {
+                        _estado = "Enviado";
+                        _btnDescarga = '<a class="btn btn-sm btn-success-transparent btn-wave" href="javascript:consultarGuiaElectronica(' + "'" + value.serie + "','" + value.numero + "'" + ');"><i class="ri-download-2-line align-middle me-2 d-inline-block"></i>Descargar</a>';
+                        _textEditarVer = "Ver";
+                    }
+                    else {
+                        _estado = "NN";
+                    }
+
+                    //badge bg-success-transparent
+                    $('#datatable-basic').DataTable().row.add($('<tr>' +
+                        '<td class="fw-semibold text-muted ms-1 text-dark">' + value.serie + '-' + value.numero + '</td>' +
+                        '<td>' + value.cliente_documento + '</td>' +
+                        '<td>' + value.cliente_nombre + '</td>' +
+                        '<td>' + _estado + '</td>' +
+                        '<td class="tdCendter">' + $.formattedDateyyyyMMdd(new Date(parseInt(value.fecha_emision.substr(6)))) + '</td>' +
+                        '<td class="tdCendter">' + $.formattedDateyyyyMMdd(new Date(parseInt(value.fecha_traslado.substr(6)))) + '</td>' +
+                        '<td>' + '<div class="hstack gap-2 fs-15">' +
+                        _btnDescarga +
+                        '<a class="btn btn-sm btn-info-transparent btn-wave" href="/Almacen/' + _accion + value.IdGuiaTransferencia + '" target="_blank" ><i class="ri-edit-line align-middle me-2 d-inline-block"></i>' + _textEditarVer + '</a>' +
+                        '</div>' +
+                        '</td>' +
+                        '</tr>')).draw();
+
+                })
+
+                setTimeout(function () {
+                    $("#exampleModalScrollable").modal('hide');
+                }, 500);
+
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+
+    function consultarGuiaElectronica(serie, num) {
+        $.ajax({
+            url: '../Almacen/consultarGuiaElectronica',
+            type: 'GET',
+            data: {
+                serie: serie,
+                num: num
+            },
+            success: function (response) {
+                //console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+                window.open(response, "Documento:" + serie + "-" + num);
+                //window.open(response, "Documento:" + doc + "-" + ser + "-" + num, "toolbar = 0, scrollbars = 0, location = 0, statusbar = 0, menubar = 0, resizable = 1, width = 80%, height = 50%,");
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+</script>
+
+<style>
+
+    .tdCendter {
+        text-align: center !important;
+    }
+
+    .buttons-copy {
+        display: none !important;
+    }
+
+    .buttons-csv {
+        display: none !important;
+    }
+
+    .dataTables_scroll {
+        position: relative;
+        overflow: auto;
+        width: 100%;
+    }
+
+    .rowRed {
+        background-color: rgba(var(--danger-rgb), .1) !important;
+        color: rgb(var(--danger-rgb)) !important;
+        border-color: rgba(var(--danger-rgb), .1) !important;
+    }
+</style>
+
+<link href="~/assets/css/cssMG.css" rel="stylesheet" />

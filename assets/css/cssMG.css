@@ -1,0 +1,148 @@
+﻿@media screen and (max-width: 450px) {
+    #divButton {
+        width: 100%;
+    }
+
+    #BtnActualizarStock {
+        width: 100%;
+    }
+
+    .btnValidar {
+        width: 100% !important;
+        margin-bottom: 15px !important;
+    }
+
+    .colPP1 {
+        display: none;
+        /*width: 50% !important;*/
+    }
+
+    .colPP2 {
+        width: 50% !important;
+    }
+
+    .colPP3 {
+        width: 50% !important;
+    }
+
+    .txtProd {
+        float: left;
+        margin-right: 10px;
+    }
+
+    .colPP32 {
+        margin-bottom: 5px !important;
+        width: 80% !important;
+        margin-top: 7px;
+    }
+    .colPP322 {
+        margin-bottom: 5px !important;
+        width: 80% !important;
+        margin-top: 7px;
+    }
+
+    .colPP11 {
+        width: 20% !important;
+    }
+
+    .txtProd {
+        height: 100%;
+    }
+}
+
+/*PEDIDO*/
+.cend {
+    text-align: end;
+}
+
+@media (min-width: 1200px) {
+
+    .colPP1 {
+        width: 5% !important;
+        padding-top: 14px;
+    }
+
+    .colPP2 {
+        width: 14% !important;
+    }
+
+    .colPP21 {
+        width: 14% !important;
+    }
+
+    .colPP3 {
+        width: 35% !important;
+    }
+
+    .colPP32 {
+        width: 25% !important;
+    }
+
+    .colPP322 {
+        width: 35% !important;
+    }
+
+    .btnValidar {
+        margin-top: 20px !important;
+    }
+
+    .colPP11 {
+        display: none !important;
+    }
+}
+
+
+.cend {
+    text-align: center !important;
+}
+
+
+.btnmg {
+    background: #7f8c8d !important;
+    border: #7f8c8d;
+}
+
+
+    .dViewG1 {
+        width: 25%;
+        float: left;
+    }
+
+
+    @media screen and (max-width: 450px) {
+        .dViewG2 {
+            width: 40%;
+            float: left;
+        }
+        .dViewG2_2 {
+            width: 55%;
+            float: left;
+            margin-bottom: 7px;
+        }
+    }
+
+@media screen and (min-width: 900px) {
+    .dViewG2 {
+        width: 20%;
+        float: left;
+    }
+}
+
+#tbodyDocumentos td, #tbodyDocumentos th, #tbodyDetails td, #tbodyDetails th {
+    padding: 7px 5px !important;
+}
+
+
+@media (min-width: 1200px) {
+    #datatable-basic_length, #datatable-basic_filter, #datatable-basic2_length, #datatable-basic2_filter {
+        width: 50% !important;
+        float: left;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .dt-buttons {
+        margin-top: 45px !important;
+    }
+}
+    

@@ -1,0 +1,472 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Documento</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="~/assets/images/brand-logos/favicon.ico" type="image/x-icon">
+
+    <!-- Choices JS -->
+    <!--<script src="~/assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>-->
+    <!-- Main Theme Js -->
+    <script src="~/assets/js/main.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="~/assets/libs/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Bootstrap Css -->
+    <link id="style" href="~/assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Style Css -->
+    <link href="~/assets/css/styles.min.css" rel="stylesheet">
+
+    <!-- Icons Css -->
+    <link href="~/assets/css/icons.css" rel="stylesheet">
+    <!--Custom Style Css-->
+    @*<link href="~/assets/css/custom.css" rel="stylesheet">*@
+
+</head>
+<body style="background:#ffffff">
+
+    @{
+        System.Data.DataTable dt = ViewData["ViewDocumento"] as System.Data.DataTable;
+
+        if (dt.Columns.Count > 1)
+        {
+
+            System.Data.DataTable dtDetalle = ViewBag.DetalleDocumento as System.Data.DataTable;
+            string est_documento = "";
+            foreach (System.Data.DataRow row in dt.Rows)
+            {
+                string fecha_cancelacion = Convert.ToDateTime(row["fch_canc"]).Year > 2000 ? Convert.ToDateTime(row["fch_canc"]).ToString("dd/MM/yyyy") : "";
+                <div class="row" style="padding-left: calc(var(--bs-gutter-x) * .5); padding-right: calc(var(--bs-gutter-x) * .5);">
+                    <div class="col-xl-12">
+                        <div class="card custom-card-body">
+                            <div class="card-header d-md-flex d-block justify-content-between align-items-center" style="padding: 5px 5px 5px 0px !important;">
+                                <div class="h5 mb-0 d-sm-flex d-bllock align-items-center">
+                                    @*<div class="avatar avatar-sm">
+                                            <img src="~/assets/images/brand-logos/toggle-logo.png" alt="">
+                                        </div>*@
+                                    <div class="ms-sm-2 ms-0 mt-sm-0 mt-2">
+                                        <div class="h6 fw-semibold mb-0">Documento : <span class="text-primary">@row["doc"].ToString()@row["doc_serie"].ToString()@row["doc_nro"].ToString()</span></div>
+                                    </div>
+                                    <div class="ms-sm-2 ms-0 mt-sm-0 mt-2">
+                                        &nbsp;
+                                    </div>
+                                    <div class="ms-sm-2 ms-0 mt-sm-0 mt-2">
+                                        <div class="h6 fw-semibold mb-0">
+                                            Estado :
+                                            @if (row["stat"].ToString() == "A")
+                                            {
+                                                if (row["stat_canc"].ToString() == "C")
+                                                {
+                                                    est_documento = "<span class=\"text-info\">Cancelado</span>";
+                                                }
+                                                else
+                                                {
+                                                    if (Convert.ToDateTime(row["fch_venc"]) < DateTime.Now)
+                                                    {
+                                                        est_documento = "<span class=\"text-danger\">Pendiente</span>";
+                                                    }
+                                                    else
+                                                    {
+                                                        est_documento = "<span class=\"text-primary\">Pendiente</span>";
+                                                    }
+                                                }
+                                            }
+                                            else if (row["stat"].ToString() == "X")
+                                            {
+                                                est_documento = "<span class=\"text-dark\">Anulado</span>";
+                                            }
+                                            else
+                                            {
+                                                est_documento = "<span class=\"text-warning\">N/N</span>";
+                                            }
+
+                                            @Html.Raw(est_documento)
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button class="btn btn-success-light m-1" id="btnFac" onclick="consultarFacturaElectronica('@row["doc"].ToString()','@row["doc_serie"].ToString()','@row["doc_nro"].ToString()');">Factura<i class="bi bi-download ms-2"></i></button>
+                                    <button class="btn btn-info-light m-1" id="btnGuia" onclick="consultarGuiaElectronica('@row["doc_ref_s"].ToString()','@row["doc_ref_n"].ToString()');">Guía<i class="bi bi-download ms-2"></i></button>
+                                    <button class="btn btn-primary-light m-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Movimientos <i class="ri-share-forward-line me-1 align-middle"></i></button>
+                                </div>
+
+                            </div>
+                            <div class="custom-card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered border-ligth">
+                                        <tbody class="table-group-divider">
+                                            <tr>
+                                                <th scope="row">Ruc</th>
+                                                <td>@row["coa"].ToString()</td>
+                                                <th scope="row">R. Social</th>
+                                                <td colspan="3">@row["coa_dsc"].ToString()</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Dirección</th>
+                                                <td colspan="5">@row["coa_dir"].ToString()</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Dpto</th>
+                                                <td>@row["DptoDocumento"]</td>
+                                                <th scope="row">Provincia</th>
+                                                <td>@row["ProvDocumento"]</td>
+                                                <th scope="row">Distrito</th>
+                                                <td>@row["DistDocumento"]</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Telefono</th>
+                                                <td>@row["TeleDocumento"]</td>
+                                                <th scope="row">Correo</th>
+                                                <td colspan="3">@row["CorrDocumento"]</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="table-responsive">
+                                    <div class="col-xl-12">
+                                        <br />
+                                        <div class="h6 fw-semibold" style="text-align: center; background: #f2f3f4; padding: 7px 0px;"></div>
+                                        <table class="table table-bordered border-ligth">
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">Importe</th>
+                                                    <td>S/ @string.Format("{0:0.00}", row["imp_s"])</td>
+                                                    <th scope="row">Fecha Emisión</th>
+                                                    <td>@Convert.ToDateTime(row["doc_fch"]).ToString("dd/MM/yyyy")</td>
+                                                    <th scope="row">Condicion de Pago</th>
+                                                    <td>@row["PagoDocumento"].ToString()</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Igv</th>
+                                                    <td>S/ @string.Format("{0:0.00}", row["imp_i"])</td>
+                                                    <th scope="row">Fecha Vencimiento</th>
+                                                    <td>@Convert.ToDateTime(row["fch_venc"]).ToString("dd/MM/yyyy")</td>
+                                                    <th scope="row">Vendedor</th>
+                                                    <td>@row["VendedorDocumento"].ToString()</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Total</th>
+                                                    <td>S/ @string.Format("{0:0.00}", row["imp_t"])</td>
+                                                    <th scope="row">Fecha Cancelación</th>
+                                                    <td>@fecha_cancelacion</td>
+                                                    <th scope="row"></th>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Saldo</th>
+                                                    <td>S/ @string.Format("{0:0.00}", row["SaldoDocumento"])</td>
+                                                    <th scope="row"></th>
+                                                    <td></td>
+                                                    <th scope="row"></th>
+                                                    <td></td>
+                                                </tr>
+
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12 ">
+                                    <div class="table-responsive">
+                                        <div class="h6 fw-semibold" style="text-align: center; background: #f2f3f4; padding: 7px 0px;">DETALLE DEL PEDIDO</div>
+                                        <table class="table table-bordered border-ligth">
+                                            <thead class="table-bordered border-ligth">
+                                                <tr>
+                                                    <th>CODIGO</th>
+                                                    <th>DESCRIPCION</th>
+                                                    <th>LOTE</th>
+                                                    <th>EXPIRA</th>
+                                                    <th>CANTIDAD</th>
+                                                    <th>PRECIO</th>
+                                                    <th>TOTAL</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (dtDetalle != null && dtDetalle.Rows.Count > 0)
+                                                {
+                                                    foreach (System.Data.DataRow detalle in dtDetalle.Rows)
+                                                    {
+                                                        // Almacenar los valores de las columnas en variables locales
+                                                        var articulo = detalle["articulo"].ToString();
+                                                        var descripcion = detalle["artic_dsc"].ToString();
+                                                        var lote = detalle["lote"].ToString();
+                                                        var fechaExpira = Convert.ToDateTime(detalle["fch_exp"]).ToString("dd/MM/yyyy");
+                                                        var cantidad = detalle["und"].ToString();
+                                                        var precioUnitario = string.Format("{0:0.00}", detalle["imp_u_inc"]);
+                                                        var precioTotal = string.Format("{0:0.00}", detalle["imp_inc"]);
+                                                        <tr>
+                                                            <td>@articulo</td>
+                                                            <td>
+                                                                <textarea class="custom-description-textarea form-control border-0 textProducto" readonly oninput="autoResize(this)">@descripcion</textarea>
+                                                            </td>
+                                                            <td>@lote</td>
+                                                            <td>@fechaExpira</td>
+                                                            <td>@cantidad</td>
+                                                            <td>S/ @precioUnitario</td>
+                                                            <td>S/ @precioTotal</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <tr>
+                                                        <td colspan="7">No hay detalles disponibles</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            }
+
+        }
+        else
+        {
+            <h1 class="modal-title fs-18 fw-semibold mb-0 text-primary" id="staticBackdropLabel">Documento no encontrado o sin acceso a los datos del cliente</h1>
+        }
+    }
+
+
+    <div class="scrollToTop">
+        <span class="arrow"><i class="ri-arrow-up-s-fill fs-20"></i></span>
+    </div>
+    <div id="responsive-overlay"></div>
+
+    @{
+        if (dt.Columns.Count > 1)
+        {
+            System.Data.DataTable dtdocumentoxplanilla = ViewBag.documentoxplanilla as System.Data.DataTable;
+            <div class="scrollToTop">
+                <span class="arrow"><i class="ri-arrow-up-s-fill fs-20"></i></span>
+            </div>
+            <div id="responsive-overlay"></div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content ">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-18 fw-semibold mb-0 text-primary" id="staticBackdropLabel">Movimientos</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive">
+                                <table id="datatable-movimientos" class="table table-bordered text-nowrap w-50" style="margin:auto">
+                                    <thead class="table">
+                                        <tr>
+                                            <th> Código</th>
+                                            <th> Cliente</th>
+                                            <th> Op.Financiera</th>
+                                            <th> Nro.Secuencia</th>
+                                            <th> Importe</th>
+                                            <th> Fecha</th>
+                                            <th> Vendedor</th>
+                                            <th> Cobrador</th>
+                                            <th> Operación</th>
+                                            <th> Planilla</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (ViewBag.documentoxplanilla != null)
+                                        {
+                                            foreach (System.Data.DataRow row in ViewBag.documentoxplanilla.Rows)
+                                            {
+                                                <tr>
+                                                    <td>@row["codigo"]</td>
+                                                    <td>@row["cliente"]</td>
+                                                    <td>@row["op. financiera"]</td>
+                                                    <td>@row["nro. secuencia"]</td>
+                                                    <td>@row["importe"]</td>
+                                                    <td>@Convert.ToDateTime(row["fecha"]).ToString("dd/MM/yyyy")</td>
+                                                    <td>@row["vendedor"]</td>
+                                                    <td>@row["cobrador"]</td>
+                                                    <td>@row["glosa"]</td> <!-- Ajusta si tienes un campo 'cobrador' -->
+                                                    <td>@row["planilla"]</td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td colspan="9">No hay datos disponibles</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Regresar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    }
+
+
+    <script src="~/assets/descargados/jquery.min.js"></script>
+    <script src="~/assets/js/custom.js"></script>
+
+    <style>
+        .liDocPerson {
+            padding: 0px;
+            border: 0px;
+        }
+
+        .table td, .table th {
+            padding: 5px 7px !important;
+            font-size: 12px;
+        }
+
+        .text-muted {
+            font-size: 12px;
+            color: #343a40 !important;
+        }
+
+        .areaProduct {
+            font-size: 12px;
+            border: 0px;
+            margin: 10px 0px -4px 0px;
+        }
+
+        body {
+            overflow-x: hidden;
+            padding-left: 0px;
+        }
+
+        .textProducto {
+            font-size: 13px;
+            padding: 0px
+        }
+    </style>
+    <script>
+        function autoResize(textarea) {
+            textarea.style.height = 'auto'; // Reinicia la altura del textarea
+
+        }
+
+        // Ajusta todos los textareas en la página al cargarse
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('textarea.custom-description-textarea').forEach(function (textarea) {
+                autoResize(textarea); // Ajusta cada textarea al contenido
+            });
+
+        });
+        function fnVerMovimientos(codigoMovimiento) {
+
+            setTimeout(function () {
+                $.ajax({
+                    url: '../Ventas/getDocumento',
+                    type: 'GET',
+                    data: {
+                        documento: documento
+                    },
+                    success: function (response) {
+                        if (response == "-1") {
+                            document.location.href = "/MG360"; // Redirige si hay un problema
+                        }
+                        else {
+                            // Abre la nueva página de movimientos en una ventana nueva
+                            window.open("../Ventas/Movimientos/", "_blank", "top=100,left=300,width=1000,height=800");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }, 200);
+        }
+
+        function consultarFacturaElectronica(doc, ser, num) {
+
+            $("#btnFac").prop("disabled", true);
+            $.ajax({
+                url: '/Almacen/consultarFacturaElectronica',
+                type: 'GET',
+                data: {
+                    doc: doc,
+                    ser: ser,
+                    num: num
+                },
+                success: function (response) {
+                    //console.log(response);
+                    if (response == "-1") {
+                        document.location.href = "/MG360";
+                    }
+                    if (response != "0") {
+                        window.open(response, "Documento:" + doc + "-" + ser + "-" + num);
+                        //window.open(response, "Documento:" + doc + "-" + ser + "-" + num, "toolbar = 0, scrollbars = 0, location = 0, statusbar = 0, menubar = 0, resizable = 1, width = 80%, height = 50%,");
+                    }
+                    else {
+                        alert("El documento no puede ser descargado, intento más tarde o validelo con su asistente");
+                    }
+                    $("#btnFac").prop("disabled", false);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    $("#btnFac").prop("disabled", false);
+                }
+            });
+        }
+
+        function consultarGuiaElectronica(serie, num) {
+
+            $("#btnGuia").prop("disabled", true);
+
+
+            $.ajax({
+                url: '/Almacen/consultarGuiaElectronica',
+                type: 'GET',
+                data: {
+                    serie: serie,
+                    num: num
+                },
+                success: function (response) {
+                    //console.log(response);
+                    if (response == "-1") {
+                        document.location.href = "/MG360";
+                    }
+                    if (response != "0") {
+                        window.open(response, "Documento:" + serie + "-" + num);
+                        //window.open(response, "Documento:" + doc + "-" + ser + "-" + num, "toolbar = 0, scrollbars = 0, location = 0, statusbar = 0, menubar = 0, resizable = 1, width = 80%, height = 50%,");
+                    }
+                    else {
+                        alert("El documento no puede ser descargado, intento más tarde o validelo con su asistente");
+                    }
+
+                    $("#btnGuia").prop("disabled", false);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    $("#btnGuia").prop("disabled", false);
+                }
+            });
+        }
+    </script>
+
+</body>
+@{
+    var usu_data3 = Session["SessionUsuario"] as WebAppMontGroup.Entity.Usuario;
+    if (usu_data3.estiloWeb == "Estilo2")
+    {
+        <link href="~/assets/css/cssMG2.css" rel="stylesheet" />
+    }
+}
+</html>

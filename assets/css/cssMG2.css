@@ -1,0 +1,36 @@
+﻿.form-control {
+    border-color: #abb2b9 !important
+}
+
+.form-select {
+    border: 1px solid #abb2b9 !important
+}
+
+tbody, td, tfoot, th, thead, tr {
+    border-color: #abb2b9 !important;
+}
+
+ td, tfoot,tr {
+    color: #000000 !important;
+}
+
+.page-link {
+    border: 1px solid #abb2b9 !important;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border: 1px solid #abb2b9 !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    border: 1px solid #abb2b9 !important;
+}
+
+.page-item:first-child .page-link, .page-item:last-child .page-link {
+    color: black;
+    border: 1px solid #abb2b9 !important;
+}
+
+.accordion-button {
+    background: #abb2b9 !important;
+}

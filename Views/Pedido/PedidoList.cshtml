@@ -1,0 +1,567 @@
+﻿
+<link rel="stylesheet" href="~/assets/descargados/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="~/assets/descargados/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="~/assets/descargados/buttons.bootstrap5.min.css">
+<!--<link href="~/assets/descargados/select2.min.css" rel="stylesheet">-->
+<!--<link rel="stylesheet" href="~/assets/libs/flatpickr/flatpickr.min.css">-->
+
+@{
+    ViewBag.Title = "Pedidos";
+    int anio = DateTime.Now.Year;
+    int veces = -2;
+    //string date_periodo = DateTime.Now("yyyy-");
+}
+
+
+
+<!-- Start:: row-2 -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card custom-card">
+                <div class="card-header fs-18 fw-semibold mb-0 text-primary">
+                    Mis Pedidos
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xl-2">
+                            <label for="CboAnio" class="form-label">Año</label>
+                            <select id="CboAnio" class="form-select form-control-sm mb-2">
+                                <option value="@anio">@anio</option>
+                                @{
+                                    while (veces < 0)
+                                    {
+                                        anio = anio + veces;
+                                        <option value="@anio">@anio</option>
+                                        veces++;
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-xl-2">
+                            <label for="CboMes" class="form-label">Mes</label>
+                            <select id="CboMes" class="form-select form-control-sm mb-2">
+                                <option value="01">Enero</option>
+                                <option value="02">Febrero</option>
+                                <option value="03">Marzo</option>
+                                <option value="04">Abril</option>
+                                <option value="05">Mayo</option>
+                                <option value="06">Junio</option>
+                                <option value="07">Julio</option>
+                                <option value="08">Agosto</option>
+                                <option value="09">Setiembre</option>
+                                <option value="10">Octubre</option>
+                                <option value="11">Noviembre</option>
+                                <option value="12">Diciembre</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-3">
+                            <label for="VendedorCbo" class="form-label">Vendedor</label>
+                            <select class="form-select form-control-sm mb-2" id="VendedorCbo">
+                                @{
+                                    var usu_data = ViewData["Usuario"] as WebAppMontGroup.Entity.Usuario;
+                                    <option value="@usu_data.codigovendedor" RValamcen="@usu_data.codigoalmacen">
+                                        @usu_data.nombres -
+                                        @usu_data.codigovendedor
+                                    </option>
+
+                                    foreach (var usu in ViewData["VendedorAsociado"] as
+                                    IList<WebAppMontGroup.Entity.Usuario>)
+                                    {
+                                        <option value="@usu.codigovendedor" RValamcen="@usu.codigoalmacen">
+                                            @usu.nombres -
+                                            @usu.codigovendedor
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-xl-2">
+                            <label for="CboEstado" class="form-label">Estado</label>
+                            <select id="CboEstado" class="form-select form-control-sm mb-2">
+                                <option value="RE">Pendiente</option>
+                                <option value="APR">Por Facturar</option>
+                                <option value="ELI">Eliminado / Anulado</option>
+                                <option value="FAC">Facturado</option>
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-3" style="margin-bottom: 10px;">
+
+                            <label for="divButton" class="form-label">&nbsp;</label>
+                            <div id="divButton">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="btnBuscarPedido" data-bs-target="#exampleModalScrollable3">Buscar Pedidos</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" style="padding-top:0px">
+                <div class="table-responsive">
+                    <table id="responsiveDataTable" class="table table-bordered text-nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th class="thMG1">Pedido </th>
+                                <th class="thMG1">Estado </th>
+                                <th class="thMG1">Coa </th>
+                                <th class="thMG1">Cliente </th>
+                                <th class="thMG1">Fecha del Pedido </th>
+                                <th class="thMG1">Fecha de Entrega </th>
+                                <th class="thMG1">Tipo de Pago </th>
+                                <th class="thMG1">Tipo de Documento </th>
+                                <th class="thMG1">Total </th>
+                                <th class="thMG1">Vendedor </th>
+                                <th class="thMG1">Factura </th>
+                                <th class="thMG1">Guia </th>
+                                <th class="thMG1">F. Aprob Crédito </th>
+                                <th class="thMG1">F. Aprob Producto </th>
+                                <th class="thMG1">F. Aprob Almacen </th>
+                                <th class="thMG1">Opciones </th>
+                                <th class="thMG1">ID </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>TP-0001-121412</td>
+                                <td>En Facturaciób</td>
+                                <td>20522658945</td>
+                                <td>
+                                    FISIOSERVICE EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA - FISIOSERVICE E.I.R.L.
+                                </td>
+                                <td>31/10/2024</td>
+                                <td>02/11/2024 9:55 am</td>
+                                <td>CONTRAENTREGA</td>
+                                <td>FACTURA</td>
+                                <td>1198.50</td>
+                                <td>GR-T001-0009151</td>
+                                <td>FV-0001-0044409</td>
+                                <td>458 - Liz Sumaran Torres - Selva Oriental</td>
+                                <td>2024-10-31 09:16:03</td>
+                                <td>
+                                    <br />hgalvan | Aprobado | 2024-10-31 10:35<br />pmengoni | Aprobado | 2024-10-31
+                                    10:40
+                                </td>
+                                <td>2024-10-31 09:16:03</td>
+                                <td></td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End:: row-2 -->
+
+
+<div class="modal fade" id="exampleModalScrollablePedidosLst" tabindex="-1" data-bs-backdrop="static"
+     aria-labelledby="exampleModalScrollablePedidosLst" data-bs-keyboard="false"
+     aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!--<div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel2">
+                    Modal title
+                </h6>
+            </div>-->
+            <div class="modal-body" style="text-align:center">
+                <img src="~/assets/images/loading.gif" />
+                <p>
+                    Estamos cargando la información. Por favor, espere.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script src="~/assets/descargados/jquery.dataTables.min.js"></script>
+<script src="~/assets/descargados/dataTables.bootstrap5.min.js"></script>
+<script src="~/assets/descargados/dataTables.responsive.min.js"></script>
+<script src="~/assets/descargados/dataTables.buttons.min.js"></script>
+@*<script src="~/assets/descargados/buttons.print.min.js"></script>*@
+@*<script src="~/assets/descargados/pdfmake.min.js"></script>*@
+@*<script src="~/assets/descargados/vfs_fonts.js"></script>*@
+<script src="~/assets/descargados/buttons.html5.min.js"></script>
+<script src="~/assets/descargados/jszip.min.js"></script>
+
+
+<!--<script src="~/assets/js/Toasts.js"></script>-->
+<!-- Select2 Cdn -->
+<!--<script src="~/assets/descargados/select2.min.js"></script>-->
+<!-- Internal Select-2.js -->
+<!--<script src="~/assets/js/select2.js"></script>-->
+<!-- Internal Datatables JS -->
+<script src="~/assets/js/datatables.js"></script>
+
+
+<!-- Date & Time Picker JS -->
+<!--<script src="~/assets/libs/flatpickr/flatpickr.min.js"></script>-->
+<!--<script src="~/assets/js/date&time_pickers.js"></script>-->
+
+
+<script type="text/javascript">
+
+    var saldo_inicial = 0;
+
+    $(document).ready(function () {
+        $("#CboMes").val("@DateTime.Now.ToString("MM")")
+        fnConsultarPedido();
+    });
+
+
+
+    $("#btnBuscarPedido").click(function () {
+        fnConsultarPedido();
+    });
+
+    async function fnConsultarPedido() {
+        let anio = $("#CboAnio").val();
+        let mes = $("#CboMes").val();
+        let estado = $("#CboEstado").val();
+        let CodVendedor = $("#VendedorCbo").val();
+
+        console.log("Codigo :", CodVendedor);
+
+        let params = {
+            anio: anio,
+            mes: mes,
+            CodVendedor: CodVendedor,
+            estado: estado
+        };
+
+        let table = $('#responsiveDataTable').DataTable();
+        table.clear().draw();
+
+        try {
+            let response = await $.ajax({
+                url: '../Pedido/listaPedidos',
+                type: 'GET',
+                data: params
+            });
+
+            if (response.error) {
+                console.error(response.error);
+                return;
+            }
+
+            response.idPedido.forEach((id, index) => {
+                let idString = String(id); // Convertir a cadena para evitar errores
+                let res = idString.includes("-") ? idString.split("-") : [idString, "N/A", "N/A"];
+
+                let btnPedidoEditar = `<button type='button' style='border-radius:80px !important;' class='badge bg-outline-success btplstDoc' 
+                onclick='editarPedido("${res[0]}");'>
+                <i class="ti ti-pencil me-2"></i>Editar Pedido</button>`;
+
+                let btnPedidoVer = `<button type='button' style='border-radius:80px !important;' class='badge bg-outline-primary btplstDoc' 
+                onclick='verPedido("${res[0]}");'>
+                <i class="ti ti-eye me-2"></i>Ver Pedido</button>`;
+
+                let row = [
+                    response.CodigoPedido?.[index] ?? '',
+                    response.estado?.[index] ?? '',
+                    response.coa?.[index] ?? '',
+                    response.cliente?.[index] ?? '',
+                    response.fechaRegistro?.[index] ?? '',
+                    response.fechaEntrega?.[index] ?? '',
+                    response.NombreTipoPago?.[index] ?? '',
+                    response.TipoDocumentoFiscal?.[index] ?? '',
+                    response.total?.[index] ?? '',
+                    response.vendedor?.[index] ?? '',
+                    '', // Factura
+                    '', // Guia
+                    '', // F. Aprob Crédito
+                    '', // F. Aprob Producto
+                    '', // F. Aprob Almacen
+                    `${btnPedidoEditar} ${btnPedidoVer}`,
+                    id
+                ];
+
+                table.row.add(row);
+            });
+
+            table.draw();
+
+        } catch (error) {
+            console.error("Error en la consulta: ", error);
+        }
+    }
+
+    function verPedido(id) {
+        window.location.href = `../Pedido/PedidoVer?id=${id}`;
+    }
+
+
+    function editarPedido(id) {
+        window.location.href = `../Pedido/PedidoCrear?id=${id}`;
+    }
+
+    async function fnConsularPedido95() {
+
+        $('#exampleModalScrollablePedidosLst').modal('show');
+        var table = new DataTable('#responsiveDataTable');
+        var rows = table
+            .rows()
+            .remove()
+            .draw();
+
+        var _estado = "";
+        var _aprob1 = "";
+        var _aprob2 = "";
+        var _total_pendientes = 0;
+        var _css = "";
+        var _btn_guia = "";
+        var _btn_fac = "";
+
+        $.ajax({
+            url: '../Pedido/lstPedidos95',
+            type: 'GET',
+            data: {
+                anio: $("#CboAnio").val(),
+                mes: $("#CboMes").val(),
+                user: "",
+                estado: $("#CboEstado").val()
+            },
+            success: async function (response) {
+                //debugger;
+                //console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+                $.each(response, function (key, value) {
+
+                    _total_pendientes = 0;
+                    _aprob1 = value.aprob1;
+                    _aprob2 = value.aprob2;
+
+                    if (value.est_pedido == "P") {
+                        _estado = "Pendiente ";
+                        if (value.apCredito == "NO") {
+                            _total_pendientes++;
+                            _estado += "[Credito] ";
+                        }
+                        if (value.apProducto == "NO") {
+                            _total_pendientes++;
+                            _estado += "[Producto] ";
+                        }
+                        if (value.apAlmacen == "NO") {
+                            _total_pendientes++;
+                            _estado += "[Almacen] ";
+                        }
+
+                        if (_total_pendientes == 3) {
+                            _estado = "Pendiente [Todos]";
+                        }
+                        else if (_total_pendientes == 0 && value.fecha_aproAlmacen == "") {
+                                _estado = "Pendiente [Almacen]";
+                        }
+
+                        _css = "cssPendiente";
+                    }
+                    else if (value.est_pedido == "AL") {
+                        if (value.doc_guia == "null" || value.doc_guia == "") {
+                            _estado = "Por facturar";
+                            _css = "cssPendiente";
+                        }
+                        else {
+                            _estado = "Facturado";
+                            _css = "cssFinalizado";
+                        }
+                    }
+                    else if (value.est_pedido == "X") {
+                        _estado = "Anulado";
+                        _css = "cssDesaprobado";
+                    }
+                    else if (value.est_pedido == "D") {
+
+                        if (value.apCredito == "NO") {
+                            _estado = "Desaprobado [Credito]";
+                        }
+                        if (value.apProducto == "NO") {
+                            _estado = "Desaprobado [Producto]";
+                        }
+                        if (value.apAlmacen == "NO") {
+                            _estado = "Desaprobado [Almacen]";
+                        }
+                        else {
+                            _estado = "Desaprobado";
+                        }
+                        _css = "cssDesaprobado";
+                    }
+                    else {
+                        _estado = "NN";
+                    }
+
+
+                    _btn_guia = "";
+                    _btn_fac = "";
+
+                    if (value.doc_guia != "null" && value.doc_guia != "") {
+                        var res = value.doc_guia.split("-");
+                        _btn_guia = "<button type='button' class='badge bg-outline-info btplstDoc' id='btnGuia' onclick='consultarGuiaElectronica(\"" + res[1] + "\",\"" + res[2] + "\");'>" + value.doc_guia + "</button>";
+                    }
+
+                    if (value.doc_FvBv != "null" && value.doc_FvBv != "") {
+                        var res = value.doc_FvBv.split("-");
+                        _btn_fac = "<button type='button' class='badge bg-outline-success btplstDoc' id='btnFac' onclick='consultarFacturaElectronica(\"" + res[0] + "\",\"" + res[1] + "\",\"" + res[2] + "\");'>" + value.doc_FvBv + "</button>";
+                    }
+
+
+                    $('#responsiveDataTable').DataTable().row.add($('<tr><td class="' + _css + '">' + value.codpedido + '</td>' +
+                        '<td>' + _estado + '</td>' +
+                        '<td>' + value.coa + '</td>' +
+                        '<td>' + value.coa_desc + '</td>' +
+                        '<td>' + value.fecha_pedido + '</td>' +
+                        '<td>' + value.fecha_entrega + '</td>' +
+                        '<td>' + value.t_pago + '</td>' +
+                        '<td>' + value.t_documento + '</td>' +
+                        '<td>' + value.total + '</td>' +
+                        '<td>' + _btn_guia + '</td>' +
+                        '<td>' + _btn_fac + '</td>' +
+                        '<td>' + value.CodVendedor + " - " + value.vendedor + '</td>' +
+                        '<td>' + value.fAprobCredito + '</td>' +
+                        '<td><br />' + value.aprob1 + '<br />' + value.aprob2 + '</td>' +
+                        '<td>' + value.fecha_aproAlmacen + '</td>' +
+                        '<td>' + value.idPedido + '</td></tr>')).draw();
+
+                });
+
+                setTimeout(function () {
+                    $('#responsiveDataTable').DataTable().order([15, 'desc']).draw();
+                    $("#exampleModalScrollablePedidosLst").modal('hide');
+                }, 500);
+
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+
+    function consultarFacturaElectronica(doc, ser, num) {
+
+        $("#btnFac").prop("disabled", true);
+        $.ajax({
+            url: '/Almacen/consultarFacturaElectronica',
+            type: 'GET',
+            data: {
+                doc: doc,
+                ser: ser,
+                num: num
+            },
+            success: function (response) {
+                //console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+                if (response != "0") {
+                    window.open(response, "Documento:" + doc + "-" + ser + "-" + num);
+                    //window.open(response, "Documento:" + doc + "-" + ser + "-" + num, "toolbar = 0, scrollbars = 0, location = 0, statusbar = 0, menubar = 0, resizable = 1, width = 80%, height = 50%,");
+                }
+                else {
+                    alert("El documento no puede ser descargado, intento más tarde o validelo con su asistente");
+                }
+                $("#btnFac").prop("disabled", false);
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                $("#btnFac").prop("disabled", false);
+            }
+        });
+    }
+
+    function consultarGuiaElectronica(serie, num) {
+
+        $("#btnGuia").prop("disabled", true);
+
+
+        $.ajax({
+            url: '/Almacen/consultarGuiaElectronica',
+            type: 'GET',
+            data: {
+                serie: serie,
+                num: num
+            },
+            success: function (response) {
+                //console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+                if (response != "0") {
+                    window.open(response, "Documento:" + serie + "-" + num);
+                    //window.open(response, "Documento:" + doc + "-" + ser + "-" + num, "toolbar = 0, scrollbars = 0, location = 0, statusbar = 0, menubar = 0, resizable = 1, width = 80%, height = 50%,");
+                }
+                else {
+                    alert("El documento no puede ser descargado, intento más tarde o validelo con su asistente");
+                }
+
+                $("#btnGuia").prop("disabled", false);
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                $("#btnGuia").prop("disabled", false);
+            }
+        });
+    }
+
+
+</script>
+
+<style>
+
+    .choices {
+        margin-bottom: 15px !important;
+    }
+
+    .divFecha {
+        margin-top: 0px !important;
+    }
+
+    .tdCendter {
+        text-align: center !important;
+    }
+
+    .rowRed {
+        background-color: rgba(var(--danger-rgb), .1) !important;
+        color: rgb(var(--danger-rgb)) !important;
+        border-color: rgba(var(--danger-rgb), .1) !important;
+    }
+
+    .dtr-details {
+        width: 100%
+    }
+
+    .cssPendiente {
+        color: #d4ac0d !important; /*#fff3cd*/
+        font-weight: bold;
+    }
+
+    .cssFinalizado {
+        color: #45b39d !important; /*#d5f5e3*/
+        font-weight: bold;
+    }
+
+    .cssDesaprobado {
+        color: #c0392b !important; /*#f5b7b1*/
+        font-weight: bold;
+    }
+
+    .btplstDoc {
+        font-size: 12px;
+    }
+</style>
+
+<!--<link href="~/assets/css/cssMG.css" rel="stylesheet" />-->
+@{
+    var usu_data3 = Session["SessionUsuario"] as WebAppMontGroup.Entity.Usuario;
+    if (usu_data3.estiloWeb == "Estilo2")
+    {
+        <link href="~/assets/css/cssMG2.css" rel="stylesheet" />
+    }
+}

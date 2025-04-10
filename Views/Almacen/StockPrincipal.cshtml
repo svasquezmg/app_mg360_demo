@@ -1,0 +1,380 @@
+﻿<link rel="stylesheet" href="~/assets/descargados/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="~/assets/descargados/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="~/assets/descargados/buttons.bootstrap5.min.css">
+<link href="~/assets/descargados/select2.min.css" rel="stylesheet">
+
+@{
+    ViewBag.Title = "Stock Principal";
+}
+
+<!-- Start:: row-2 -->
+<div class="row">
+    <div class="col-xl-12">
+
+        <input type="hidden" id="tipeUser" name="tipeUser" value="@Session["TipoUsuario"].ToString()">
+        <div class="card custom-card">
+            <div class="card custom-card">
+                <div class="card-header fs-18 fw-semibold mb-0 text-primary">
+                    Stock Principal
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xl-2">
+                            <label for="AnioMesCbo" class="form-label">Seleccione Año - Mes</label>
+                            <select class="form-select" id="AnioMesCbo" name="AnioMesCbo">
+                                @{ DateTime f_Actual = DateTime.Now;
+                                    int mes = f_Actual.Month;
+                                    int mes_num = 0;
+
+                                    while (mes_num < 2)
+                                    {
+                                        if (mes_num == 0)
+                                        {
+                                            <option value="@DateTime.Now.AddMonths(mes_num * -1).ToString("yyMM")" data_m="@DateTime.Now.AddMonths(mes_num * -1 - 1).ToString("yyMM")" selected">@DateTime.Now.AddMonths(mes_num * -1).ToString("yyyy-MM")</option>
+
+                                        }
+                                        else
+                                        {
+                                            <option value="@DateTime.Now.AddMonths(mes_num * -1).ToString("yyMM")" data_m="@DateTime.Now.AddMonths(mes_num * -1 - 1).ToString("yyMM")">@DateTime.Now.AddMonths(mes_num * -1).ToString("yyyy-MM")</option>
+                                        }
+                                        mes_num++;
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-xl-2">
+                            <label for="AlmacenCbo" class="form-label">Almacén</label>
+                            <select id="AlmacenCbo" class="form-select">
+                                <option value="XX">Principal</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-4">
+                            <label for="ProveedorCbo" class="form-label">Proveedor</label>
+                            <select class="js-example-basic-single " id="ProveedorCbo" name="state">
+                                <option value="-1">Seleccione Proveedor</option>
+                                @{ System.Data.DataTable proveedor = ViewData["Proveedor"] as System.Data.DataTable;
+                                    foreach (System.Data.DataRow row in proveedor.Rows)
+                                    {
+                                        <option value="@row["idProveedor"].ToString()">@row["dsc"].ToString()</option>
+                                    }
+                                }
+                                <option value="0">Todos los proveedores</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-xl-2" style="margin-bottom: 10px;">
+                            <label for="divButton" class="form-label">&nbsp;</label>
+                            <div id="divButton">
+                                <button type="button" class="btn btn-primary btn-wave waves-effect waves-light btnmg" style="width:100%" id="BtnActualizarMesAnioAlmacen">Buscar Productos</button>
+                            </div>
+                        </div>
+                        <div class="col-xl-6" style="margin-bottom: 10px;">&nbsp;</div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="card-body" style="padding-top:0px">
+                <div class="table-responsive">
+                    <table id="datatable-basic-KardexGeneral" class="table table-bordered text-nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th class="thMG1">Proveedor</th>
+                                <th class="thMG1">Articulo</th>
+                                <th class="thMG1">Descripción</th>
+                                <th class="thMG1">Desc Corto</th>
+                                <th class="thMG1">Presentación</th>
+                                <th class="thMG1">Cajon</th>
+                                <th class="thMG1" style="text-align: center !important ">Separado</th>
+                                <th class="thMG1" style="text-align: center !important ">Stock (UND)</th>
+                                <th class="thMG1" style="text-align: center !important ">Vecimiento</th>
+                                <th class="thMG1">Responsable</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End:: row-2 -->
+
+
+<div class="modal fade" id="exampleModalScrollableKardexGeneral" tabindex="-1" data-bs-backdrop="static"
+     aria-labelledby="exampleModalScrollableKardexGeneral" data-bs-keyboard="false"
+     aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!--<div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel2">
+                    Modal title
+                </h6>
+            </div>-->
+            <div class="modal-body" style="text-align:center">
+                <img src="~/assets/images/loading.gif" />
+                <p>
+                    Estamos cargando la información. Por favor, espere.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/assets/descargados/jquery.dataTables.min.js"></script>
+<script src="~/assets/descargados/dataTables.bootstrap5.min.js"></script>
+<script src="~/assets/descargados/dataTables.responsive.min.js"></script>
+<script src="~/assets/descargados/dataTables.buttons.min.js"></script>
+@*<script src="~/assets/descargados/buttons.print.min.js"></script>*@
+@*<script src="~/assets/descargados/pdfmake.min.js"></script>*@
+@*<script src="~/assets/descargados/vfs_fonts.js"></script>*@
+<script src="~/assets/descargados/buttons.html5.min.js"></script>
+<script src="~/assets/descargados/jszip.min.js"></script>
+
+<!-- Select2 Cdn -->
+<script src="~/assets/descargados/select2.min.js"></script>
+
+<!-- Internal Select-2.js -->
+<script src="~/assets/js/select2.js"></script>
+
+
+<!-- Internal Datatables JS -->
+<script src="~/assets/js/datatables.js"></script>
+
+
+
+<script type="text/javascript">
+
+    var saldo_inicial = 0;
+
+    $(document).ready(function () {
+        // $('#exampleModalScrollableKardex').modal('show');
+        // consularKardex();
+        //
+        //consularKardex();
+    });
+
+    $("#BtnActualizarMesAnioAlmacen").click(function () {
+        $('#exampleModalScrollableKardexGeneral').modal('show');
+
+        //if ($("#tipeUser").val() == "2") {
+        consularKardex2();
+        //}
+        //else {
+        //    consularKardex();
+        //}
+    });
+
+
+
+    async function consularKardex() {
+
+        var table = new DataTable('#datatable-basic-KardexGeneral');
+        var rows = table
+            .rows()
+            .remove()
+            .draw();
+
+        var fecha_vencimiento = "";
+        $.ajax({
+            url: '../Almacen/StockAlmacenPrincipal',
+            type: 'GET',
+            data: {
+                aniomes: $("#AnioMesCbo").val(),
+                idProveedor: $("#ProveedorCbo").val()
+            },
+            success: function (response) {
+                //console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+                $.each(response, function (key, value) {
+                    //console.log(value.Articulo);
+
+                    fecha_vencimiento = value.FechaVencimiento;
+                    if (fecha_vencimiento == null) {
+                        fecha_vencimiento = "";
+                    }
+
+                    if (value.stock == "0") {
+                        $('#datatable-basic-KardexGeneral').DataTable().row.add($('<tr>' +
+                            '<td class="fw-semibold text-muted ms-1 text-dark rowRed">' + value.proveedor + '</td>' +
+                            '<td class="rowRed">' + value.articulo + '</td>' +
+                            '<td class="rowRed">' + value.artic_dsc + '</td>' +
+                            '<td class="rowRed">' + value.artic_dsc_corto + '</td>' +
+                            '<td class="rowRed">' + value.presentacion + '</td>' +
+                            '<td class="rowRed">' + value.cajon + '</td>' +
+                            '<td class="rowRed tdCendter">' + (parseInt(value.stock) - parseInt(value.separacion)) + '</td>' +
+                            '<td class="rowRed tdCendter">' + fecha_vencimiento + '</td>' +
+                            //'<td class="rowRed">' + value.categoria + '</td>' +
+                            //'<td class="rowRed">' + value.subcategoria + '</td>' +
+                            '<td class="rowRed">' + value.responsable + '</td>' +
+                            '</tr>')).draw();
+                    }
+                    else {
+                        $('#datatable-basic-KardexGeneral').DataTable().row.add($('<tr>' +
+                            '<td class="fw-semibold text-muted ms-1 text-dark">' + value.proveedor + '</td>' +
+                            '<td>' + value.articulo + '</td>' +
+                            '<td>' + value.artic_dsc + '</td>' +
+                            '<td>' + value.artic_dsc_corto + '</td>' +
+                            '<td>' + value.presentacion + '</td>' +
+                            '<td>' + value.cajon + '</td>' +
+                            '<td class="tdCendter">' + (parseInt(value.stock) - parseInt(value.separacion)) + '</td>' +
+                            '<td class="tdCendter">' + fecha_vencimiento + '</td>' +
+                            //'<td>' + value.categoria + '</td>' +
+                            //'<td>' + value.subcategoria + '</td>' +
+                            '<td>' + value.responsable + '</td>' +
+                            '</tr>')).draw();
+                    }
+
+                })
+
+                setTimeout(function () {
+                    $("#exampleModalScrollableKardexGeneral").modal('hide');
+                }, 500);
+
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+
+    async function consularKardex2() {
+
+        var table = new DataTable('#datatable-basic-KardexGeneral');
+        var rows = table
+            .rows()
+            .remove()
+            .draw();
+
+        var fecha_vencimiento = "";
+        $.ajax({
+            url: '../Almacen/StockAlmacenPrincipal',
+            type: 'GET',
+            data: {
+                aniomes: $("#AnioMesCbo").val(),
+                idProveedor: $("#ProveedorCbo").val()
+            },
+            success: function (response) {
+                //console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+                $.each(response, function (key, value) {
+                    //console.log(value.Articulo);
+
+                    fecha_vencimiento = value.FechaVencimiento;
+                    if (fecha_vencimiento == null) {
+                        fecha_vencimiento = "";
+                    }
+
+                    if (value.stock == "0") {
+                        $('#datatable-basic-KardexGeneral').DataTable().row.add($('<tr>' +
+                            '<td class="fw-semibold text-muted ms-1 text-dark rowRed">' + value.proveedor + '</td>' +
+                            '<td class="rowRed">' + value.articulo + '</td>' +
+                            '<td class="rowRed">' + value.artic_dsc + '</td>' +
+                            '<td class="rowRed">' + value.artic_dsc_corto + '</td>' +
+                            '<td class="rowRed">' + value.presentacion + '</td>' +
+                            '<td class="rowRed">' + value.cajon + '</td>' +
+                            '<td class="rowRed tdCendter">' + value.separacion + '</td>' +
+                            '<td class="rowRed tdCendter">' + (parseInt(value.stock) - parseInt(value.separacion)) + '</td>' +
+                            //'<td class="rowRed">' + (parseInt(value.stock) - parseInt(value.separacion)) + '</td>' +
+                            '<td class="rowRed tdCendter">' + fecha_vencimiento + '</td>' +
+                            //'<td class="rowRed">' + value.categoria + '</td>' +
+                            //'<td class="rowRed">' + value.subcategoria + '</td>' +
+                            '<td class="rowRed">' + value.responsable + '</td>' +
+                            '</tr>')).draw();
+                    }
+                    else {
+                        $('#datatable-basic-KardexGeneral').DataTable().row.add($('<tr>' +
+                            '<td class="fw-semibold text-muted ms-1 text-dark">' + value.proveedor + '</td>' +
+                            '<td>' + value.articulo + '</td>' +
+                            '<td>' + value.artic_dsc + '</td>' +
+                            '<td>' + value.artic_dsc_corto + '</td>' +
+                            '<td>' + value.presentacion + '</td>' +
+                            '<td>' + value.cajon + '</td>' +
+                            '<td class="tdCendter">' + value.separacion + '</td>' +
+                            '<td class="tdCendter">' + (parseInt(value.stock) - parseInt(value.separacion)) + '</td>' +
+                            //'<td>' + (parseInt(value.stock) - parseInt(value.separacion)) + '</td>' +
+                            '<td class="tdCendter">' + fecha_vencimiento + '</td>' +
+                            //'<td>' + value.categoria + '</td>' +
+                            //'<td>' + value.subcategoria + '</td>' +
+                            '<td>' + value.responsable + '</td>' +
+                            '</tr>')).draw();
+                    }
+
+                })
+
+                setTimeout(function () {
+                    $("#exampleModalScrollableKardexGeneral").modal('hide');
+                }, 500);
+
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+
+</script>
+
+<style>
+
+    .tdCendter {
+        text-align: center !important;
+    }
+
+    .buttons-copy {
+        display: none !important;
+    }
+
+    .buttons-csv {
+        display: none !important;
+    }
+
+    .dataTables_scroll {
+        position: relative;
+        overflow: auto;
+        width: 100%;
+    }
+
+    .rowRed {
+        background-color: rgba(var(--danger-rgb), .1) !important;
+        color: rgb(var(--danger-rgb)) !important;
+        border-color: rgba(var(--danger-rgb), .1) !important;
+    }
+
+
+
+    .dataTables_scrollBody::-webkit-scrollbar {
+        width: 8px; /* Ancho del scrollbar en vertical */
+        height: 8px; /* Ancho del scrollbar en horizontal */
+    }
+
+    .dataTables_scrollBody::-webkit-scrollbar-thumb {
+        background-color: gray !important; /* Color por defecto del thumb (scroll) */
+        border-radius: 10px; /* Bordes redondeados */
+    }
+
+        .dataTables_scrollBody::-webkit-scrollbar-thumb:hover {
+            background-color: darkorange; /* Cambia el color del thumb a naranja cuando esté sobre él */
+        }
+</style>
+
+<link href="~/assets/css/cssMG.css" rel="stylesheet" />
+@{
+    var usu_data3 = Session["SessionUsuario"] as WebAppMontGroup.Entity.Usuario;
+    if (usu_data3.estiloWeb == "Estilo2")
+    {
+        <link href="~/assets/css/cssMG2.css" rel="stylesheet" />
+    }
+}

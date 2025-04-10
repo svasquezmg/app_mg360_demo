@@ -1,0 +1,270 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+<link rel="icon" href="../assets/images/brand-logos/favicon.ico" type="image/x-icon">
+
+
+@{
+
+    //bool tiene_almacen = false;
+    System.Data.DataTable permisos_usuario = new System.Data.DataTable();
+    string tipo_usuario = Session["TipoUsuario"] as string;
+
+    //if (tipo_usuario == "1")
+    //{
+    //var usu_data = Session["SessionUsuario"] as WebAppMontGroup.Entity.Usuario;
+    //if (usu_data.codigoalmacen != "")
+    //{
+    //    tiene_almacen = true;
+    //}
+    //}
+    //else if (tipo_usuario == "2")
+    //{
+    permisos_usuario = Session["SessionUsuarioPermiso"] as System.Data.DataTable;
+    //}
+
+}
+
+
+<div class="row">
+    <div class="col-xl-12">
+        <br />
+    </div>
+    <div class="col-xl-12">
+        <div class="card custom-card border border-lithg">
+            <div class="card-body">
+                <blockquote class="blockquote mb-0 text-center">
+                    <h6 class="">Mont Group S.A.C.</h6>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-12">
+        <div class="row">
+            <div class="col-xl-12">
+
+                <div class="tab-content" id="myTabContent1">
+                    <div class="tab-pane show active p-0 border-0" id="pricing-monthly1-pane"
+                         role="tabpanel" aria-labelledby="pricing-monthly1" tabindex="0">
+                        <div class="row justify-content-center">
+                            @foreach (System.Data.DataRow row in permisos_usuario.Rows)
+                            {
+                                if (!string.IsNullOrEmpty(row["MenuPrincipal"].ToString()) && row["MenuBotonVisible"].ToString() == "1")
+                                {
+                                    <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                                        <div class="custom-card  border border-light rounded card">
+                                            <div class="d-flex flex-column p-0">
+                                                <a href="~/@row["formulario"].ToString()" class="card-body p-0">
+                                                    <div class="p-4">
+                                                        <div class="mb-1 text-muted" style="text-align:center">
+                                                            <img src="~/assets/images/@row["formularioImagen"].ToString()" style="width:90px" />
+                                                        </div>
+                                                        <div style="text-align:center">
+                                                            <div>
+                                                                <div class="fs-18 fw-semibold">
+                                                                    @row["formularioNombre"].ToString()
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ROW-1 -->
+@*<div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xxl-3">
+            <div class="card overflow-hidden">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div class="mt-2">
+                            <h6 class="fw-normal">Total Users</h6>
+                            <h2 class="mb-0 text-dark fw-semibold">44,278</h2>
+                        </div>
+                        <div class="ms-auto">
+                            <div class="chart-wrapper mt-1">
+                                <canvas id="saleschart" class="chart-dropshadow"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-muted fs-12">
+                        <span class="text-secondary">
+                            <i class="fe fe-arrow-up-circle text-secondary"></i> 5%
+                        </span>
+                        Last week
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xxl-3">
+            <div class="card overflow-hidden">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div class="mt-2">
+                            <h6 class="fw-normal">Total Profit</h6>
+                            <h2 class="mb-0 text-dark fw-semibold">67,987</h2>
+                        </div>
+                        <div class="ms-auto">
+                            <div class="chart-wrapper mt-1">
+                                <canvas id="leadschart"
+                                        class="chart-dropshadow"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-muted fs-12">
+                        <span class="text-pink">
+                            <i class="fe fe-arrow-down-circle text-pink"></i> 0.75%
+                        </span>
+                        Last 6 days
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xxl-3">
+            <div class="card overflow-hidden">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div class="mt-2">
+                            <h6 class="fw-normal">Total Expenses</h6>
+                            <h2 class="mb-0 text-dark fw-semibold">$76,965</h2>
+                        </div>
+                        <div class="ms-auto">
+                            <div class="chart-wrapper mt-1">
+                                <canvas id="profitchart"
+                                        class="chart-dropshadow"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-muted fs-12">
+                        <span class="text-green">
+                            <i class="fe fe-arrow-up-circle text-green"></i> 0.9%
+                        </span>
+                        Last 9 days
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xxl-3">
+            <div class="card overflow-hidden">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div class="mt-2">
+                            <h6 class="fw-normal">Total Cost</h6>
+                            <h2 class="mb-0 text-dark fw-semibold">$59,765</h2>
+                        </div>
+                        <div class="ms-auto">
+                            <div class="chart-wrapper mt-1">
+                                <canvas id="costchart"
+                                        class="chart-dropshadow"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-muted fs-12">
+                        <span class="text-warning">
+                            <i class="fe fe-arrow-up-circle text-warning"></i> 0.6%
+                        </span>
+                        Last year
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>*@
+<!-- ROW-1 END -->
+@*<div class="row">
+
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xxl-3">
+            <div class="card overflow-hidden">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div class="mt-2">
+                            <h6 class="fw-normal">Total Ventas</h6>
+                            <h2 class="mb-0 text-dark fw-semibold">$76,965</h2>
+                        </div>
+                        <div class="ms-auto">
+                            <div class="chart-wrapper mt-1">
+                                <canvas id="profitchart"
+                                        class="chart-dropshadow"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-muted fs-15">
+                        <span class="text-danger">
+                            <i class="fe fe-arrow-down-circle text-danger"></i> 0.9%
+                        </span>
+                        de la meta
+                    </span><br />
+
+                    <span class="text-muted fs-15">
+                        <span class="text-warning">
+                            <i class="fe fe-arrow-up-circle text-warning"></i> 0.9%
+                        </span>
+                        de la meta
+                    </span><br />
+
+                    <span class="text-muted fs-15">
+                        <span class="text-green">
+                            <i class="fe fe-arrow-up-circle text-green"></i> 0.9%
+                        </span>
+                        de la meta
+                    </span><br />
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>*@
+
+
+<!-- Chartjs Chart JS -->
+@Scripts.Render("~/assets/libs/chart.js/chart.min.js")
+@Scripts.Render("~/assets/js/index.js")
+
+
+
+@*<main>
+        <section class="row" aria-labelledby="aspnetTitle">
+            <h1 id="title">ASP.NET</h1>
+            <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+            <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
+        </section>
+
+        <div class="row">
+            <section class="col-md-4" aria-labelledby="gettingStartedTitle">
+                <h2 id="gettingStartedTitle">Getting started</h2>
+                <p>
+                    ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+                    enables a clean separation of concerns and gives you full control over markup
+                    for enjoyable, agile development.
+                </p>
+                <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+            </section>
+            <section class="col-md-4" aria-labelledby="librariesTitle">
+                <h2 id="librariesTitle">Get more libraries</h2>
+                <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+                <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+            </section>
+            <section class="col-md-4" aria-labelledby="hostingTitle">
+                <h2 id="hostingTitle">Web Hosting</h2>
+                <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+                <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+            </section>
+        </div>
+    </main>*@
+
+
+<!-- Node Waves JS-->

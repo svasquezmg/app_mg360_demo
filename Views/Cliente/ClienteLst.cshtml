@@ -1,0 +1,247 @@
+﻿
+<link rel="stylesheet" href="~/assets/descargados/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="~/assets/descargados/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="~/assets/descargados/buttons.bootstrap5.min.css">
+<link href="~/assets/descargados/select2.min.css" rel="stylesheet">
+@{
+    ViewBag.Title = "ClienteLst";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<!-- Start:: row-2 -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card custom-card">
+                <div class="card-header fs-18 fw-semibold mb-0 text-primary">
+                    Mis Clientes
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xl-4">
+                            <label for="VendedorCbo" class="form-label">Vendedor</label>
+
+                            <select class="js-example-basic-single" id="VendedorCbo" name="VendedorCbo">
+                                @{
+                                    var usu_data = ViewData["Usuario"] as WebAppMontGroup.Entity.Usuario;
+                                    <option value="@usu_data.codigovendedor" RValamcen="@usu_data.codigoalmacen">
+                                        @usu_data.nombres -
+                                        @usu_data.codigovendedor
+                                    </option>
+
+                                    foreach (var usu in ViewData["VendedorAsociado"] as
+                                    IList<WebAppMontGroup.Entity.Usuario>)
+                                    {
+                                        <option value="@usu.codigovendedor" RValamcen="@usu.codigoalmacen">
+                                            @usu.nombres -
+                                            @usu.codigovendedor
+                                        </option>
+                                    }
+                                }
+                            </select>
+
+                        </div>
+                        <div class="col-xl-3">
+                            <label for="btnActualizarLst" class="form-label">&nbsp;</label>
+                            <button type="button" class="btn btn-wave waves-effect waves-light btnmg" id="btnActualizarLst" style="width:100%;color:#ffffff !important">Buscar</button>
+                        </div>
+                        <div class="col-xl-3">
+                            <label for="btnCrear" class="form-label">&nbsp;</label>
+                            <a href="../Cliente/ClienteCrear" class="btn btn-primary btn-wave waves-effect waves-light" id="btnCrear" style="width:100%">Nuevo Cliente</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card-body" style="padding-top:0px">
+                <div class="table-responsive">
+                    <table id="responsiveDataTable2" class="table table-bordered text-nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th class="thMG1">Coa</th>
+                                <th class="thMG1">Razon Social</th>
+                                <th class="thMG1">Categoria</th>
+                                <th class="thMG1">Codigo RV</th>
+                                <th class="thMG1">Ver</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>xx</td>
+                                <td>xx</td>
+                                <td>xx</td>
+                                <td>xx</td>
+                                <td>xx</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End:: row-2 -->
+
+
+<div class="modal fade" id="exampleModalScrollableClienteLst" tabindex="-1" data-bs-backdrop="static"
+     aria-labelledby="exampleModalScrollableClienteLst" data-bs-keyboard="false"
+     aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!--<div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel2">
+                    Modal title
+                </h6>
+            </div>-->
+            <div class="modal-body" style="text-align:center">
+                <img src="~/assets/images/loading.gif" />
+                <p>
+                    Estamos cargando la información. Por favor, espere.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Select2 Cdn -->
+<script src="~/assets/descargados/select2.min.js"></script>
+<!-- Internal Select-2.js -->
+<script src="~/assets/js/select2.js"></script>
+
+<script src="~/assets/descargados/jquery.dataTables.min.js"></script>
+<script src="~/assets/descargados/dataTables.bootstrap5.min.js"></script>
+<script src="~/assets/descargados/dataTables.responsive.min.js"></script>
+<script src="~/assets/descargados/dataTables.buttons.min.js"></script>
+
+<script src="~/assets/descargados/buttons.html5.min.js"></script>
+<script src="~/assets/descargados/jszip.min.js"></script>
+
+<script src="~/assets/js/datatables.js"></script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        fnConsularCliente();
+    });
+
+
+    $("#btnActualizarLst").click(function () {
+        fnConsularCliente();
+    });
+
+
+    async function fnConsularCliente() {
+
+        $('#exampleModalScrollableClienteLst').modal('show');
+        var table = new DataTable('#responsiveDataTable2');
+        var rows = table
+            .rows()
+            .remove()
+            .draw();
+
+
+        $.ajax({
+            url: '../Cliente/ClientelstVendedor',
+            type: 'GET',
+            data: { codVendedor: $("#VendedorCbo").val() },
+            success: async function (response) {
+                //debugger;
+                //console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+                $.each(response, function (key, value) {
+
+                    //$('#responsiveDataTable2').DataTable().row.add($("<tr><td><a href='/Cliente/ClienteCrear?id=" + value.CoaCliente + "' target='_blank'' class='text-primary fw-semibold'>" + value.CoaCliente + "</a></td>" +
+                    $('#responsiveDataTable2').DataTable().row.add($("<tr><td><span class='text-primary fw-semibold'>" + value.CoaCliente + "</span></td>" +
+                        "<td>" + value.razonSocial + "</td>" +
+                        "<td>" + value.categoria + "</td>" +
+                        "<td>" + value.codigoVendedor + "</td>" + //</tr>")).draw();
+                        "<td><a href='/Cliente/ClienteCrear?id=" + value.CoaCliente + "' target='_blank'' class='text-primary fw-semibold'>Ver</a></td></tr>")).draw();
+
+                });
+
+
+                setTimeout(function () {
+                    //$('#responsiveDataTable').DataTable().order([2, 'desc']).draw();
+                    $("#exampleModalScrollableClienteLst").modal('hide');
+                }, 500);
+
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+
+
+
+</script>
+
+<style>
+
+    .choices {
+        margin-bottom: 15px !important;
+    }
+
+    .divFecha {
+        margin-top: 0px !important;
+    }
+
+    .tdCendter {
+        text-align: center !important;
+    }
+
+    .rowRed {
+        background-color: rgba(var(--danger-rgb), .1) !important;
+        color: rgb(var(--danger-rgb)) !important;
+        border-color: rgba(var(--danger-rgb), .1) !important;
+    }
+
+    .dtr-details {
+        width: 100%
+    }
+
+    .cssPendiente {
+        color: #d4ac0d !important; /*#fff3cd*/
+        font-weight: bold;
+    }
+
+    .cssFinalizado {
+        color: #45b39d !important; /*#d5f5e3*/
+        font-weight: bold;
+    }
+
+    .cssDesaprobado {
+        color: #c0392b !important; /*#f5b7b1*/
+        font-weight: bold;
+    }
+
+    .btplstDoc {
+        font-size: 12px;
+    }
+</style>
+
+<link href="~/assets/css/cssMG.css" rel="stylesheet" />
+@{
+    try
+    {
+        var usu_data3 = Session["SessionUsuario"] as WebAppMontGroup.Entity.Usuario;
+        if (usu_data3.estiloWeb == "Estilo2")
+        {
+            <link href="~/assets/css/cssMG2.css" rel="stylesheet" />
+        }
+    }
+    catch
+    {
+        Response.Redirect("/MG360");
+    }
+
+}

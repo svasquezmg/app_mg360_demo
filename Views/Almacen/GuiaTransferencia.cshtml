@@ -1,0 +1,1043 @@
+﻿<link href="~/assets/descargados/select2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="~/assets/libs/flatpickr/flatpickr.min.css">
+
+@{
+    ViewBag.Title = "Guia De Transferencia";
+}
+
+@{
+
+
+    int x_nveces = 1;
+    var data_guia = ViewData["mGuia"] as WebAppMontGroup.Entity.GuiaTransferencia;
+    string metodo = "inserta_guia_transferencia";
+    string tipometodo = "POST";
+    string fecha_traslado = "";
+    if (data_guia == null)
+    {
+        <input type="hidden" id="IdGuia" value="0">
+    }
+    else
+    {
+        <input type="hidden" id="IdGuia" value="@data_guia.IdGuiaTransferencia">
+        metodo = "actualiza_guia_transferencia";
+
+        if (data_guia.fecha_traslado < DateTime.Now)
+        {
+            fecha_traslado = DateTime.Now.ToString("yyyy-MM-dd");
+        }
+        else
+        {
+            fecha_traslado = data_guia.fecha_traslado.ToString("yyyy-MM-dd");
+        }
+        // tipometodo = "PUT";
+    }
+
+
+}
+
+<!-- Start:: row-5 -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card">
+            <div class="card-header justify-content-between">
+                <div class="card-title text-primary">
+                    Registro de guía de transferencia
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Coa Cliente</label>
+                                <input class="form-control" type="text" id="ClienteCoaInput" placeholder="" aria-label=".form-control-sm example" disabled value="20509532622">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Razón Social</label>
+                                <input class="form-control" type="text" id="ClienteNombreInput" placeholder="" aria-label=".form-control-sm example" disabled value="MONT GROUP SAC">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Vendedor</label>
+                                <select class="js-example-basic-single " id="VendedorCbo" name="state">
+                                    @{
+                                        var usu_data = ViewData["Usuario"] as WebAppMontGroup.Entity.Usuario;
+                                        <option value="@usu_data.codigovendedor" RValamcen="@usu_data.codigoalmacen">@usu_data.nombres - @usu_data.codigovendedor</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="TipoMovilidadCbo" class="form-label">Tipo de traslado</label>
+                                <select id="TipoMovilidadCbo" class="form-select form-control-sm mb-2">
+                                    <option value="-1">Seleccione</option>
+                                    <option value="02">Movilidad Mont Group</option>
+                                    <option value="01">Movilidad privada</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <label for="AgenciaCbo" class="form-label">Transporte / Agencia</label>
+                                <select class="js-example-basic-single " id="AgenciaCbo" name="state">
+                                    <option value="-1">Seleccione</option>
+                                    @{
+                                        foreach (var usu in ViewData["Agencia"] as IList<WebAppMontGroup.Entity.Agencia>)
+                                        {
+                                            if (usu.estado == "")
+                                            {
+                                                <option value="@usu.ruc">@usu.razon_social</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Serie</label>
+                                <input class="form-control" type="text" id="SerieInput" placeholder="" aria-label=".form-control-sm example" disabled value="T020">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Correlativo</label>
+                                <input class="form-control" type="text" id="CorrelativoInput" placeholder="" aria-label=".form-control-sm example" disabled value="">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="inputEmail4" class="form-label">Fecha Emisión</label>
+                                <input class="form-control" type="text" id="FechaEmisionInput" placeholder="" aria-label=".form-control-sm example" value="@DateTime.Now.ToString("yyyy-MM-dd")" disabled>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="inputEmail4" class="form-label">Fecha Traslado (Solo entre hoy y mañana)</label>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-text text-muted"> <i class="ri-calendar-line"></i> </div>
+                                        <input type="text" class="form-control" id="date" minDate="@DateTime.Now.ToString("yyyy-MM-dd")" maxDate="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" placeholder="Choose date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End:: row-5 -->
+
+
+
+<div class="col-xl-12">
+    <div class="card custom-card alert shadow-lg">
+        <div class="alert alert-light" style="text-align:center">
+            <div class="card-title" style="color: #74829c; font-size: 13px; ">
+                Datos para la salida de productos
+            </div>
+        </div>
+        <div class="row" style="padding-bottom:12px">
+
+            <div class="col-xl-4">
+                <label for="PuntoSalidaCbo" class="form-label">Punto de Salida</label>
+                <select id="PuntoSalidaCbo" class="form-select form-control-sm mb-2">
+                    <option value="DIR-FISCAL">MONT GROUP - ALMACÉN DEL RV</option>
+                </select>
+            </div>
+            <div class="col-xl-4">
+                <label for="DireccionSalidaInput" class="form-label">Dirección de salida</label>
+                <textarea class="form-control form-control-sm mb-3" id="DireccionSalidaInput" placeholder="" required=""></textarea>
+            </div>
+            <div class="col-xl-4">
+                <label for="UbigeoSalidaCbo" class="form-label">Ubigeo Salida</label>
+                <select class="js-example-basic-single " id="UbigeoSalidaCbo" name="state">
+                    <option value="-1">Seleccione Ubigeo</option>
+                    @{
+                        foreach (var usu in ViewData["Ubigeo"] as IList<WebAppMontGroup.Entity.Ubigeo>)
+                        {
+                            <option value="@usu.codigo">@usu.distrito - @usu.provincia - @usu.departamento</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer d-none border-top-0">
+        <!-- Prism Code -->
+        <!-- Prism Code -->
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card custom-card alert shadow-lg">
+        <div class="alert alert-light" style="text-align:center">
+            <div class="card-title" style="color: #74829c; font-size: 13px; ">
+                Datos la llegada de productos
+            </div>
+        </div>
+        <div class="row" style="padding-bottom:12px">
+
+            <div class="col-xl-4">
+                <label for="PuntoLlegadaCbo" class="form-label">Punto de llegada</label>
+                <select id="PuntoLlegadaCbo" class="form-select form-control-sm mb-2">
+                    <option value="-1">Seleccione</option>
+                    <option value="ALPRINCIPAL">MONT GROUP - ALMACÉN PRINCIPAL</option>
+                    <option value="OTROSAGENCIA">DIRECCIÓN / AGENCIA</option>
+                </select>
+            </div>
+            <div class="col-xl-4">
+                <label for="DireccionEntregaInput" class="form-label">Dirección de llegada</label>
+                <textarea class="form-control form-control-sm mb-3" id="DireccionEntregaInput" placeholder="Ingrese Dirección / Agencia" required=""></textarea>
+            </div>
+            <div class="col-xl-4">
+                <label for="UbigeollegadaCbo" class="form-label">Ubigeo Llegada</label>
+                <select class="js-example-basic-single " id="UbigeollegadaCbo" name="state">
+                    <option value="-1">Seleccione Ubigeo</option>
+                    @{
+                        foreach (var usu in ViewData["Ubigeo"] as IList<WebAppMontGroup.Entity.Ubigeo>)
+                        {
+                            <option value="@usu.codigo">@usu.distrito - @usu.provincia - @usu.departamento</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer d-none border-top-0">
+        <!-- Prism Code -->
+        <!-- Prism Code -->
+    </div>
+</div>
+
+
+<div class="col-xl-12">
+    <div class="card custom-card alert shadow-lg">
+        <div class="alert alert-light" style="text-align:center">
+            <div class="card-title" style="color: #74829c; font-size: 13px; ">
+                Observaciones para la guía
+            </div>
+        </div>
+        <div style="padding-top: 5px;">
+            <div class="row">
+                @*<div class="col-xl-6">
+                        <label for="PedidoObjCreditosInput" class="form-label">Para Aprobador</label>
+                        <textarea class="form-control form-control-sm mb-3" id="PedidoObjCreditosInput" placeholder="" required=""></textarea>
+                    </div>*@
+                <div class="col-xl-12">
+                    <label for="ObservacionInput" class="form-label">Observaciones</label>
+                    <textarea class="form-control form-control-sm mb-3" id="ObservacionInput" placeholder="" required=""></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer d-none border-top-0">
+        <!-- Prism Code -->
+        <!-- Prism Code -->
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card custom-card alert shadow-lg">
+        <div class="alert alert-light" style="text-align:center">
+            <div class="card-title" style="color: #74829c; font-size: 13px; ">
+                Datos de las personas de recepción
+            </div>
+        </div>
+        <div style="padding-top: 5px;">
+            <div class="row">
+                <div class="col-xl-3">
+                    <label for="TipoDocumentoCbo1" class="form-label">Tipo</label>
+                    <select id="TipoDocumentoCbo1" class="form-select form-control-sm mb-2">
+                        <option value="-1">Seleccione</option>
+                        <option value="PERUANO">Peruano</option>
+                        <option value="EXTRANJERO">Extranjero</option>
+                    </select>
+                </div>
+                <div class="col-xl-2">
+                    <label for="TipoDocumentoContacto1" class="form-label">N° Documento</label>
+                    <input class="form-control form-control-sm mb-2" type="text" id="TipoDocumentoContacto1" placeholder="" aria-label=".form-control-sm example">
+                </div>
+                <div class="col-xl-1">
+                    <button type="button" class="btn btn-info-ghost btn-wave btnValidar" id="btnValidarDocumentoContacto1">Validar</button>
+                </div>
+                <div class="col-xl-6">
+                    <label for="TipoNombreContacto1" class="form-label">Nombres</label>
+                    <input class="form-control form-control-sm mb-2" type="text" id="TipoNombreContacto1" placeholder="" aria-label=".form-control-sm example">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3">
+                    <label for="TipoDocumentoCbo2" class="form-label">Tipo</label>
+                    <select id="TipoDocumentoCbo2" class="form-select form-control-sm mb-2">
+                        <option value="-1">Seleccione</option>
+                        <option value="PERUANO">Peruano</option>
+                        <option value="EXTRANJERO">Extranjero</option>
+                    </select>
+                </div>
+                <div class="col-xl-2">
+                    <label for="TipoDocumentoContacto2" class="form-label">N° Documento</label>
+                    <input class="form-control form-control-sm mb-2" type="text" id="TipoDocumentoContacto2" placeholder="" aria-label=".form-control-sm example">
+                </div>
+                <div class="col-xl-1">
+                    <button type="button" class="btn btn-info-ghost btn-wave btnValidar" id="btnValidarDocumentoContacto1">Validar</button>
+                </div>
+                <div class="col-xl-6">
+                    <label for="TipoNombreContacto2" class="form-label">Nombres</label>
+                    <input class="form-control form-control-sm mb-2" type="text" id="TipoNombreContacto2" placeholder="" aria-label=".form-control-sm example">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer d-none border-top-0">
+        <!-- Prism Code -->
+        <!-- Prism Code -->
+    </div>
+</div>
+
+
+<div class="col-xl-12">
+    <div class="card custom-card alert shadow-lg">
+        <div class="card-body" style="padding:0px">
+            <div class="row">
+                <div class="col-xl-10"></div>
+                <div class="col-xl-2">
+                    <button type="button" class="btn btn-primary btn-wave" data-bs-toggle="modal" data-bs-target="#staticBackdropBuscarProducto" id="btnBucarProducto" style="width: 100%; max-height: 40px;">Agregar Productos</button>
+                </div>
+
+            </div>
+        </div>
+        <div class="card-body" id="divProductosPedir">
+
+            @{ if (data_guia != null)
+                {
+                    foreach (var data_guia_detalle in data_guia.lst_guiaDetalle)
+                    {
+                        <div class="row" style="margin-bottom: 15px; border: 1px solid #cacfd2; padding: 15px 0px; border-radius: 10px" id="PProductoSelect_@x_nveces.ToString()">
+                            <div class="col-xl-3 colPP322" style="margin-bottom:15px">
+                                <label for="ProductoNombreLabel_@x_nveces.ToString()" class="text-muted txtProd">Producto:</label>
+                                <h6 class="card-title fw-semibold productosSeleccionados" id="ProductoNombreLabel_@x_nveces.ToString()">@data_guia_detalle.producto</h6>
+                                <input type="hidden" id="ProductoNombreInput_@x_nveces.ToString()" value="@data_guia_detalle.producto">
+                                <input type="hidden" id="ProductoCodigoInput_@x_nveces.ToString()" value="@data_guia_detalle.codigo">
+                                <input type="hidden" id="IdDetalleInput_@x_nveces.ToString()" value="@data_guia_detalle.IdGuiaTransferenciaDetalle">
+                            </div>
+                            <div class="col-xl-1 colPP11" style="text-align:center">
+                                <button class="btn btn-icon btn-danger-transparent rounded-pill btn-wave me-5" id="PProductoDelete_@x_nveces.ToString()" onclick="PProductoDelete('@x_nveces.ToString()');">
+                                    <i class="ri-delete-bin-line"></i>
+                                </button>
+                            </div>
+                            <div class="col-xl-3">
+                                <label for="LoteImput_@x_nveces.ToString()" class="text-muted">Lote</label>
+                                <input class="form-control form-control-sm mb-2" type="text" id="LoteImput_@x_nveces.ToString()" placeholder="" aria-label=".form-control-sm example" value="@data_guia_detalle.lote" disabled>
+                            </div>
+                            <div class="col-xl-2">
+                                <label for="FechaVencimientoInput_@x_nveces.ToString()" class="text-muted">Fecha Vencimiento</label>
+                                <input class="form-control form-control-sm mb-2" type="text" id="FechaVencimientoInput_@x_nveces.ToString()" placeholder="" aria-label=".form-control-sm example" value="@data_guia_detalle.fecha_vencimiento.ToString("yyyy-MM-dd")" disabled>
+                            </div>
+                            <div class="col-xl-2">
+                                <label for="ProductoCantidadInput_@x_nveces.ToString()" class="text-muted">Cantidad</label>
+                                <input class="form-control form-control-sm mb-2 cend vn0" type="text" id="ProductoCantidadInput_@x_nveces.ToString()" placeholder="" aria-label=".form-control-sm example" value="@data_guia_detalle.cantidad.ToString()">
+                            </div>
+                            <div class="col-xl-1 colPP1" style="text-align:center">
+                                <button class="btn btn-icon btn-danger-transparent rounded-pill btn-wave me-5" id="PProductoDelete_@x_nveces.ToString()" onclick="PProductoDelete(@x_nveces.ToString());">
+                                    <i class="ri-delete-bin-line"></i>
+                                </button>
+                            </div>
+                        </div>
+                        x_nveces++;
+                    }
+                }
+            }
+        </div>
+    </div>
+    <div class="card-footer d-none border-top-0">
+        <!-- Prism Code -->
+        <!-- Prism Code -->
+    </div>
+</div>
+
+
+
+<div class="col-xl-12">
+    <div class="card-body">
+        <div class="btn-list">
+            <div class="row">
+                <div class="col-xl-3"></div>
+                <div class="col-xl-6">
+                    <div class="d-grid gap-2 mb-4">
+                        <button class="btn btn-info shadow btn-wave" onclick="fnValidarRegistro();">Guardar Guía de Traslado</button>
+                    </div>
+                </div>
+                <div class="col-xl-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+
+
+<div class="modal fade" id="staticBackdropBuscarCliente" data-bs-backdrop="static"
+     data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropBuscarClienteLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h6 class="modal-title" id="staticBackdropBuscarClienteLabel">
+                    Busqueda de Cliente
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <span class="fw-semibold text-decoration-none text-danger" id="lblValidaCodVendedorSelect" style=" font-size: 13px;">
+                            Por favor, debe seleccionar su c         *
+                            ódigo de vendedor
+                        </span>
+                        <input class="form-control form-control-sm mb-3" type="text" id="ClienteBuscarText" placeholder="Ingrese ruc o razón social" aria-label=".form-control-sm example" style="visibility: hidden;">
+                    </div>
+                </div>
+                <div id="divResultadoCliente" style="max-height: 400px !important; min-height: 400px !important; overflow-y: scroll; scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0); overflow-x: hidden; padding: 0px 12px ">
+                    @*<div class="row">
+                            <div class="col-xl-3">Ruc:<br /> 000468413065</div>
+                            <div class="col-xl-6">Cliente:<br /> FRANCIS ENRIQUE MAS ANGELES</div>
+                            <div class="col-xl-3">Estado:<br /> No Disponible</div>
+                        </div>*@
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-light"
+                        data-bs-dismiss="modal">
+                    Cerrar Busqueda
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="staticBackdropBuscarProducto" data-bs-backdrop="static"
+     data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropBuscarProductoLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header alert alert-primary">
+                <h6 class="modal-title" id="staticBackdropBuscarProductoLabel">
+                    Busqueda de Productos
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <input class="form-control form-control-sm mb-3" type="text" id="ProductoBuscarText" placeholder="Ingrese el nombre o nombre corto del producto" aria-label=".form-control-sm example">
+                    </div>
+                </div>
+                <div id="divResultadoProducto" style="max-height: 400px !important; min-height: 400px !important; overflow-y: scroll; scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0); overflow-x: hidden; padding: 0px 12px;">
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-light"
+                        data-bs-dismiss="modal">
+                    Cerrar Busqueda
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalScrollableStock" tabindex="-1" data-bs-backdrop="static"
+     aria-labelledby="exampleModalScrollableStock" data-bs-keyboard="false"
+     aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!--<div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel2">
+                    Modal title
+                </h6>
+            </div>-->
+            <div class="modal-body" style="text-align:center;padding:0px">
+                <div id="msjEspera">
+                    <img src="~/assets/images/loading.gif" />
+                    <p>
+                        Estamos cargando la información. Por favor, espere.
+                    </p>
+                </div>
+                <div class="col-xxl-12 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="msjError">
+                    <div class="card bg-white border-0">
+                        <div class="alert custom-alert1 alert-danger">
+
+                            <div class="text-center px-5 pb-0">
+                                <svg class="custom-alert-icon svg-danger" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000"><path d="M0 0h24v24H0z" fill="none" /><path d="M15.73 3H8.27L3 8.27v7.46L8.27 21h7.46L21 15.73V8.27L15.73 3zM12 17.3c-.72 0-1.3-.58-1.3-1.3 0-.72.58-1.3 1.3-1.3.72 0 1.3.58 1.3 1.3 0 .72-.58 1.3-1.3 1.3zm1-4.3h-2V7h2v6z" /></svg>
+                                <h5>Alerta!</h5>
+                                <p id="textmsjErrores">..</p>
+                                <div class="">
+                                    <button class="btn btn-sm btn-danger m-1">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-12 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="msjWarning">
+                    <div class="card bg-white border-0">
+                        <div class="alert custom-alert1 alert-warning">
+                            <div class="text-center px-6 pb-0">
+                                <svg class="custom-alert-icon svg-warning" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000"><path d="M0 0h24v24H0z" fill="none" /><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" /></svg>
+                                <h5>Alerta!</h5>
+                                <p id="textmsjWarning">..</p>
+                                <div class="">
+                                    <button class="btn btn-sm btn-warning m-1" data-bs-dismiss="modal" id="BtnModalwarning">Cerrar</button>
+                                    <button class="btn btn-sm btn-warning m-1" data-bs-dismiss="modal" id="BtnHrefGuia" style="display:none">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-12 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="msjsuccess">
+                    <div class="card bg-white border-0">
+                        <div class="alert custom-alert1 alert-success">
+                            <div class="text-center px-6 pb-0">
+                                <svg class="custom-alert-icon svg-success" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000"><path d="M0 0h24v24H0z" fill="none" /><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg>
+                                <h5>Alerta!</h5>
+                                <p id="textmsjsuccess">..</p>
+                                <div class="">
+                                    <button class="btn btn-sm btn-success m-1" data-bs-dismiss="modal" id="BtnHrefGuia">Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .my-class-ocultar {
+        display: none !important;
+    }
+</style>
+
+<!-- Select2 Cdn -->
+<script src="~/assets/descargados/select2.min.js"></script>
+<!-- Date & Time Picker JS -->
+<script src="~/assets/libs/flatpickr/flatpickr.min.js"></script>
+<script src="~/assets/js/date&time_pickers.js"></script>
+
+<!-- Internal Select-2.js -->
+<script src="~/assets/js/select2.js"></script>
+
+
+<script type="text/javascript">
+
+    var inicia_form = 0;
+    var inicia_carga_producto = 0;
+    var idemProductoSeleccionado = @x_nveces;
+    var d_salidaAlmacen = "AV. CAMINOS DEL INCA NRO. 264 INT. 03 URB. SAN JUAN BAUTISTA DE VILLA";
+    var d_salidaAlmacen2 = "AV. CAMINOS DEL INCA NRO. 264 INT. 03";
+    var u_salidaAlmacen = "150108";
+
+
+    $(document).ready(function () {
+        let _date = $('#date');
+        //let end_date = $('#end_date');
+
+        _date.flatpickr({
+            //dateFormat: "d-m-Y",
+            //disableMobile: true,
+            minDate: "today",
+            maxDate: new Date(Date.now()).fp_incr(1)
+            /*onChange: function (selectedDates) {
+                end_date.flatpickr({
+                    dateFormat: "d-m-Y",
+                    minDate: new Date(selectedDates).fp_incr(6), // add 7 days
+                });
+            }*/
+        });
+
+        //end_date.flatpickr({});
+    });
+
+
+    $("#BtnHrefGuia").click(function () {
+        //debugger;
+        if ($("#IdGuia").val() != "0") {
+
+            fnLimpiaModales();
+            $('#exampleModalScrollableStock').modal('show');
+            window.location.href = "/Almacen/GuiaTransferencia/?required=0&idGuia=" + $("#IdGuia").val();
+        }
+
+    });
+
+    function fnLimpiaModales() {
+
+        $("#msjEspera").css('display', 'block');
+        $("#msjError").css('display', 'none');
+        document.getElementById('textmsjErrores').innerHTML = '';
+        $("#msjWarning").css('display', 'none');
+        document.getElementById('textmsjWarning').innerHTML = '';
+        $("#msjsuccess").css('display', 'none');
+        document.getElementById('textmsjsuccess').innerHTML = '';
+
+    }
+
+    $("#btnBucarProducto").click(function () {
+        BuscarProductoMiStock();
+    });
+
+    const input = document.getElementById("ProductoBuscarText");
+    input.addEventListener("input", () => {
+        const value = input.value;
+        const sections = document.querySelectorAll(".docSection");
+        sections.forEach(el => {
+            el.innerHTML = el.innerHTML;
+            var element_id = document.getElementById(el.id);
+            element_id.classList.remove("my-class-ocultar");
+        });
+        if (value.trim() !== "") {
+            sections.forEach(el => {
+                if (!el.innerText.toLowerCase().includes(value.toLowerCase())) {
+                    var element_id = document.getElementById(el.id);
+                    element_id.classList.add("my-class-ocultar");
+                } else {
+                    var element_id = document.getElementById(el.id);
+                    element_id.classList.remove("my-class-ocultar");
+                }
+            });
+        }
+    });
+
+    function BuscarProductoMiStock() {
+        document.getElementById('divResultadoProducto').innerHTML = '';
+        var veces = 1;
+        $.ajax({
+            url: '../StockAlmacen',
+            type: 'GET',
+            data: {
+                aniomes: fnFechaActual(),
+                almacen: '',
+                articulo: ''
+            },
+            success: function (response) {
+                //console.log(response);
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+                $.each(response, function (key, value) {
+                    $.each(value.listaStocks, function (key2, value2) {
+                        $('#divResultadoProducto').append(
+                            '<div class="row docSection" id="rowBusquedaProducto' + veces + '" style="margin-bottom:15px;border: 1px solid #cacfd2;padding: 10px 0px;border-radius: 10px;">' +
+                            '<div class="col-xl-3"><span Class="text-muted fs-12">Producto:</span><br />' + value2.Producto + '</div>' +
+                            '<div class="col-xl-2"><span Class="text-muted fs-12">Código:</span><br />' + value2.Articulo.trim() + '</div>' +
+                            '<div class="col-xl-2"><span Class="text-muted fs-12">Lote:</span><br />' + value2.Lote + '</div>' +
+                            '<div class="col-xl-2"><span Class="text-muted fs-12">Expira:</span><br />' + value2.FechaVecimiento + '</div>' +
+                            '<div class="col-xl-1"><span Class="text-muted fs-12">Total:</span><br />' + value2.Cantidad + '</div>' +
+                            '<div class="col-xl-2"><button class="btn btn-sm btn-success" style="width:100%;margin-top: 8px" id="ButtonSelectProducto_' + veces + '" ' +
+                            ' dataP-codigo="' + value2.Articulo +
+                            '" dataP-dsc="' + value2.Producto.trim() +
+                            '" dataP-lote="' + value2.Lote +
+                            '" dataP-expira="' + value2.FechaVecimiento +
+                            '" onclick="ProductoSeleccion(' + veces + ');">Seleccionar</button>' +
+                            '</div>'
+                        );
+                        veces++;
+                    })
+                })
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+
+    function ProductoSeleccion(idem) {
+
+        var nom_producto = $("#ButtonSelectProducto_" + idem).attr("dataP-dsc");
+        var cod_producto = $("#ButtonSelectProducto_" + idem).attr("dataP-codigo");
+        var cod_lote = $("#ButtonSelectProducto_" + idem).attr("dataP-lote");
+        var cod_expira = $("#ButtonSelectProducto_" + idem).attr("dataP-expira");
+
+        var idemText = idemProductoSeleccionado.toString();
+
+        $('#divProductosPedir').append('<div class="row" style="margin-bottom: 15px; border: 1px solid #cacfd2; padding: 15px 0px; border-radius: 10px" id="PProductoSelect_' + idemText + '">' +
+            '<div class="col-xl-3 colPP322" style="margin-bottom:15px">' +
+            '<label for="ProductoNombreLabel_' + idemText + '" class="text-muted txtProd">Producto:</label>' +
+            '<h6 class="card-title fw-semibold productosSeleccionados" id="ProductoNombreLabel_' + idemText + '">' + nom_producto + '</h6>' +
+            '<input type="hidden" id="ProductoNombreInput_' + idemText + '" value="' + nom_producto + '">' +
+            '<input type="hidden" id="ProductoCodigoInput_' + idemText + '" value="' + cod_producto + '">' +
+            '<input type="hidden" id="IdDetalleInput_' + idemText + '" value="0">' +
+            '</div>' +
+            '<div class="col-xl-1 colPP11" style="text-align:center">' +
+            '<button class="btn btn-icon btn-danger-transparent rounded-pill btn-wave me-5" id="PProductoDelete_' + idemText + '" onclick="PProductoDelete(' + idemText + ');">' +
+            '<i class="ri-delete-bin-line"></i>' +
+            '</button>' +
+            '</div>' +
+            '<div class="col-xl-3">' +
+            '<label for="LoteImput_' + idemText + '" class="text-muted">Lote</label>' +
+            '<input class="form-control form-control-sm mb-2" type="text" id="LoteImput_' + idemText + '" placeholder="" aria-label=".form-control-sm example" value="' + cod_lote + '" disabled >' +
+            '</div>' +
+            '<div class="col-xl-2">' +
+            '<label for="FechaVencimientoInput_' + idemText + '" class="text-muted">Fecha Vencimiento</label>' +
+            '<input class="form-control form-control-sm mb-2" type="text" id="FechaVencimientoInput_' + idemText + '" placeholder="" aria-label=".form-control-sm example" value="' + cod_expira + '" disabled >' +
+            '</div>' +
+            '<div class="col-xl-2">' +
+            '<label for="ProductoCantidadInput_' + idemText + '" class="text-muted">Cantidad</label>' +
+            '<input class="form-control form-control-sm mb-2 cend vn0" type="text" id="ProductoCantidadInput_' + idemText + '" placeholder="" aria-label=".form-control-sm example" value="" >' +
+            '</div>' +
+            '<div class="col-xl-1 colPP1" style="text-align:center">' +
+            '<button class="btn btn-icon btn-danger-transparent rounded-pill btn-wave me-5" id="PProductoDelete_' + idemText + '" onclick="PProductoDelete(' + idemText + ');">' +
+            '<i class="ri-delete-bin-line"></i>' +
+            '</button>' +
+            '</div>' +
+            '</div>');
+
+        soloNumeros();
+        idemProductoSeleccionado++;
+
+    }
+
+    $('#PuntoLlegadaCbo').on('change', function () {
+        $("#DireccionEntregaInput").val("");
+        $('#DireccionEntregaInput').attr('readonly', false);
+        document.getElementById('DireccionEntregaInput').disabled = false;
+
+        $('#UbigeollegadaCbo').val('-1').trigger('change');
+        $('#UbigeollegadaCbo').attr('readonly', false);
+        document.getElementById('UbigeollegadaCbo').disabled = false;
+
+        if ($("#PuntoLlegadaCbo").val() == "ALPRINCIPAL") {
+            $("#DireccionEntregaInput").val(d_salidaAlmacen);
+            $('#DireccionEntregaInput').attr('readonly', true);
+            document.getElementById('DireccionEntregaInput').disabled = true;
+            $('#UbigeollegadaCbo').val(u_salidaAlmacen).trigger('change');
+            $('#UbigeollegadaCbo').attr('readonly', true);
+            document.getElementById('UbigeollegadaCbo').disabled = true;
+        }
+        else if ($("#PuntoLlegadaCbo").val() == "OTROSAGENCIA") {
+            //fnDireccionUltimoPedido();
+        }
+    });
+
+    function fnTipoMovilidad() {
+        if ($("#TipoMovilidadCbo").val() == "02") {
+            $('#AgenciaCbo').val('20509532622').trigger('change');
+            $('#AgenciaCbo').attr('readonly', true);
+            document.getElementById('AgenciaCbo').disabled = true;
+        }
+        else {
+            $('#AgenciaCbo').val('-1').trigger('change');
+            $('#AgenciaCbo').attr('readonly', false);
+            document.getElementById('AgenciaCbo').disabled = false;
+        }
+    }
+
+    $('#TipoMovilidadCbo').on('change', function () {
+        fnTipoMovilidad();
+    });
+
+
+
+    function soloNumeros() {
+        $('.vn0').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    }
+
+    function fnValidarRegistro() {
+
+       /* $("#msjEspera").css('display', 'block');
+        $("#msjError").css('display', 'none');
+        document.getElementById('textmsjErrores').innerHTML = '';
+        $("#msjWarning").css('display', 'none');
+        document.getElementById('textmsjWarning').innerHTML = '';
+        $("#msjsuccess").css('display', 'none');
+        document.getElementById('textmsjsuccess').innerHTML = '';*/
+        fnLimpiaModales();
+
+
+        $('#exampleModalScrollableStock').modal('show');
+        var mensaje_validacion = "";
+
+
+        if ($("#TipoMovilidadCbo").val() == "-1") {
+            mensaje_validacion += "Seleccione un tipo de traslado";
+        }
+
+        if ($("#AgenciaCbo").val() == "-1") {
+            mensaje_validacion += "<br/>Seleccione un transporte / agencia";
+        }
+
+        if ($("#TipoMovilidadCbo").val() == "01" && $("#AgenciaCbo").val() == "20509532622") {
+            mensaje_validacion += "<br/>El tipo de movilidad 'Movilidad Privada' no puede ser MONT GROUP SAC";
+        }
+
+        if ($("#VendedorCbo").val() == "-1") {
+            mensaje_validacion += "<br/Seleccione un código de vendedor";
+        }
+
+        if ($("#ClienteCoaInput").val() == "") {
+            mensaje_validacion += "<br/>Seleccione un cliente";
+        }
+
+        if ($("#date").val() == "") {
+            mensaje_validacion += "<br/>Indique la fecha de traslado de la guía";
+        }
+
+        if ($("#DireccionSalidaInput").val().trim() == "" || $("#UbigeoSalidaCbo").val() == "-1") {
+            mensaje_validacion += "<br/>Ingrese la dirreción y ubigeo de salida para la guía";
+        }
+
+        if ($("#PuntoLlegadaCbo").val() == "-1" || $("#DireccionEntregaInput").val().trim() == "" || $("#UbigeollegadaCbo").val() == "-1") {
+            mensaje_validacion += "<br/>Ingrese un punto, dirreción y ubigeo de entrega de la guía";
+        }
+
+        if ($("#TipoModalidadCbo").val() == "-1") {
+            mensaje_validacion += "<br/>Seleccione el Tipo y modalidad de transporte de la guía para la entrega";
+        }
+
+        let lst_guiaDetalle = [];
+
+        $(".productosSeleccionados").each(function () {
+            var idem = ($(this).attr('id')).replace("ProductoNombreLabel_", "");
+            //debugger;
+            try {
+                var p_x_nombre = $("#ProductoNombreInput_" + idem).val();
+                var p_x_codigo = $("#ProductoCodigoInput_" + idem).val();
+                var p_x_lote = $("#LoteImput_" + idem).val();
+                var p_x_fechaVencimiento = $("#FechaVencimientoInput_" + idem).val();
+                var p_x_cantidad = $("#ProductoCantidadInput_" + idem).val();
+                var p_x_iddetalle = $("#IdDetalleInput_" + idem).val();
+
+                if (p_x_cantidad == "0" || p_x_cantidad.trim() == "") {
+                    mensaje_validacion = "<br/>Error en el producto " + p_x_nombre + " valide la cantidad";
+                    return false;
+                }
+
+                var itemProducto = {
+                    "IdGuiaTransferenciaDetalle": p_x_iddetalle,
+                    "IdGuiaTransferencia": $("#IdGuia").val(),
+                    "codigo": p_x_codigo,
+                    "producto": p_x_nombre,
+                    "lote": p_x_lote,
+                    "fecha_vencimiento": p_x_fechaVencimiento,
+                    "cantidad": p_x_cantidad,
+                    "Estado": "",
+                    "FechaActualizacion": "",
+                    "UsuarioActualizacion": ""
+                }
+
+                //console.log(itemProducto);
+                lst_guiaDetalle.push(itemProducto);
+            }
+            catch (err) {
+                mensaje_validacion += "<br/>Se contró un error en el listado de productos ingresados. Por favor, revise las cantidades y precios";
+                return false;
+            }
+
+        });
+
+        //console.log(JSON.stringify(listProductos));
+        //console.log(listProductos.length);
+
+        if (lst_guiaDetalle.length < 1) {
+            mensaje_validacion += "<br/>Debe ingresar productos";
+        }
+
+
+        if (mensaje_validacion == "") {
+
+            var placa = "";
+            if ($("#TipoMovilidadCbo").val() == "02") {
+                placa = "BVC770";
+            }
+
+            var GuiaDatos = {
+
+                "IdGuiaTransferencia": $("#IdGuia").val(),
+                "serie": "T020",
+                "numero": 0,
+                "cliente_documento": $("#ClienteCoaInput").val(),
+                "cliente_tipo_documento": 6,
+                "cliente_nombre": $("#ClienteNombreInput").val(),
+                "cliente_direccion": "AV. CAMINOS DEL INCA NRO. 264 INT. 03",
+                "fecha_emision": $("#FechaEmisionInput").val(),
+                "observaciones": $("#ObservacionInput").val(),
+                "motivo_traslado": "04",
+                "tipo_transporte": $("#TipoMovilidadCbo").val(),
+                "fecha_traslado": $("#date").val(),
+                "transportista_documento_tipo": "6",
+                "transportista_documento_numero": $("#AgenciaCbo").val(),
+                "transportista_nombre": $("#AgenciaCbo option:selected").text(),
+                "transportista_placa_numero": placa,
+                "conductor_documento_tipo": "",
+                "conductor_documento_numero": "",
+                "conductor_nombre": "",
+                "conductor_apellidos": "",
+                "conductor_numero_licencia": "",
+                "punto_de_partida_ubigeo": $("#UbigeoSalidaCbo").val(),
+                "punto_de_partida_direccion": $("#DireccionSalidaInput").val(),
+                "punto_de_llegada_ubigeo": $("#UbigeollegadaCbo").val(),
+                "punto_de_llegada_direccion": $("#DireccionEntregaInput").val(),
+                "atencion_dni_1": $("#TipoDocumentoContacto1").val(),
+                "atencion_1": $("#TipoNombreContacto1").val(),
+                "atencion_dni_2": $("#TipoDocumentoContacto2").val(),
+                "atencion_2": $("#TipoNombreContacto2").val(),
+                "agencia": "",
+                "flete_x_pagar": "",
+                "estado": "RE",
+                "UsuarioActualizacion": "",
+                "FechaActualizacion": "",
+
+                "lst_guiaDetalle": lst_guiaDetalle
+            }
+
+            //console.log(JSON.stringify(GuiaDatos));
+            fninsertaGuia(GuiaDatos);
+        }
+        else {
+            $("#msjEspera").css('display', 'none');
+            $("#msjError").css('display', 'none');
+            $("#msjsuccess").css('display', 'none');
+            $("#msjWarning").css('display', 'block');
+            document.getElementById('textmsjErrores').innerHTML = "";
+            document.getElementById('textmsjsuccess').innerHTML = "";
+            document.getElementById('textmsjWarning').innerHTML = mensaje_validacion;
+        }
+        //AgenciaCbo
+    }
+
+    async function fninsertaGuia(datos) {
+        //console.log(JSON.stringify(datos));
+        //console.log(datos);
+        //debugger;
+        $.ajax({
+            url: '../@metodo',
+            type: '@tipometodo',
+            data: {
+                access_pass: "",
+                m_guia: datos
+            },
+            dataType: 'json',
+            //contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                //console.log(response);
+
+                $("#msjEspera").css('display', 'none');
+                $("#msjError").css('display', 'none');
+                $("#msjsuccess").css('display', 'none');
+                $("#msjWarning").css('display', 'none');
+                document.getElementById('textmsjErrores').innerHTML = "";
+                document.getElementById('textmsjWarning').innerHTML = "";
+                document.getElementById('textmsjsuccess').innerHTML = "";
+
+                if (response.respuesta_1 > 0) {
+
+                    if ($("#IdGuia").val() == "0") {
+                        $("#IdGuia").val(response.respuesta_1)
+                    }
+                    if (response.respuesta_3 > 0) {
+                        document.getElementById('textmsjsuccess').innerHTML = "Guia registrada correctamente : T020-" + response.respuesta_4;
+                        $("#msjsuccess").css('display', 'block');
+                    }
+                    else {
+                        document.getElementById('textmsjWarning').innerHTML = response.observacion_3 + "<br>" + response.observacion_2 + "<br>" + response.observacion_1;
+                        $("#BtnModalwarning").css('display', 'none');
+                        $("#BtnHrefGuia").removeAttr("style");
+                        $("#msjWarning").css('display', 'block');
+                    }
+                }
+                else
+                {
+                    document.getElementById('textmsjErrores').innerHTML = "Error al registrar la Guía";
+                    $("#msjError").css('display', 'block');
+                }
+
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    function PProductoDelete(idem) {
+        $("#PProductoSelect_" + idem).remove();
+    }
+
+    function fnFechaActual() {
+        var date = new Date();
+
+        // Get year, month, and day part from the date
+        var year = date.toLocaleString("default", { year: "numeric" });
+        var month = date.toLocaleString("default", { month: "2-digit" });
+        //var day = date.toLocaleString("default", { day: "2-digit" });
+
+        // Generate yyyy-mm-dd date string
+        var formattedDate = year.substring(2, 4) + month;// + "-" + day;
+        return formattedDate;
+    }
+
+
+</script>
+
+@{
+    if (data_guia != null)
+    {
+        <script>
+                function fnPuntoLlegadaEdit()
+                {
+                    if ($("#DireccionEntregaInput").val() == d_salidaAlmacen || $("#DireccionEntregaInput").val() == d_salidaAlmacen2) {
+                    $('#PuntoLlegadaCbo option[value="ALPRINCIPAL"]').attr('selected', 'selected');
+                    $('#DireccionEntregaInput').attr('readonly', true);
+                        document.getElementById('DireccionEntregaInput').disabled = true;
+                    $('#UbigeollegadaCbo').val(u_salidaAlmacen).trigger('change');
+                    $('#UbigeollegadaCbo').attr('readonly', true);
+                        document.getElementById('UbigeollegadaCbo').disabled = true;
+                    }
+                }
+
+                $(document).ready(function () {
+                    cargaDataGuia()
+                    soloNumeros();
+                    idemProductoSeleccionado = @x_nveces;
+                });
+
+                    function cargaDataGuia()
+                    {
+                    //var estado = @data_guia.estado.ToString();
+                    $('#AgenciaCbo').val('@data_guia.transportista_documento_numero').trigger('change');
+                    $('#TipoMovilidadCbo option[value="@data_guia.tipo_transporte"]').prop('selected', true);
+                    $("#CorrelativoInput").val("@data_guia.numero.ToString()");
+                    $("#FechaEmisionInput").val("@DateTime.Now.ToString("yyyy-MM-dd")");
+                    $("#date").val("@fecha_traslado");
+                    $('#UbigeoSalidaCbo').val("@data_guia.punto_de_partida_ubigeo.ToString()").trigger('change');
+                    $("#DireccionSalidaInput").val("@data_guia.punto_de_partida_direccion.ToString()");
+                    $('#UbigeollegadaCbo').val("@data_guia.punto_de_llegada_ubigeo.ToString()").trigger('change');
+                    $("#DireccionEntregaInput").val("@data_guia.punto_de_llegada_direccion.ToString()");
+                    $("#TipoDocumentoContacto1").val("@data_guia.atencion_dni_1.ToString()");
+                    $("#TipoNombreContacto1").val("@data_guia.atencion_1.ToString()");
+                    $("#TipoDocumentoContacto2").val("@data_guia.atencion_dni_2.ToString()");
+                    $("#TipoNombreContacto2").val("@data_guia.atencion_2.ToString()");
+                    $("#ObservacionInput").val("@data_guia.observaciones");
+                        fnPuntoLlegadaEdit();
+                        fnTipoMovilidad();
+                        /**
+                        "fecha_emision": $("#FechaEmisionInput").val(),
+                        "observaciones": $("#ObservacionInput").val(),
+                        */
+                    }
+
+        </script>
+    }
+
+}
+
+<link href="~/assets/css/cssMG.css" rel="stylesheet" />

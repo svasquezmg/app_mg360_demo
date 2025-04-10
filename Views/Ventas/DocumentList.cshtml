@@ -1,0 +1,1054 @@
+﻿<link rel="stylesheet" href="~/assets/descargados/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="~/assets/descargados/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="~/assets/descargados/buttons.bootstrap5.min.css">
+<link href="~/assets/descargados/select2.min.css" rel="stylesheet">
+
+@{
+    ViewBag.Title = "Busqueda de Lista de Documentos";
+    string tipoUsuario = ViewData["TipoUsuario"] as string;
+    string estilo = " style=display:none ";
+    string estilo2 = " style=display:none ";
+    IList<WebAppMontGroup.Entity.Usuario> lstCodVendedoreRelacionado = ViewData["VendedorAsociado"] as IList<WebAppMontGroup.Entity.Usuario>;
+    if (tipoUsuario == "2")
+    {
+        estilo2 = "";
+    }
+    else
+    {
+        if (lstCodVendedoreRelacionado != null && lstCodVendedoreRelacionado.Count > 0)
+        {
+            estilo2 = "";
+        }
+    }
+
+    string idImputcliente = "x";
+}
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card custom-card-body bg-white shadow-sm border">
+            <div class="card-header fs-18 fw-semibold mb-0 text-primary">
+                Búsqueda de Documentos
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-xl-2">
+                        <label for="date_desde" class="form-label">Desde:</label>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-text text-muted"> <i class="ri-calendar-line"></i> </div>
+                                <input type="text" class="form-control" id="date_desde" placeholder="Seleccione fecha" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2">
+                        <label for="date_hasta" class="form-label">Hasta:</label>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-text text-muted"> <i class="ri-calendar-line"></i> </div>
+                                <input type="text" class="form-control" id="date_hasta" placeholder="Seleccione fecha" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2">
+                        <label for="Cancelado" class="form-label">Cancelado:</label>
+                        <select id="Cancelado" class="form-select rounded bg-body" style="background:#ffffff !important">
+                            <option value="">Sin Seleccion</option>
+                            <option value=" ">Pendiente</option>
+                            <option value="C">Cancelado</option>
+                        </select>
+                    </div>
+
+                    <div class="col-xl-2">
+                        <label for="Anulado" class="form-label">Anulado:</label>
+                        <select id="Anulado" class="form-select rounded bg-body" style="background:#ffffff !important">
+                            <option value="<>" selected>No</option>
+                            <option value="=">Si</option>
+                            <option value="">Todos</option>
+                        </select>
+                    </div>
+
+                    <div class="col-xl-2">
+                        <br /><br />
+                        <div class="d-flex">
+                            <label for="documentDetailSwitch" id="documentDetailSwitch_doc" class="me-1 text-primary" style="font-weight:bold">Documento</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="documentDetailSwitch">
+                            </div>
+                            <label for="documentDetailSwitch" id="documentDetailSwitch_det" class="ms-0" style="font-weight:bold;margin-left:-10px">Detalle</label>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2">
+                        <br />
+                        <button type="button" class="btn btn-primary mt-2 btn-custom waves-effect waves-light" id="btnBucarDocumento" style="width:100%;margin-left:10px">Buscar Documento</button>
+                    </div>
+
+                </div>
+                <br />
+
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="false"
+                                    aria-controls="collapseOne">
+                                Otros filtros
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse"
+                             aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="row">
+
+                                    <div class="col-xl-4">
+                                        <label for="Serie" class="form-label">Serie:</label>
+                                        <input id="Serie" type="text" class="form-control rounded bg-body" title="Serie" style="background:#ffffff !important" />
+                                    </div>
+
+                                    @{if (tipoUsuario == "2")
+                                        {
+                                            <div class="col-xl-6">
+                                                <div class="form-group mb-2">
+                                                    <label for="ClienteNombreInput" class="form-label">Cliente</label>
+                                                    <input id="ClienteNombreInput" type="text" class="form-control bg-body" readonly>
+                                                    <input type="hidden" id="ClienteCoaInput" name="ClienteCoa">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-2">
+                                                <!--buscar cliente --><br />
+                                                <button type="button" class="btn btn-outline-primary btn-wave mt-2" id="btnBucarCliente" data-bs-toggle="modal" data-bs-target="#staticBackdropBuscarCliente" style="width:50%">Cliente</button>
+                                                <button type="button" class="btn btn-outline-danger btn-wave mt-2 ms-2" id="btnLimpiarSeleccion" style="width:40%"><!--<i class="ri-delete-bin-2-fill"></i>--> Limpiar</button>
+                                            </div>
+                                        }
+                                        else if (tipoUsuario == "1")
+                                        {
+                                            <div class="col-xl-6" @estilo>
+                                                <div class="form-group mb-2">
+                                                    <label for="ClienteNombreInput" class="form-label">Cliente</label>
+                                                    <input id="ClienteNombreInput" type="text" class="form-control bg-body" readonly>
+                                                    <input type="hidden" id="@idImputcliente" name="ClienteCoa">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-2" @estilo>
+                                                <!--buscar cliente --><br />
+                                                <button type="button" class="btn btn-outline-primary btn-wave mt-2" id="btnBucarCliente" data-bs-toggle="modal" data-bs-target="#staticBackdropBuscarCliente" style="width:50%">Cliente</button>
+                                                <button type="button" class="btn btn-outline-danger btn-wave mt-2 ms-2" id="btnLimpiarSeleccion" style="width:40%"><!--<i class="ri-delete-bin-2-fill"></i>--> Limpiar</button>
+                                            </div>
+
+                                            <div class="col-xl-8">
+                                                <label for="ClienteCoaInput" class="form-label">Cliente</label>
+                                                <select class="js-example-basic-single " id="ClienteCoaInput" name="state">
+                                                    <option value="">Todos</option>
+                                                    @{ System.Data.DataTable proveedor = ViewData["ClientesEasy"] as System.Data.DataTable;
+                                                        foreach (System.Data.DataRow row in proveedor.Rows)
+                                                        {
+                                                            <option value="@row["coa"].ToString()">@row["coa"].ToString()  - @row["nombre"].ToString()</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        }
+                                    }
+
+                                </div>
+
+                                <br />
+                                <div class="row">
+
+                                    <div class="col-xl-4">
+                                        <label class="form-label">Tipo Documento:</label>
+                                        <select class="js-example-basic-multiple" name="states[]" multiple="multiple" id="TipoDocumentoCbo">
+                                            <option value="BV" selected>BV</option>
+                                            <option value="FV" selected>FV</option>
+                                            <option value="FI">FI</option>
+                                            <option value="BI">BI</option>
+                                            <option value="NC" selected>NC</option>
+                                            <option value="ND">ND</option>
+                                            <option value=" ">Todos</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-xl-4" @estilo2>
+                                        <label for="VendedorCbo" class="form-label">Vendedor:</label>
+                                        @{ System.Data.DataTable dtvendedores = ViewBag.Vendedores as System.Data.DataTable;
+                                            <select class="js-example-basic-multiple" id="VendedorCbo" name="state2[]" multiple="multiple">
+                                                <option value=" ">Todos</option>
+
+                                                @if (tipoUsuario == "2")
+                                                {
+                                                    if (dtvendedores != null && dtvendedores.Rows.Count > 0)
+                                                    {
+                                                        foreach (System.Data.DataRow vendedor in dtvendedores.Rows)
+                                                        {
+                                                            var codigo = vendedor["codigo"].ToString();
+                                                            var nombre = vendedor["dsc"].ToString();
+                                                            <option value="@codigo">@codigo - @nombre</option>
+                                                        }
+                                                    }
+                                                }
+
+                                                @if (tipoUsuario == "1")
+                                                {
+                                                    var usu_data = ViewData["Usuario"] as WebAppMontGroup.Entity.Usuario;
+                                                    <option value="@usu_data.codigovendedor">@usu_data.codigovendedor - @usu_data.nombres</option>
+                                                    foreach (var usu in ViewData["VendedorAsociado"] as IList<WebAppMontGroup.Entity.Usuario>)
+                                                    {
+                                                        <option value="@usu.codigovendedor">@usu.codigovendedor - @usu.nombres</option>
+                                                    }
+                                                }
+                                            </select>
+                                        }
+
+                                    </div>
+
+                                    <div class="col-xl-2">
+                                        <label for="Articulo" class="form-label">Artículo:</label>
+                                        <input id="Articulo" type="text" class="form-control rounded bg-body bg1" title="Artículo" disabled />
+                                    </div>
+
+                                    <div class="col-xl-2">
+                                        <label for="Lote" class="form-label">Lote:</label>
+                                        <input id="Lote" type="text" class="form-control rounded bg-body bg1" title="Lote" disabled />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--aqui inicia el datatable-->
+        <div class="card custom-card bg-white shadow-sm border" id="datatable-documentos">
+            <div class="card-body">
+
+                <div class="table-responsive">
+                    <table id="datatable-basic" class="table table-bordered text-nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th class="thMG1">Documento</th>
+                                <th class="thMG1">Doc</th>
+                                <th class="thMG1">Serie</th>
+                                <th class="thMG1">Nro</th>
+                                <th class="thMG1">F.Emisión</th>
+                                <th class="thMG1">RUC</th>
+                                <th class="thMG1">Razón Social</th>
+                                <th class="thMG1">Vendedor</th>
+                                <th class="thMG1">Codigo Vendedor</th>
+                                <th class="thMG1">Oper. Fact</th>
+                                <th class="thMG1">SubTotal</th>
+                                <th class="thMG1">IGV</th>
+                                <th class="thMG1">Total</th>
+                                <th class="thMG1">F.Vencimiento</th>
+                                <th class="thMG1">F.Cancelación</th>
+                                <th class="thMG1">Días Transcurridos</th>
+                                <th class="thMG1">Estado</th>
+                                <th class="thMG1">Teléfonos</th>
+                                <th class="thMG1">Correos</th>
+                                <th class="thMG1">Dirección</th>
+                                <th class="thMG1">Distrito</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyDocumentos">
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="1" style="text-align:right;">Total:</th>
+                                <td id="total2"></td>
+                                <td colspan="16"></td>
+                            </tr>
+
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <!--aqui acaba el datatable-->
+        <div class="card custom-card bg-white shadow-sm border" id="datatable-details">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="datatable-basic2" class="table table-bordered text-nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th class="thMG1">Documento</th>
+                                <th class="thMG1">Doc</th>
+                                <th class="thMG1">Serie</th>
+                                <th class="thMG1">Nro</th>
+                                <th class="thMG1">F.Emisión</th>
+                                <th class="thMG1">RUC</th>
+                                <th class="thMG1">Razón Social</th>
+                                <th class="thMG1">Codigo Vendedor</th>
+                                <th class="thMG1">Vendedor</th>
+                                <th class="thMG1">Estado</th>
+                                <th class="thMG1">Artículo</th>
+                                <th class="thMG1">Almacen</th>
+                                <th class="thMG1">Lote</th>
+                                <th class="thMG1">F.Expiración</th>
+                                <th class="thMG1">Descripción</th>
+                                <th class="thMG1">Cantidad</th>
+                                <th class="thMG1">Prec.Unitario</th>
+                                <th class="thMG1">SubTotal</th>
+                                <th class="thMG1">Promocion</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyDetails">
+                            <!-- Aquí puedes agregar dinámicamente los datos -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="1" style="text-align:right;">Total:</th>
+                                <td id="total2d"></td>
+                                <td colspan="13"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--modal buscar cliente ini-->
+
+<div class="modal fade" id="staticBackdropBuscarCliente" data-bs-backdrop="static"
+     data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropBuscarClienteLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-m modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropBuscarClienteLabel">
+                    Búsqueda de Cliente
+                </h6>
+                <button type="button" class="btn btn-outline-light btn-wave" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <input class="form-control form-control-sm mb-3" type="text" id="ClienteBuscarText" placeholder="Ingrese razón social o COA" aria-label=".form-control-sm example">
+                    </div>
+                </div>
+                <div id="divResultadoCliente" style="max-height: 400px !important; min-height: 400px !important; overflow-y: scroll; scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0); overflow-x: hidden; padding: 0px 12px ">
+                    <!-- Aquí se mostrarán las razones sociales y COA de los clientes -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--modal buscar cliente fin-->
+<!-- Modal mensaje alerta -->
+<div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel">Advertencia</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalMessage">
+                <!-- Aquí se colocará el mensaje -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal mensaje alerta -->
+<div class="modal fade" id="exampleModalScrollableStock" tabindex="-1" data-bs-backdrop="static"
+     aria-labelledby="exampleModalScrollableStock" data-bs-keyboard="false"
+     aria-hidden="true" inert>
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!--<div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel2">
+                    Modal title
+                </h6>
+            </div>-->
+            <div class="modal-body" style="text-align:center">
+                <img src="~/assets/images/loading.gif" />
+                <p>
+                    Estamos cargando la información. Por favor, espere.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/descargados/jquery.dataTables.min.js"></script>
+<script src="~/assets/descargados/dataTables.bootstrap5.min.js"></script>
+<script src="~/assets/descargados/dataTables.responsive.min.js"></script>
+<script src="~/assets/descargados/dataTables.buttons.min.js"></script>
+<script src="~/assets/descargados/buttons.print.min.js"></script>
+<script src="~/assets/descargados/pdfmake.min.js"></script>
+<script src="~/assets/descargados/vfs_fonts.js"></script>
+<script src="~/assets/descargados/buttons.html5.min.js"></script>
+<script src="~/assets/descargados/jszip.min.js"></script>
+
+
+<!-- Select2 Cdn -->
+<script src="~/assets/descargados/select2.min.js"></script>
+
+<!-- Internal Select-2.js -->
+<script src="~/assets/js/select2.js"></script>
+
+<script src="~/assets/libs/flatpickr/flatpickr.min.js"></script>
+<script src="~/assets/js/date&time_pickers.js"></script>
+<!-- Internal Datatables JS -->
+<script src="~/assets/js/datatables.js"></script>
+
+<script src="~/assets/js/jsMG.js"></script>
+<style>
+    /* Estilos para los campos deshabilitados */
+    input:disabled {
+        background-color: #938c8c;
+        color: #a1a1a1;
+        cursor: not-allowed;
+    }
+
+    .dt-buttons {
+        margin-top: 20px; /* Añade un margen a la izquierda de los botones */
+    }
+</style>
+<script>
+         var mesesMaximosSinFiltro = @ViewBag.MesesMaximosSinFiltro;
+         var mesesMaximosConFiltro = @ViewBag.MesesMaximosConFiltro;
+
+		 var flatpickrInstanceInicio;
+		 var flatpickrInstanceFin;
+
+		 var filtros
+
+            function delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+        // JavaScript para habilitar/deshabilitar campos Artículo y Lote según el estado del switch
+    document.addEventListener("DOMContentLoaded", function () {
+
+            const switchInput = document.getElementById("documentDetailSwitch");
+            const articuloInput = document.getElementById("Articulo");
+            const loteInput = document.getElementById("Lote");
+            const detailstable = document.getElementById("datatable-details");
+            const documenttable = document.getElementById("datatable-documentos")
+
+            // Verificar que los elementos existan antes de agregar la lógica
+            if (switchInput && articuloInput && loteInput) {
+                // Función para habilitar/deshabilitar los campos de Artículo y Lote
+                function toggleFields() {
+
+                    if (switchInput.checked) {
+                        // Si el switch está activado (Detalle)
+                        articuloInput.disabled = false;
+                        articuloInput.className = "form-control rounded bg-dark-subtle";
+                        loteInput.disabled = false;
+                        loteInput.className = "form-control rounded bg-dark-subtle";
+                        detailstable.className = "card custom-card bg-white shadow-sm border";
+                        documenttable.className = "card custom-card bg-white shadow-sm border d-none";
+                        $("#documentDetailSwitch_doc").removeClass("text-primary");
+                        $("#documentDetailSwitch_det").addClass("text-primary");
+                        $("#Articulo").removeClass("bg1");
+                        $("#Articulo").removeClass("bg1");
+                        $("#Articulo").addClass("bg0");
+                        $("#Lote").addClass("bg0");
+
+                    } else {
+                        // Si el switch está desactivado (Documento)
+                        articuloInput.disabled = true;
+                        articuloInput.className = "form-control rounded bg-dark-subtle";
+                        loteInput.disabled = true;
+                        loteInput.className = "form-control rounded bg-dark-subtle";
+                        detailstable.className = "card custom-card bg-white shadow-sm borderd d-none";
+                        documenttable.className = "card custom-card bg-white shadow-sm border ";
+                        articuloInput.value = "";
+                        loteInput.value = "";
+                        $("#documentDetailSwitch_det").removeClass("text-primary");
+                        $("#documentDetailSwitch_doc").addClass("text-primary");
+                        $("#Articulo").removeClass("bg0");
+                        $("#Articulo").removeClass("bg0");
+                        $("#Articulo").addClass("bg1");
+                        $("#Lote").addClass("bg1");
+
+                    }
+                }
+
+                // Agregar evento al switch para cambiar el estado de los campos
+                switchInput.addEventListener("change", toggleFields);
+
+                // Inicializar el estado de los campos al cargar la página
+                toggleFields();
+            } else {
+                console.error("Los elementos switch, artículo o lote no están presentes en el DOM.");
+            }
+
+        /*modal*/
+        $("#btnBucarCliente").on('click', function () {
+            $("#ClienteBuscarText").val("");
+            document.getElementById('divResultadoCliente').innerHTML = '';
+        });
+
+        $('#ClienteBuscarText').on('input', function (e) {
+            if (($("#ClienteBuscarText").val().length) > 2) {
+                BuscarCliente();
+            }
+        });
+
+
+        document.getElementById("btnLimpiarSeleccion").addEventListener("click", function () {
+            // Limpiar los campos de cliente
+            document.getElementById("ClienteNombreInput").value = "";
+            document.getElementById("ClienteCoaInput").value = "";
+            // Si tienes otros campos que deseas limpiar, añade aquí su lógica
+            console.log("Selección de cliente limpiada.");
+        });
+
+
+            /*  aqui va todo lo referente a la fecha- de tipo calendario*/
+
+            filtros = document.querySelectorAll("#TipoDocumentoCbo, #Serie ,#VendedorCbo, #ClienteNombreInput, #Anulado, #Cancelado, #Articulo, #Lote");
+
+
+
+            // Instanciar flatpickr para date_desde y date_hasta
+             flatpickrInstanceInicio = flatpickr("#date_desde", {
+                //dateFormat: "Y-m-d",
+                //altInput: true,
+                //altFormat: "F j, Y",
+                locale: {
+                    firstDayOfWeek: 1,
+                    weekdays: {
+                        shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                        longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                    },
+                    months: {
+                        shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                        longhand: ['Enero', 'Febreo', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                    },
+                },
+                allowInput: true,
+                onChange: function (selectedDates, dateStr, instance) {
+                    if (selectedDates.length > 1) {
+                        instance.clear();
+                        instance.setDate(selectedDates[selectedDates.length - 1]);
+                    }
+                    validarFechas(); // Validar fechas después de cualquier cambio
+                }
+            });
+
+             flatpickrInstanceFin = flatpickr("#date_hasta", {
+                //dateFormat: "Y-m-d",
+                //altInput: true,
+                //altFormat: "F j, Y",
+                locale: {
+                    firstDayOfWeek: 1,
+                    weekdays: {
+                        shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                        longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                    },
+                    months: {
+                        shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                        longhand: ['Enero', 'Febreo', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                    },
+                },
+                allowInput: true,
+                onChange: function (selectedDates, dateStr, instance) {
+                    if (selectedDates.length > 1) {
+                        instance.clear();
+                        instance.setDate(selectedDates[selectedDates.length - 1]);
+                    }
+                    validarFechas(); // Validar fechas después de cualquier cambio
+                }
+            });
+
+
+
+
+    document.getElementById("btnBucarDocumento").addEventListener("click", function () {
+
+        fnBuscar();
+
+    });
+
+
+    $('.js-example-basic-multiple').select2({
+        allowClear: false // Permite limpiar la selección
+    });
+
+    $('.js-example-basic-multiple').on('select2:select', function (e) {
+        var selectedValue = e.params.data.id;
+        var selectElement = $(this); // Se refiere solo al select actual
+
+        // Si selecciona "Todos", desmarcar las otras opciones del select actual
+        if (selectedValue === ' ') {
+            selectElement.val(' ').trigger('change'); // Mantener solo "Todos" en este select
+        } else {
+            // Si se selecciona cualquier otra opción, desmarcar "Todos" en el select actual
+            var values = selectElement.val();
+            if (values && values.includes(' ')) {
+                values = values.filter(function (value) {
+                    return value !== ' ';
+                });
+                selectElement.val(values).trigger('change');
+            }
+        }
+    });
+
+
+
+    });
+
+
+    function fnBuscar() {
+
+            if (document.getElementById("date_desde").value == "" || document.getElementById("date_hasta").value == "") {
+                alert("ingrese fechas validas");
+                return false;
+            }
+
+            // Si ya hay una instancia de DataTable, primero destrúyela
+            if ($.fn.DataTable.isDataTable('#datatable-basic')) {
+                $('#datatable-basic').DataTable().clear().destroy();
+                $('#total2').html("");
+
+            } else {
+                console.error('El DataTable #datatable-basic no está inicializado.');
+            }
+            // Si ya hay una instancia de DataTable, primero destrúyela
+            if ($.fn.DataTable.isDataTable('#datatable-basic2')) {
+                $('#datatable-basic2').DataTable().clear().destroy();
+                $('#total2d').html("");
+            } else {
+                console.error('El DataTable #datatable-basic2 no está inicializado.');
+            }
+            // Inicializa el DataTable Bfrtip lfrtiBp
+            if (!$.fn.DataTable.isDataTable('#datatable-basic')) {
+                $('#datatable-basic').DataTable({
+                    dom: 'lfrtiBp',
+                    buttons: [{
+                        extend: 'excel',
+                        text: 'Descargar Excel'
+                    }
+
+                    ],
+                    language: {
+                        searchPlaceholder: 'Buscar...',
+                        sSearch: '',
+                    },
+                    lengthMenu: [10, 25, 50, 75, 100],
+                    responsive: false,
+                    pageLength: 10,
+                    scrollX: true,
+
+                });
+            }
+            // Inicializa el DataTable
+            if (!$.fn.DataTable.isDataTable('#datatable-basic2')) {
+                $('#datatable-basic2').DataTable({
+                    dom: 'lfrtiBp',
+                    buttons: [{
+                        extend: 'excel',
+                        text: 'Descargar Excel'
+                    }
+                    ],
+                    language: {
+                        searchPlaceholder: 'Buscar...',
+                        sSearch: '',
+                    },
+                    lengthMenu: [10, 25, 50, 75, 100],
+                    responsive: false,
+                    pageLength: 10,
+                    scrollX: true,
+
+                });
+            }
+
+            // Obtener los valores de los filtros
+            const fechaInicio = document.getElementById("date_desde").value;
+            const fechaFin = document.getElementById("date_hasta").value;
+            const tipoDocumento = $('#TipoDocumentoCbo').val();
+            const vendedor = $('#VendedorCbo').val();
+            const serie = document.getElementById("Serie").value;
+            const cliente = document.getElementById("ClienteCoaInput").value;
+            const cancelado = document.getElementById("Cancelado").value;
+            const anulado = document.getElementById("Anulado").value;
+            const articulo = document.getElementById("Articulo").value || '';
+            const lote = document.getElementById("Lote").value || '';
+            const switchInput = document.getElementById("documentDetailSwitch");
+
+            const filtros = {
+                fechaInicio: fechaInicio,
+                fechaFin: fechaFin,
+                tipoDocumento: Array.isArray(tipoDocumento) ? tipoDocumento.join(',') : tipoDocumento,
+                serie: serie,
+                vendedor: Array.isArray(vendedor) ? vendedor.join(',') : '',
+                cliente: cliente,
+                cancelado: cancelado,
+                anulado: anulado,
+                articulo: articulo,
+                lote: lote
+            };
+            if (switchInput.checked) {
+                enviarFiltrosdetalles(filtros)
+
+            }
+
+            else {
+
+                enviarFiltrosdocumentos(filtros);
+
+            }
+        }
+
+
+    function fnVerDocumento(documento) {
+
+        setTimeout(function () {
+            $.ajax({
+                url: '../Ventas/getDocumento',
+                type: 'GET',
+                data: {
+                    documento: documento
+                },
+                success: function (response) {
+                    //console.log(response);
+                    if (response == "-1") {
+                        document.location.href = "/MG360";
+                    }
+                    else {
+                        window.open("../Ventas/Documento/", "_blank", "top=100,left=300,width=1000,height=800");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+
+        }, 200);
+    }
+
+    function ClienteSeleccion(razonSocial, coa) {
+        document.getElementById("ClienteNombreInput").value = razonSocial;
+        // Asignar el código del cliente al campo oculto
+        document.getElementById("ClienteCoaInput").value = coa;
+
+        // Optionally, close the modal after selection
+        $('#staticBackdropBuscarCliente').modal('hide');
+    }
+
+    async function BuscarCliente() {
+        document.getElementById('divResultadoCliente').innerHTML = '';
+        var datos_cliente_busqueda = $("#ClienteBuscarText").val().toUpperCase();
+        $.ajax({
+            url: '../Cliente/listaClienteBusqueda',
+            type: 'GET',
+            data: {
+                ruc_razon: datos_cliente_busqueda,
+            },
+            success: function (response) {
+                $('#divResultadoCliente').empty();  // Limpiar resultados anteriores
+                $.each(response, function (key, value) {
+                    // Mostrar el COA (RUC) y la razón social del cliente en el modal
+                    $('#divResultadoCliente').append(
+                        '<div class="row" style="margin-bottom:15px;border: 1px solid #cacfd2;padding: 10px 0px;border-radius: 10px;">' +
+                        '<div class="col-xl-3"><span Class="text-muted fs-12">COA (RUC):</span><br />' + value.CoaCliente + '</div>' +
+                        '<div class="col-xl-6"><span Class="text-muted fs-12">Cliente:</span><br />' + value.razonSocial + '</div>' +
+                        '<div class="col-xl-3"><button class="btn btn-outline-success btn-wave btn-sm" style="width:100%;margin-top: 8px" data-razon="' + value.razonSocial + '" data-coa="' + value.CoaCliente + '" onclick="ClienteSeleccion(\'' + value.razonSocial + '\', \'' + value.CoaCliente + '\');">Seleccionar</button></div>' +
+                        '</div>'
+                    );
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+
+    }
+
+    async function enviarFiltrosdetalles(filtros) {
+        //console.log(filtros)
+        $('#exampleModalScrollableStock').modal('show');
+        var table = $('#datatable-basic2').DataTable();
+        var rows = table
+            .rows()
+            .remove()
+            .draw();
+        let imp_incT = 0;
+        var estado = "";
+        $.ajax({
+            url: '../Ventas/getDocumentosDetallefiltrados',
+            type: 'GET',
+            data: filtros, // Enviar el objeto 'filtros' al controlador
+            success: async function (response) {
+
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+
+                let rowsToAdd = [];
+                $.each(response, function (key, value) {
+
+                    if (value.stat == "A") {
+                        estado = "";
+                    }
+                    else if (value.stat == "X") {
+                        estado = "Anulado";
+                    }
+                    else {
+                        estado = "NN";
+                    }
+                    imp_incT += parseFloat(value.imp_inc) || 0;
+                    let fechaDoc = value.doc_fch ? $.formattedDateyyyyMMdd(new Date(parseInt(value.doc_fch.substr(6)))) : '';
+                    let fechaExp = value.fch_exp ? $.formattedDateyyyyMMdd(new Date(parseInt(value.fch_exp.substr(6)))) : '';
+                    let firstColumn = `<span class="text-primary" onclick="fnVerDocumento('${value.cod_documento}')">${value.cod_documento}</span>`;
+
+                    const cod_documento = value.cod_documento;
+                    const doc = cod_documento.substr(0, 2); // Primeros dos dígitos
+                    const serie = cod_documento.substr(2, 6); // Siguientes cuatro dígitos
+                    const nro = cod_documento.substr(6); // Restantes dígitos
+
+                    let row = [
+                        firstColumn,
+                        doc,
+                        serie,
+                        nro,
+                        fechaDoc,
+                        value.coa,
+                        value.razonsocial,
+                        value.vendedor,
+                        value.nomvendedor,
+                        estado, //value.stat,
+                        value.articulo,
+                        value.almacen,
+                        value.lote,
+                        fechaExp,
+                        value.artic_dsc,
+                        value.und,
+                        value.imp_u_inc, //"S/ " + value.imp_u_inc.toLocaleString('es-PE'),
+                        value.imp_inc, //"S/ " + value.imp_inc.toLocaleString('es-PE'),
+                        value.articulo1
+                    ];
+                    rowsToAdd.push(row);
+
+
+                });
+                $('#total2d').html("S/ " + imp_incT.toLocaleString('es-PE'));
+                $('#datatable-basic2').DataTable().rows.add(rowsToAdd).order([5, 'asc']).draw();
+                await delay(500)
+                $('#exampleModalScrollableStock').modal('hide');
+            },
+            error: function (error) {
+                console.error('Error al enviar los filtros:', error);
+            }
+        });
+
+    }
+
+    function convertirFecha(dato) {
+        if (!dato || typeof dato !== 'string') {
+            console.log("El valor de fecha no es válido:", dato);
+            return null; // Devolver null si el valor es nulo, indefinido o no es una cadena
+        }
+        // Verifica si el valor de fecha tiene el formato /Date(....)/
+        const match = dato.match(/\/Date\((\d+)\)\//);
+        if (match) {
+            const timestamp = parseInt(match[1], 10); // Extraer el valor numérico y convertir a entero
+            const fecha = new Date(timestamp); // Crear un objeto Date a partir del timestamp
+
+            // Formatear la fecha en formato dd/MM/yyyy
+            const dia = fecha.getDate().toString().padStart(2, '0'); // Día con dos dígitos
+            const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Mes con dos dígitos (getMonth() devuelve de 0 a 11)
+            const año = fecha.getFullYear(); // Obtener el año
+
+            return `${dia}/${mes}/${año}`; // Retornar la fecha en el formato dd/MM/yyyy
+        }
+
+        console.log("El formato de la fecha no es válido:", dato);
+        return null; // Si no tiene el formato esperado, devolver null
+    }
+
+    function enviarFiltrosdocumentos(filtros) {
+
+        var estado = "";
+        $('#exampleModalScrollableStock').modal('show');
+        var table = $('#datatable-basic').DataTable();
+        table.clear();
+        let totalImpT = 0;
+        let contador = 0;
+        // Enviar los filtros al servidor mediante una solicitud AJAX
+        $.ajax({
+            url: '../Ventas/getDocumentosfiltrados', // Cambia esto por la ruta del controlador y acción
+            type: 'GET',
+            data: filtros, // Enviar el objeto 'filtros' al controlador
+            success: async function (response) {
+
+                if (response == "-1") {
+                    document.location.href = "/MG360";
+                }
+
+                let rowsToAdd = [];
+                $.each(response, function (key, value) {
+
+                    if (value.stat == "A") {
+                        estado = "";
+                    }
+                    else if (value.stat == "X") {
+                        estado = "Anulado";
+                    }
+                    else {
+                        estado = "NN";
+                    }
+                    totalImpT += parseFloat(value.imp_t) || 0;
+
+                    let fechaCanc = value.fch_canc;// (value.fch_canc ? $.formattedDate(new Date(parseInt(value.fch_canc.substr(6)))) : '')
+                    let firstColumn = `<span class="text-primary" onclick="fnVerDocumento('${value.doc + value.doc_serie + value.doc_nro}')">${value.doc + value.doc_serie + value.doc_nro}</span>`;
+                    //if (!(fechaCanc instanceof Date) || isNaN(fechaCanc)) {
+                    if (value.fch_canc == "/Date(-2209143600000)/") {
+                        //fechaCanc = new Date();
+                        fechaCanc = "/Date(" + Date.now() + ")/";
+                    }
+                    //console.log(value.doc);
+                    //let diasTranscurridos = $.subtractDates(value.doc_fch, value.fch_canc)
+                    let diasTranscurridos;
+                if (value.doc != "FI" || value.doc != "BI" || value.stat != "X") { diasTranscurridos = $.subtractDates(value.fch_venc, fechaCanc) } else { diasTranscurridos = "" };
+                    let row = [firstColumn,
+                        value.doc,
+                        value.doc_serie,
+                        value.doc_nro,
+                        $.formattedDateyyyyMMdd(new Date(parseInt(value.doc_fch.substr(6)))),
+                        value.coa,
+                        value.razonsocial,
+                        value.nomvendedor,
+                        value.vendedor,
+                        value.oper_fact,
+                        value.imp_b, //"S/ " + value.imp_b.toLocaleString('es-PE'),
+                        value.imp_i, //"S/ " + value.imp_i.toLocaleString('es-PE'),
+                        value.imp_t, //"S/ " + value.imp_t.toLocaleString('es-PE'),
+                        $.formattedDateyyyyMMdd(new Date(parseInt(value.fch_venc.substr(6)))),
+                        (value.fch_canc ? $.formattedDateyyyyMMdd(new Date(parseInt(value.fch_canc.substr(6)))) : ''),
+                        diasTranscurridos,
+                        estado,//value.stat,
+                        value.telef1,
+                        value.referen1,
+                        value.direccion,
+                        value.distrito];
+                    rowsToAdd.push(row)
+                    contador++
+
+                });
+                //console.log(rowsToAdd)
+
+                table.rows.add(rowsToAdd).order([5, 'asc']).draw();
+
+                $('#total2').html("S/ " + totalImpT.toLocaleString('es-PE'));
+
+                /*$('#total1').html(contador);*/
+                await delay(500);
+                $("#exampleModalScrollableStock").modal('hide');
+            },
+            error: function (error) {
+                console.error('Error al enviar los filtros:', error);
+            }
+        });
+
+    }
+
+    function mostrarModal(mensaje) {
+        document.getElementById('modalMessage').innerText = mensaje;
+        const myModal = new bootstrap.Modal(document.getElementById('alertModal'));
+        myModal.show();
+    }
+
+    function limpiarFechas() {
+        flatpickrInstanceInicio.clear();
+        flatpickrInstanceFin.clear();
+    }
+
+    function validarFechas() {
+        const fechaInicio = flatpickrInstanceInicio.selectedDates[0];
+        const fechaFin = flatpickrInstanceFin.selectedDates[0];
+
+        if (!fechaInicio || !fechaFin) return; // Si alguna de las fechas está vacía, no hace nada.
+
+        const mesesDiferencia = Math.abs(fechaFin.getMonth() - fechaInicio.getMonth() + 12 * (fechaFin.getFullYear() - fechaInicio.getFullYear()));
+
+        // Si hay algún filtro seleccionado
+        const filtroSeleccionado = Array.from(filtros).some(filtro => filtro.value && filtro.value !== "-1");
+
+        if (filtroSeleccionado) {
+            // Validar si la diferencia entre las fechas es mayor a 12 meses (1 año)
+            if (mesesDiferencia > mesesMaximosConFiltro) {
+                mostrarModal("La diferencia entre las fechas no puede ser mayor a " + mesesMaximosConFiltro + " meses con filtros aplicados.");
+                limpiarFechas(); // Limpiar las fechas si la validación falla
+                return false;
+            }
+        } else {
+            // Validar si la diferencia entre las fechas es mayor a 6 meses
+            if (mesesDiferencia > mesesMaximosSinFiltro) {
+                mostrarModal("La diferencia entre las fechas no puede ser mayor a " + mesesMaximosSinFiltro + " meses sin filtros.");
+                limpiarFechas(); // Limpiar las fechas si la validación falla
+                return false;
+            }
+        }
+        return true;
+    }
+
+    $(document).ready(function () {
+        fnBuscar();
+    });
+
+
+</script>
+<style>
+
+
+    .input-small {
+        width: 80%; /* Reduce el ancho */
+    }
+
+    .dataTables_scrollBody::-webkit-scrollbar {
+        width: 8px; /* Ancho del scrollbar en vertical */
+        height: 8px; /* Ancho del scrollbar en horizontal */
+    }
+
+    .dataTables_scrollBody::-webkit-scrollbar-thumb {
+        background-color: gray !important; /* Color por defecto del thumb (scroll) */
+        border-radius: 10px; /* Bordes redondeados */
+    }
+
+        .dataTables_scrollBody::-webkit-scrollbar-thumb:hover {
+            background-color: darkorange; /* Cambia el color del thumb a naranja cuando esté sobre él */
+        }
+
+    .select2-container--default .select2-selection--multiple {
+        background: #ffffff !important;
+    }
+
+    .bg0 {
+        background: #ffffff !important
+    }
+
+    .bg1 {
+        background: #F0F0F5 !important
+    }
+</style>
+
+
+<link href="~/assets/css/cssMG.css" rel="stylesheet" />
+@{
+    var usu_data3 = Session["SessionUsuario"] as WebAppMontGroup.Entity.Usuario;
+    if (usu_data3.estiloWeb == "Estilo2")
+    {
+        <link href="~/assets/css/cssMG2.css" rel="stylesheet" />
+    }
+}

@@ -1,0 +1,2391 @@
+﻿@using System.Text.Json
+@{
+    ViewBag.Title = "PedidoCrear";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string
+        xId = "0",
+        xcoaCliente = "",
+        xCodVendedor = "",
+        xRucDni = "",
+        xCliente = "",
+        xDireccionCliente = "",
+        xCodCategoriaCliente = "",
+        xTipoDocumentoFiscal = "",
+        xCodigoTipoPago = "",
+        xFechaEntrega = "",
+        xOrdenCompra = "",
+        xDocOrdenCompra = "",
+        xSubTotal = "",
+        xIgv = "",
+        xTotal = "",
+        xZonaVenta = "",
+        xObservacionAlmacen = "",
+        xObservacionCredito = "",
+        xObservacionPrecio = "",
+        xGuiaPuntoEntrega = "",
+        xGuiaDireccionEntrega = "",
+        xGuiaUbigeoEntrega = "",
+        xGuiaTransporte = "",
+        xGuiaTransporteEmpRuc = "",
+        xRepcionTipo1 = "",
+        xDni1 = "",
+        xNombre1 = "",
+        xTelefono1 = "",
+        xRepcionTipo2 = "",
+        xDni2 = "",
+        xNombre2 = "",
+        xTelefono2 = "",
+        xIdGuia = "0",
+        xUbigeo = "";
+
+    bool bloquearBoton = false; // Variable para bloquear el botón
+    bool ocultarTipoDocumento = string.IsNullOrEmpty(xTipoDocumentoFiscal); //BloquearTipoDocumento
+
+    WebAppMontGroup.Entity.Pedido dataPedido = new WebAppMontGroup.Entity.Pedido();
+    List<WebAppMontGroup.Entity.PedidoDetalle> pedidoDetalles = new List<WebAppMontGroup.Entity.PedidoDetalle>();
+
+    if (ViewBag.id != "0")
+    {
+        xId = ViewBag.id; //id pedido
+        dataPedido = ViewData["PedidoCab"] as WebAppMontGroup.Entity.Pedido;
+        xcoaCliente = dataPedido.Coa;
+        xCodVendedor = dataPedido.CodVendedor;
+        xRucDni = dataPedido.RucDni;
+        xCliente = dataPedido.Cliente;
+        xDireccionCliente = dataPedido.DireccionCliente;
+        xCodCategoriaCliente = dataPedido.CodCategoriaCliente;
+        xTipoDocumentoFiscal = dataPedido.TipoDocumentoFiscal;
+        xCodigoTipoPago = dataPedido.CodigoTipoPago;
+        xFechaEntrega = dataPedido.FechaEntrega.ToString("yyyy-MM-dd");
+        xOrdenCompra = dataPedido.OrdenCompra;
+        xDocOrdenCompra = dataPedido.DocOrdenCompra;
+        xSubTotal = dataPedido.SubTotal.ToString("0.00");
+        xIgv = dataPedido.Igv.ToString("0.00");
+        xTotal = dataPedido.Total.ToString("0.00");
+        xZonaVenta = dataPedido.ZonaVenta;
+        xObservacionAlmacen = dataPedido.ObservacionAlmacen;
+        xObservacionCredito = dataPedido.ObservacionCredito;
+        xObservacionPrecio = dataPedido.ObservacionPrecio;
+        xIdGuia = dataPedido.pedido_guia.idPedidoGuia.ToString("0"); //id guia
+        xGuiaPuntoEntrega = dataPedido.pedido_guia.GuiaPuntoEntrega;
+        xGuiaDireccionEntrega = dataPedido.pedido_guia.GuiaDireccionEntrega;
+        xGuiaUbigeoEntrega = dataPedido.pedido_guia.GuiaUbigeoEntrega;
+        xGuiaTransporte = dataPedido.pedido_guia.GuiaTransporte;
+        xGuiaTransporteEmpRuc = dataPedido.pedido_guia.GuiaTransporteEmpRuc;
+        xRepcionTipo1 = dataPedido.pedido_guia.RepcionTipo1;
+        xDni1 = dataPedido.pedido_guia.Dni1;
+        xNombre1 = dataPedido.pedido_guia.Nombre1;
+        xTelefono1 = dataPedido.pedido_guia.Telefono1;
+        xRepcionTipo2 = dataPedido.pedido_guia.RepcionTipo2;
+        xDni2 = dataPedido.pedido_guia.Dni2;
+        xNombre2 = dataPedido.pedido_guia.Nombre2;
+        xTelefono2 = dataPedido.pedido_guia.Telefono2;
+        xUbigeo = dataPedido.Ubigeo;
+        bloquearBoton = true; // Bloquear el botón si ViewBag.id no es "0"
+
+        @* Productos *@
+        // Verificar que pedido_detalle no sea null y tenga al menos un elemento
+        if (dataPedido != null && dataPedido.pedido_detalle != null && dataPedido.pedido_detalle.Count > 0)
+        {
+            pedidoDetalles = dataPedido.pedido_detalle; // Asignar la lista correctamente
+        }
+    }
+}
+<link href="~/assets/descargados/select2.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../assets/libs/flatpickr/flatpickr.min.css">
+<style>
+    .obligatorio {
+        color: red;
+    }
+</style>
+
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card custom-card">
+            <div class="card-body" style="padding:3px 15px;">
+
+                <input class="form-control form-control-sm mb-3" type="hidden" id="IdPedidoInput" value="@xId" placeholder=""
+                       aria-label=".form-control-sm example" disabled>
+                <input class="form-control form-control-sm mb-3" type="hidden" id="IdPedidoGuiaInput" value="@xIdGuia" placeholder=""
+                       aria-label=".form-control-sm example" disabled>
+
+                <label for="VendedorCbo" class="form-label" style="margin-top:10px">
+                    Vendedor <span class="obligatorio">*</span>
+                </label>
+                <select class="js-example-basic-single" id="VendedorCbo" name="state" @(bloquearBoton ? "disabled" : "") required>
+                    <option value="-1" selected>Seleccione Vendedor</option>
+                    @{
+                        var usu_data = ViewData["Usuario"] as WebAppMontGroup.Entity.Usuario;
+                        <option value="@usu_data.codigovendedor" @(usu_data.codigovendedor == xCodVendedor ? "selected" : "") RValamcen="@usu_data.codigoalmacen">
+                            @usu_data.nombres - @usu_data.codigovendedor
+                        </option>
+                        foreach (var usu in ViewData["VendedorAsociado"] as IList<WebAppMontGroup.Entity.Usuario>)
+                        {
+                            <option value="@usu.codigovendedor" @(usu.codigovendedor == xCodVendedor ? "selected" : "") RValamcen="@usu.codigoalmacen">
+                                @usu.nombres - @usu.codigovendedor
+                            </option>
+                        }
+                    }
+                </select>
+                <input type="hidden" id="hiddenVendedorCbo" name="hiddenVendedorCbo" value="">
+                <div class="row">
+                    <div class="col-xl-4">
+                        <button type="button" class="btn btn-info shadow btn-wave waves-effect waves-light"
+                                data-bs-toggle="modal" data-bs-target="#staticBackdropBuscarCliente" id="btnBucarCliente" @(bloquearBoton ? "disabled" : "")
+                                style="width: 100%; margin-top: 32px; max-height: 40px;">
+                            <i class="fe fe-search"
+                               aria-hidden="true"></i> Buscar Cliente
+                        </button>
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="ClienteCoaInput" class="form-label" style="margin-top:15px">Coa Cliente</label>
+                        <input class="form-control form-control-sm mb-3" type="text" id="ClienteCoaInput" value="@xcoaCliente" placeholder=""
+                               aria-label=".form-control-sm example" disabled>
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="ClienteRucInput" class="form-label" style="margin-top:15px">Ruc Cliente</label>
+                        <input class="form-control form-control-sm mb-3" type="text" id="ClienteRucInput" value="@xRucDni" placeholder=""
+                               aria-label=".form-control-sm example" disabled>
+                    </div>
+                </div>
+
+                <label for="ClienteNombreInput" class="form-label">Razón Social Del Cliente</label>
+                <textarea class="form-control form-control-sm mb-3" id="ClienteNombreInput" value="@xCliente" placeholder="" required=""
+                          disabled>@xCliente</textarea>
+
+                <label for="ClienteDireccionInput" class="form-label">Dirección Del Cliente:</label>
+                <textarea class="form-control form-control-sm mb-3" id="ClienteDireccionInput" value="@xDireccionCliente" placeholder=""
+                          required="" disabled>@xDireccionCliente</textarea>
+                <div id="divUbigeoDirCliente" style="margin-top: -10px; font-size:11px">
+                    @*  <span class="fw-semibold text-decoration-none text-success">@xDepartamento- @xProvincia - @xDistrito (@xUbigeo)</span> *@
+                </div>
+                <input type="hidden" id="hiddenUbigeoFiscalCliente" name="hiddenUbigeoFiscalCliente" value="@xUbigeo">
+                <label for="ClienteTipoInput" class="form-label" style="margin-top:13px">Tipo Cliente</label>
+                <input class="form-control form-control-sm mb-3" type="text" id="ClienteTipoInput" value="@xCodCategoriaCliente" placeholder=""
+                       aria-label=".form-control-sm example" disabled readonly>
+            </div>
+
+        </div>
+        <div class="card-footer d-none border-top-0">
+            <!-- Prism Code -->
+            <!-- Prism Code -->
+        </div>
+    </div>
+
+    <div class="col-xl-6">
+        <div class="card custom-card">
+            <div class="card-body" style="padding:3px 15px;">
+
+                <div class="row">
+                    <div class="col-xl-8">
+                        <label for="ClienteCorreoInput" class="form-label" style="margin-top:10px">
+
+                            Correo Cliente
+                        </label>
+                        <input class="form-control" type="text" id="ClienteCorreoInput" placeholder=""
+                               aria-label=".form-control-sm example" disabled>
+                    </div>
+                    <div class="col-xl-4">
+                        <label for="ClienteTelefonoInput" class="form-label" style="margin-top:10px">
+                            Telefono Cliente
+
+                        </label>
+                        <input class="form-control" type="text" id="ClienteTelefonoInput" placeholder=""
+                               aria-label=".form-control-sm example" disabled>
+                    </div>
+                </div>
+
+                <label for="TipoDocumentoCbo" class="form-label" style="margin-top:15px">
+                    Tipo Documento de Venta <span class="obligatorio">*</span>
+                </label>
+                <select id="TipoDocumentoCbo" class="form-select" @(bloquearBoton ? "disabled" : "")>
+                    <option value="-1">Seleccione</option>
+                    @if (xId != "0")
+                    {
+                        <option value="FV" @(xTipoDocumentoFiscal == "FV" ? "selected" : "")>Factura</option>
+                        <option value="BV" @(xTipoDocumentoFiscal == "BV" ? "selected" : "")>Boleta</option>
+                    }
+                </select>
+
+                <label for="CondicionPagoCbo" class="form-label" style="margin-top:13px">
+                    Condición de pago <span class="obligatorio">*</span>
+                </label>
+                <select class="js-example-basic-single " id="CondicionPagoCbo" value="" name="state">
+                    <option value="-1">Seleccione</option>
+                    @{
+                        foreach (var data in ViewData["PagoTipo"] as IList<WebAppMontGroup.Entity.PagoTipo>)
+                        {
+                            if (data.estado == "1")
+                            {
+                                <option value="@data.codigo" @(data.codigo == @xCodigoTipoPago ? "selected" : "")>@data.descripcion</option>
+                            }
+                        }
+                    }
+                </select>
+
+                <div class="row">
+                    <div class="col-xl-6">
+                        <label for="date" class="form-label" style="margin-top:15px">
+                            Fecha Entrega <span class="obligatorio">*</span>
+                        </label>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-text text-muted"> <i class="ri-calendar-line"></i> </div>
+                                <input type="text" class="form-control" id="date" value="@xFechaEntrega" placeholder="Elige fecha">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <label for="OrdenCompraNombreInput" class="form-label" style="margin-top:15px">
+                            Orden de
+                            Compra
+                        </label>
+                        <input class="form-control" type="text" id="OrdenCompraNombreInput" value="@xOrdenCompra" placeholder=""
+                               aria-label=".form-control-sm example">
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="mb-3">
+                            <br />
+                            <label for="formFile" class="form-label">Cargar Orden de Compra</label>
+                            <input class="form-control" type="file" id="formFile" name="formFile" value="@xDocOrdenCompra" accept=".pdf, .doc, .jpg, .jpeg, .png">
+                            <span id="currentFile" class="d-block mt-2 text-primary"></span>
+                            <span id="fileError" class="text-danger"></span>
+
+                            <script>
+                                    document.addEventListener("DOMContentLoaded", function () {
+                                        let pedidoDocOrdenCompra = "@xDocOrdenCompra"; // Ruta completa del archivo
+
+                                        if (pedidoDocOrdenCompra) {
+                                            // Extrae solo el nombre del archivo sin la ruta
+                                            let fileName = pedidoDocOrdenCompra.split('/').pop();
+                                            document.getElementById('currentFile').innerHTML = `Archivo actual: <strong>${fileName}</strong>`;
+
+                                        }
+
+                                        document.getElementById('formFile').addEventListener('change', function () {
+                                            let file = this.files[0];
+                                            let allowedExtensions = ['pdf', 'doc', 'jpg', 'jpeg', 'png'];
+                                            let fileError = document.getElementById('fileError');
+
+                                            if (file) {
+                                                let fileExtension = file.name.split('.').pop().toLowerCase();
+                                                if (!allowedExtensions.includes(fileExtension)) {
+                                                    fileError.textContent = "Formato no permitido. Solo se aceptan PDF, DOC, JPG, JPEG y PNG.";
+                                                    this.value = ""; // Limpia el input file
+                                                } else {
+                                                    fileError.textContent = ""; // Borra el mensaje de error si es válido
+                                                    document.getElementById('currentFile').innerHTML = `Archivo seleccionado: <strong>${file.name}</strong>`;
+                                                }
+                                            }
+                                        });
+                                    });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer d-none border-top-0">
+            <!-- Prism Code -->
+            <!-- Prism Code -->
+        </div>
+    </div>
+
+</div>
+
+
+<div id="notificacionContainer" style="position: fixed; top: 10px; right: 10px; z-index: 1000;width: 25% !important;"></div>
+<div class="col-xl-12">
+    <div class="card custom-card alert shadow-lg">
+        <div class="card-body" style="padding:0px">
+            <div class="row">
+                <div class="col-xl-7"></div>
+                <div class="col-xl-3">
+                    <select id="ProcedenciaCbo" class="form-select form-control-sm mb-2" @(bloquearBoton ? "disabled" : "")>
+                        @* <option value="0">¿De donde salen los productos?</option> *@
+                    </select>
+                    <input type="hidden" id="hiddenProcedenciaCbo" name="hiddenProcedenciaCbo" value="">
+                </div>
+                <div class="col-xl-2">
+                    <button type="button" class="btn btn-primary btn-wave" data-bs-toggle="modal"
+                            data-bs-target="#staticBackdropBuscarProducto" id="btnBucarProducto"
+                            style="width: 100%; max-height: 40px;">
+                        <i class="fe fe-plus-circle" aria-hidden="true"></i>
+                        Agregar Productos
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body" id="divProductosPedir">
+        </div>
+    </div>
+    <div class="card-footer d-none border-top-0">
+        <!-- Prism Code -->
+        <!-- Prism Code -->
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card custom-card alert shadow-lg">
+        <!--<div class="card-header justify-content-between">-->
+        <div class="alert alert-light" style="text-align:center">
+            <div class="card-title" style="color: #74829c; font-size: 13px; ">
+                Resumen de Pedido
+
+            </div>
+        </div>
+        <div style="padding-top: 5px;">
+            <div class="row">
+                <div class="col-xl-3">
+                </div>
+                <div class="col-xl-3">
+                    <label for="PedidoSubTotalInput" class="form-label">
+                        Sub Total <span class="obligatorio">*</span>
+                    </label>
+                    <input class="form-control form-control-sm mb-3 cend" type="text" id="PedidoSubTotalInput"
+                           value="@xSubTotal" placeholder="" aria-label=".form-control-sm example" disabled>
+                </div>
+                <div class="col-xl-3">
+                    <label for="PedidoIgvInput" class="form-label">IGV <span class="obligatorio">*</span></label>
+                    <input class="form-control form-control-sm mb-3 cend" type="text" id="PedidoIgvInput" value="@xIgv" placeholder=""
+                           aria-label=".form-control-sm example" disabled>
+                </div>
+                <div class="col-xl-3">
+                    <label for="PedidoTotalInput" class="form-label">Total <span class="obligatorio">*</span></label>
+                    <input class="form-control form-control-sm mb-3 cend" type="text" id="PedidoTotalInput"
+                           value="@xTotal" placeholder="" aria-label=".form-control-sm example" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer d-none border-top-0">
+        <!-- Prism Code -->
+        <!-- Prism Code -->
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card custom-card alert shadow-lg">
+        <div class="alert alert-light" style="text-align:center">
+            <div class="card-title" style="color: #74829c; font-size: 13px; ">
+                Observaciones para aprobadores
+
+            </div>
+        </div>
+        <div style="padding-top: 5px;">
+            <div class="row">
+                <div class="col-xl-4">
+                    <label for="PedidoObjAlacenFacturInput" class="form-label">Para Almacén y Facturación</label>
+                    <textarea class="form-control form-control-sm mb-3" id="PedidoObjAlacenFacturInput" placeholder=""
+                              required="">@xObservacionAlmacen</textarea>
+                </div>
+                <div class="col-xl-4">
+                    <label for="PedidoObjCreditosInput" class="form-label">Para Créditos</label>
+                    <textarea class="form-control form-control-sm mb-3" id="PedidoObjCreditosInput" placeholder=""
+                              required="">@xObservacionCredito</textarea>
+                </div>
+                <div class="col-xl-4">
+                    <label for="PedidoObjPreciosInput" class="form-label">Para Precios</label>
+                    <textarea class="form-control form-control-sm mb-3" id="PedidoObjPreciosInput" placeholder=""
+                              required="">@xObservacionPrecio</textarea>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer d-none border-top-0">
+        <!-- Prism Code -->
+        <!-- Prism Code -->
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card custom-card alert shadow-lg">
+        <div class="alert alert-light" style="text-align:center">
+            <div class="card-title" style="color: #74829c; font-size: 13px; ">
+                Datos Para El Envío
+            </div>
+        </div>
+        <div class="row" style="padding-bottom:12px">
+
+            <div class="col-xl-4">
+                <label for="PuntoLlegadaCbo" class="form-label">Punto de Llegada <span class="obligatorio">*</label>
+                <select id="PuntoLlegadaCbo" class="form-select form-control-sm mb-2">
+                    <option value="-1">Seleccione</option>
+                    <option value="DIR-FISCAL" @(xGuiaPuntoEntrega == "DIR-FISCAL" ? "selected" : "")>Dirección fiscal del cliente</option>
+                    <option value="DIR-ULTPED" @(xGuiaPuntoEntrega == "DIR-ULTPED" ? "selected" : "")>Dirección de último pedido</option>
+                    <option value="DIR-TERMINAL" @(xGuiaPuntoEntrega == "DIR-TERMINAL" ? "selected" : "")>Terminal Agencia</option>
+                </select>
+            </div>
+            <div class="col-xl-4">
+                <label for="DireccionEntregaInput" class="form-label">Dirección <span class="obligatorio">*</label>
+                <textarea class="form-control form-control-sm mb-3" id="DireccionEntregaInput" placeholder=""
+                          required="">@xGuiaDireccionEntrega</textarea>
+            </div>
+            <div class="col-xl-4">
+                <label for="UbigeoCbo" class="form-label">Ubigeo <span class="obligatorio">*</label>
+                <select class="js-example-basic-single " id="UbigeoCbo" name="state">
+                    <option value="-1">Seleccione Ubigeo</option>
+                    @{
+                        foreach (var usu in ViewData["Ubigeo"] as IList<WebAppMontGroup.Entity.Ubigeo>)
+                        {
+                            <option value="@usu.codigo" @(xGuiaUbigeoEntrega == usu.codigo ? "selected" : "")>@usu.distrito - @usu.provincia - @usu.departamento</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer d-none border-top-0">
+        <!-- Prism Code -->
+        <!-- Prism Code -->
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card custom-card alert shadow-lg">
+        <div class="alert alert-light" style="text-align:center">
+            <div class="card-title" style="color: #74829c; font-size: 13px; ">
+                Tipo y Modalidad De Transporte De Productos / Entrega
+            </div>
+        </div>
+        <div class="row" style="padding-bottom:12px">
+            <!-- Tipo de Transporte -->
+            <div class="col-xl-4">
+                <label for="TipoModalidadCbo" class="form-label">Tipo <span class="obligatorio">*</span></label>
+                <select id="TipoModalidadCbo" class="form-select form-control-sm mb-2">
+                    <option value="-1">Seleccione</option>
+                    <option value="PRIVADO" @(xGuiaTransporte == "PRIVADO" ? "selected" : "")>PRIVADO</option>
+                    <option value="PUBLICO" @(xGuiaTransporte == "PUBLICO" ? "selected" : "")>PÚBLICO</option>
+                </select>
+            </div>
+
+            <!-- Transporte / Agencia -->
+            <div class="col-xl-8">
+                <label for="AgenciaCbo" class="form-label">Transporte / Agencia <span class="obligatorio">*</span></label>
+                <select class="js-example-basic-single form-select" id="AgenciaCbo" name="state" required
+                        disabled="@((xGuiaTransporte != "PUBLICO") ? "disabled" : null)">
+                    <option value="-1" @(xGuiaTransporteEmpRuc == "-1" ? "selected" : "")>Seleccione</option>
+                    @foreach (var usu in ViewData["Agencia"] as IList<WebAppMontGroup.Entity.Agencia>)
+                    {
+                        if (usu.ruc != "20509532622")
+                        {
+                            <option value="@usu.ruc" @(usu.ruc == xGuiaTransporteEmpRuc ? "selected" : "")>@usu.razon_social</option>
+                        }
+                        else
+                        {
+                            <option value="@usu.ruc" @(usu.ruc == xGuiaTransporteEmpRuc ? "selected" : "") disabled>MONT GROUP SAC</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-footer d-none border-top-0">
+        <!-- Prism Code -->
+        <!-- Prism Code -->
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <div class="card custom-card alert shadow-lg">
+        <div class="alert alert-light" style="text-align:center">
+            <div class="card-title" style="color: #74829c; font-size: 13px; ">
+                Datos de las personas de recepción - Cliente
+            </div>
+        </div>
+        <div style="padding-top: 5px;">
+            <div class="row">
+                <div class="col-xl-3">
+                    <label for="TipoDocumentoCbo1" class="form-label">Tipo</label>
+                    <select id="TipoDocumentoCbo1" class="form-select form-control-sm mb-2" @*  style="max-height:20px" *@>
+                        <option value="-1" @(xRepcionTipo1 == "-1" ? "selected" : "")>Seleccione</option>
+                        <option value="PERUANO" @(xRepcionTipo1 == "PERUANO" ? "selected" : "")>Peruano</option>
+                        <option value="EXTRANJERO" @(xRepcionTipo1 == "EXTRANJERO" ? "selected" : "")>Extranjero</option>
+                    </select>
+                </div>
+                <div class="col-xl-2">
+                    <label for="TipoDocumentoContacto1" class="form-label">N° Documento</label>
+                    <input class="form-control form-control-sm mb-3" type="text" id="TipoDocumentoContacto1"
+                           value="@xDni1" placeholder="Ingrese N° Documento" aria-label=".form-control-sm example">
+                </div>
+                <div class="col-xl-1">
+                    <button type="button" class="btn btn-info-ghost btn-wave btnValidar"
+                            id="btnValidarDocumentoContacto1">
+                        <i class="fe fe-search" aria-hidden="true" id="search-icon"></i>
+                        <span id="btn-text">Validar</span>
+                        <!-- Icono de carga oculto inicialmente -->
+                        <i id="loading-icon" class="fas fa-spinner fa-spin" style="display: none;"></i>
+                    </button>
+                </div>
+                <div class="col-xl-3">
+                    <label for="TipoNombreContacto1" class="form-label">Apellidos y nombres</label>
+                    <input class="form-control form-control-sm mb-3" type="text" id="TipoNombreContacto1"
+                           value="@xNombre1" placeholder="Apellidos y nombres" aria-label=".form-control-sm example">
+                </div>
+                <div class="col-xl-3">
+                    <label for="TipoTelefonoContacto1" class="form-label">Teléfono</label>
+                    <input class="form-control form-control-sm mb-3" type="text" id="TipoTelefonoContacto1"
+                           value="@xTelefono1" placeholder="" aria-label=".form-control-sm example">
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-xl-3">
+                    <label for="TipoDocumentoCbo2" class="form-label">Tipo</label>
+                    <select id="TipoDocumentoCbo2" class="form-select form-control-sm mb-2" @* style="max-height:20px" *@>
+                        <option value="-1" @(xRepcionTipo2 == "-1" ? "selected" : "")>Seleccione</option>
+                        <option value="PERUANO" @(xRepcionTipo2 == "PERUANO" ? "selected" : "")>Peruano</option>
+                        <option value="EXTRANJERO" @(xRepcionTipo2 == "EXTRANJERO" ? "selected" : "")>Extranjero</option>
+                    </select>
+                </div>
+                <div class="col-xl-2">
+                    <label for="TipoDocumentoContacto2" class="form-label">N° Documento</label>
+                    <input class="form-control form-control-sm mb-3" type="text" id="TipoDocumentoContacto2"
+                           value="@xDni2" placeholder="Ingrese N° Documento" aria-label=".form-control-sm example">
+                </div>
+                <div class="col-xl-1">
+                    <button type="button" class="btn btn-info-ghost btn-wave btnValidar"
+                            id="btnValidarDocumentoContacto2">
+                        <i class="fe fe-search" aria-hidden="true" id="search-icon2"></i>
+                        <span id="btn-text2">Validar</span>
+                        <!-- Icono de carga oculto inicialmente -->
+                        <i id="loading-icon2" class="fas fa-spinner fa-spin" style="display: none;"></i>
+                    </button>
+                </div>
+                <div class="col-xl-3">
+                    <label for="TipoNombreContacto2" class="form-label">Apellidos y nombres</label>
+                    <input class="form-control form-control-sm mb-3" type="text" id="TipoNombreContacto2"
+                           value="@xNombre2" placeholder="Apellidos y nombres" aria-label=".form-control-sm example">
+                </div>
+                <div class="col-xl-3">
+                    <label for="TipoTelefonoContacto2" class="form-label">Telefono</label>
+                    <input class="form-control form-control-sm mb-3" type="text" id="TipoTelefonoContacto2"
+                           value="@xTelefono2" placeholder="" aria-label=".form-control-sm example">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer d-none border-top-0">
+        <!-- Prism Code -->
+        <!-- Prism Code -->
+    </div>
+</div>
+<div class="col-xl-12">
+    <div class="card-body">
+        <div class="btn-list">
+            <div class="row">
+                <div class="col-xl-3"></div>
+                <div class="col-xl-6">
+                    <div class="d-grid gap-2 mb-4">
+                        @if (xId != "0")
+                        {
+                            <button class="btn btn-warning shadow btn-wave" onclick="fnValidarRegistro();">
+                                <i class="fa fa-edit"></i> Editar Pedido
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-info shadow btn-wave" onclick="fnValidarRegistro();">
+                                <i class="fa fa-save"></i> Registrar Pedido
+
+                            </button>
+                        }
+                    </div>
+
+                </div>
+                <div class="col-xl-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+
+
+<div class="modal fade" id="staticBackdropBuscarCliente" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1" aria-labelledby="staticBackdropBuscarClienteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h6 class="modal-title" id="staticBackdropBuscarClienteLabel">
+                    Busqueda de Cliente
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <span class="fw-semibold text-decoration-none text-danger" id="lblValidaCodVendedorSelect"
+                              style=" font-size: 13px;">Por favor, debe seleccionar su código de vendedor</span>
+                        <input class="form-control mb-3" type="text" id="ClienteBuscarText"
+                               placeholder="Ingrese ruc o razón social" aria-label=".form-control-sm example"
+                               style="visibility: hidden;">
+                    </div>
+                </div>
+                <div id="divResultadoCliente"
+                     style="max-height: 400px !important; min-height: 400px !important; overflow-y: scroll; scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0); overflow-x: hidden; padding: 0px 12px ">
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    Cerrar Busqueda
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdropBuscarProducto" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1" aria-labelledby="staticBackdropBuscarProductoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header alert alert-primary">
+                <h6 class="modal-title" id="staticBackdropBuscarProductoLabel">
+                    Busqueda de Productos
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <span class="fw-semibold text-decoration-none text-danger" id="lblValidaCodClienteSelect"
+                              style=" font-size: 13px;">Por favor, debe seleccionar un cliente</span>
+                        <input class="form-control mb-3" type="text" id="ProductoBuscarText"
+                               placeholder="Ingrese el nombre o nombre corto del producto"
+                               aria-label=".form-control-sm example" style="visibility: hidden;">
+
+
+                    </div>
+                </div>
+                <div id="divResultadoProducto"
+                     style="max-height: 400px !important; min-height: 400px !important; overflow-y: scroll; scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0); overflow-x: hidden; padding: 0px 12px;">
+
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    Cerrar Busqueda
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="staticBackdropBuscarPromocion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropBuscarPromocionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header alert alert-primary">
+                <h6 class="modal-title" id="staticBackdropBuscarProductoLabel">
+                    Busqueda de Promoción
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="divResultadoPromocion" style="max-height: 400px !important; min-height: 400px !important; overflow-y: scroll; scrollbar-color: rgba(0, 0, 0, .5) rgba(0, 0, 0, 0); overflow-x: hidden; padding: 0px 12px;">
+
+
+
+
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    Cerrar Busqueda
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalScrollableStock" tabindex="-1" data-bs-backdrop="static"
+     aria-labelledby="exampleModalScrollableStock" data-bs-keyboard="false" aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!--<div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel2">
+                    Modal title
+                </h6>
+            </div>-->
+            <div class="modal-body" style="text-align:center;padding:0px">
+                <div id="msjEspera">
+                    <img src="~/assets/images/loading.gif" />
+                    <p>
+                        Estamos cargando la información. Por favor, espere.
+                    </p>
+                </div>
+                <div class="col-xxl-12 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="msjError">
+                    <div class="card bg-white border-0">
+                        <div class="alert custom-alert1 alert-danger">
+
+                            <div class="text-center px-5 pb-0">
+                                <svg class="custom-alert-icon svg-danger" height="1.5rem" viewBox="0 0 24 24"
+                                     width="1.5rem" fill="#000000">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M15.73 3H8.27L3 8.27v7.46L8.27 21h7.46L21 15.73V8.27L15.73 3zM12 17.3c-.72 0-1.3-.58-1.3-1.3 0-.72.58-1.3 1.3-1.3.72 0 1.3.58 1.3 1.3 0 .72-.58 1.3-1.3 1.3zm1-4.3h-2V7h2v6z" />
+                                </svg>
+                                <h5>Alerta!</h5>
+                                <p id="textmsjErrores">..</p>
+                                <div class="">
+                                    <button class="btn btn-sm btn-danger m-1">Cerrar</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-12 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="msjWarning">
+                    <div class="card bg-white border-0">
+                        <div class="alert custom-alert1 alert-warning">
+                            <div class="text-center px-6 pb-0">
+                                <svg class="custom-alert-icon svg-warning" height="1.5rem" viewBox="0 0 24 24"
+                                     width="1.5rem" fill="#000000">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+                                </svg>
+                                <h5>Alerta!</h5>
+                                <p id="textmsjWarning">..</p>
+                                <div class="">
+                                    <button class="btn btn-sm btn-warning m-1" data-bs-dismiss="modal">Cerrar</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Select2 Cdn -->
+<script src="~/assets/descargados/select2.min.js"></script>
+<!-- Date & Time Picker JS -->
+<script src="~/assets/libs/flatpickr/flatpickr.min.js"></script>
+<script src="~/assets/js/date&time_pickers.js"></script>
+
+<!-- Internal Select-2.js -->
+<script src="~/assets/js/select2.js"></script>
+
+@* PARA EDITAR VISTA *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        // PARA JALAR EL DATO DE DONDE PROVIENEN LOS PRODUCTOS
+        var zonaVenta = "@xZonaVenta"; // Variable desde backend
+        var nalmacen = $("#VendedorCbo").find(':selected').attr("RValamcen");
+        $('#ProcedenciaCbo').empty();
+
+        if (zonaVenta === "LIMA") {
+            $('#ProcedenciaCbo').append(
+                '<option value="03">Los productos salen de Lima</option>'
+            );
+            $("#hiddenProcedenciaCbo").val("03"); // Asignar valor oculto
+        } else if (zonaVenta === "PROVINCIA") {
+            $('#ProcedenciaCbo').append(
+                '<option value="' + nalmacen + '">Los productos salen de mi Stock</option>'
+            );
+            $("#hiddenProcedenciaCbo").val(nalmacen); // Asignar valor oculto
+        } else {
+            $('#ProcedenciaCbo').append(
+                '<option value="0">¿De dónde salen los productos?</option>'
+            );
+            $("#hiddenProcedenciaCbo").val("0"); // Asignar valor oculto
+        }
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Obtener los detalles del pedido desde Razor como JSON
+        var pedido_Detalles = @Html.Raw(JsonSerializer.Serialize(pedidoDetalles));
+        var tipoSalidaProducto = $("#VendedorCbo").find(':selected').attr("RValamcen");
+        var zonaVenta = "@xZonaVenta"; // Variable desde backend
+        var tipoCliente = $("#ClienteTipoInput").val(); // Tipo de cliente
+        console.log("ess: ",tipoSalidaProducto)
+
+    // Obtener el div donde se agregarán los productos
+    let contenedor = document.getElementById("divProductosPedir");
+        if (contenedor) {
+            pedido_Detalles.forEach(detalle => {
+                // Crear la estructura HTML para cada producto
+                let card = document.createElement("div");
+        card.classList.add("card", "mb-2");
+                let contenido = '';
+
+                if (zonaVenta == "LIMA") {
+                    contenido = `
+                        <div class="row" style="margin-bottom: 15px; border: 1px solid #cacfd2; padding: 15px 0px; border-radius: 10px" id="PProductoSelect_${idemProductoSeleccionado}">
+                            <div class="col-xl-3 colPP3" style="margin-bottom:15px">
+                                <label for="ProductoNombreLabel_${idemProductoSeleccionado}" class="text-muted txtProd">Producto:</label>
+                                <h6 class="card-title fw-semibold" id="ProductoNombreLabel_${idemProductoSeleccionado}">${detalle.ArticuloDesc}</h6>
+                                <input type="hidden" id="IdPedidoDetalleInput_${idemProductoSeleccionado}" value="${detalle.IdPedidoDetalle}">
+                                <input type="hidden" id="ProductoNombreInput_${idemProductoSeleccionado}" value="${detalle.ArticuloDesc}">
+                                <input type="hidden" id="ProductoCodigoInput_${idemProductoSeleccionado}" value="${detalle.Articulo}">
+                                <label for="DescuentoLabel_${idemProductoSeleccionado}" class="text-muted" data-bs-toggle="modal"
+                                    data-bs-target="#staticBackdropBuscarPromocion" id="btnBucarPromocion"
+                                    onclick="buscarPromocion(${idemProductoSeleccionado})" style="margin-top: 10px; margin-bottom: 20px;
+                                    border: 1px solid; border-radius: 50px; color: #ff7800 !important; font-size: 12px;
+                                    padding: 5px; cursor: pointer;">+ Agregar Promoción </label>
+                            </div>
+                            <div class="col-xl-1 colPP11 text-center">
+                                <button class="btn btn-icon btn-danger-transparent rounded-pill btn-wave me-5"
+                                    id="PProductoDelete_${idemProductoSeleccionado}" onclick="PProductoDelete(${idemProductoSeleccionado});">
+                                    <i class="ri-delete-bin-line"></i>
+                                </button>
+                            </div>
+                            <input type="hidden" id="UsuarioResponsableInput${idemProductoSeleccionado}" value="${detalle.UsuarioResponsable}">
+                            <div class="col-xl-2 colPP2">
+                                <label for="ProductoCantidadInput_${idemProductoSeleccionado}" class="text-muted">Cantidad <span class="obligatorio">*</span></label>
+                                <input class="form-control form-control-sm mb-2 ProductoCantidadInput cend vn0 is-valid" type="text"
+                                    id="ProductoCantidadInput_${idemProductoSeleccionado}" placeholder="" value="${detalle.Cantidad}"
+                                    onkeyup="fnActualizarPrecioYCantidad(${idemProductoSeleccionado})">
+                            </div>
+                            <div class="col-xl-2 colPP2">
+                                <label for="ProductoPrecioInput_${idemProductoSeleccionado}" class="text-muted">Precio <span class="obligatorio">*</span></label>
+                                <input class="form-control form-control-sm mb-2 ProductoPrecioInput cend vn1" type="text"
+                                    id="ProductoPrecioInput_${idemProductoSeleccionado}" placeholder="" value="${detalle.Precio}"
+                                    onkeyup="fnCalcularSubTotal(${idemProductoSeleccionado})">
+                            </div>
+                            <div class="col-xl-2 colPP2">
+                                <label for="DescuentoLabel_${idemProductoSeleccionado}" class="text-muted">Descuento</label>
+                                <input type="hidden" id="idPromo${idemProductoSeleccionado}">
+                                <input type="text" class="form-control form-control-sm mb-2 cend" id="DescuentoInput_${idemProductoSeleccionado}" value="${detalle.Descuento}" disabled>
+                            </div>
+                            <div class="col-xl-2 colPP2">
+                                <label for="ProductoSubTotalInput_${idemProductoSeleccionado}" class="text-muted">Sub Total <span class="obligatorio">*</span></label>
+                                <input class="form-control form-control-sm mb-2 ProductoSubTotalInput cend" type="text"
+                                    id="ProductoSubTotalInput_${idemProductoSeleccionado}" placeholder="" value="${detalle.SubTotal}" disabled>
+                            </div>
+                            <div class="col-xl-1 colPP1 text-center">
+                                <button class="btn btn-icon btn-danger-transparent rounded-pill btn-wave me-5"
+                                    id="PProductoDelete_${idemProductoSeleccionado}" onclick="PProductoDelete(${idemProductoSeleccionado});">
+                                    <i class="ri-delete-bin-line"></i>
+                                </button>
+                            </div>
+                        </div>`;
+                } else {
+                    contenido = `
+                    <div class="row" style="margin-bottom: 15px; border: 1px solid #cacfd2; padding: 15px 0px; border-radius: 10px" id="PProductoSelect_${idemProductoSeleccionado}">
+                    <div class="col-xl-3 colPP32" style="margin-bottom:15px">
+                    <label for="ProductoNombreLabel_${idemProductoSeleccionado}" class="text-muted txtProd">Producto:</label>
+                    <h6 class="card-title fw-semibold" id="ProductoNombreLabel_${idemProductoSeleccionado}">${detalle.ArticuloDesc}</h6>
+                    <input type="hidden" id="IdPedidoDetalleInput_${idemProductoSeleccionado}" value="${detalle.IdPedidoDetalle}">
+                    <input type="hidden" id="ProductoNombreInput_${idemProductoSeleccionado}" value="${detalle.ArticuloDesc}">
+                    <input type="hidden" id="ProductoCodigoInput_${idemProductoSeleccionado}" value="${detalle.Articulo}">
+                    <label for="DescuentoLabel_${idemProductoSeleccionado}" class="text-muted" data-bs-toggle="modal" data-bs-target="#staticBackdropBuscarPromocion" id="btnBucarPromocion" onclick="buscarPromocion(${idemProductoSeleccionado})" style="margin-top: 10px; margin-bottom: 20px;
+                    border: 1px solid; border-radius: 50px; color: #ff7800 !important; font-size: 12px;padding: 5px 5px 5px 5px; cursor: pointer;">+ Agregar Promocion </label>
+                    </div>
+
+                    <div class="col-xl-1 colPP11 text-center">
+                    <button class="btn btn-icon btn-danger-transparent rounded-pill btn-wave me-5"
+                    id="PProductoDelete_${idemProductoSeleccionado}" onclick="PProductoDelete(${idemProductoSeleccionado});">
+                    <i class="ri-delete-bin-line"></i>
+                    </button>
+                    </div>
+
+                    <div class="col-xl-2 colPP2">
+                    <label for="LoteCbo_${detalle.Lote}" class="text-muted">Lote</label>
+                    <input type="hidden" id="ProductoLoteInput_${idemProductoSeleccionado}" value="${detalle.Lote}">
+                    <input class="form-control form-control-sm mb-2 LoteInput" type="text" id="LoteCbo_${detalle.Lote}" value="${detalle.Lote}" readonly disabled/>
+                    </div>
+
+                    <div class="col-xl-2 colPP2">
+                    <label for="ProductoCantidadInput_${idemProductoSeleccionado}" class="text-muted">Cantidad <span class="obligatorio">*</span></label>
+                    <input class="form-control form-control-sm mb-2 ProductoCantidadInput cend vn0 is-valid"
+                    type="text" id="ProductoCantidadInput_${idemProductoSeleccionado}" placeholder="" aria-label=".form-control-sm example" value="${detalle.Cantidad}" onkeyup="fnActualizarPrecioYCantidad(${idemProductoSeleccionado})">
+                    </div>
+                    <div class="col-xl-2 colPP2">
+                    <label for="ProductoPrecioInput_${idemProductoSeleccionado}" class="text-muted">Precio <span class="obligatorio">*</span></label>
+                    <input class="form-control form-control-sm mb-2 ProductoPrecioInput cend vn1" type="text"
+                    id="ProductoPrecioInput_${idemProductoSeleccionado}" placeholder="" aria-label=".form-control-sm example"
+                    value="${detalle.Precio}" onkeyup="fnCalcularSubTotal(${idemProductoSeleccionado})">
+                    </div>
+                    <div class="col-xl-2 colPP2">
+                    <label for="DescuentoLabel_" class="text-muted">Descuento </label>
+                    <input type="hidden" id="idPromo${idemProductoSeleccionado}">
+                    <input type="text" class="form-control form-control-sm mb-2 cend" id="DescuentoInput_${idemProductoSeleccionado}" value="${detalle.Descuento}" disabled>
+                    </div>
+                    <div class="col-xl-2 colPP2">
+                    <label for="ProductoSubTotalInput_1" class="text-muted">Sub Total <span class="obligatorio">*</span></label>
+                    <input class="form-control form-control-sm mb-2 ProductoSubTotalInput cend" type="text" id="ProductoSubTotalInput_${idemProductoSeleccionado}"
+                    placeholder="" aria-label=".form-control-sm example" value="${detalle.SubTotal}" disabled >
+                    </div>
+                    <div class="col-xl-1 colPP1 text-center">
+                    <button class="btn btn-icon btn-danger-transparent rounded-pill btn-wave me-5"
+                    id="PProductoDelete_${idemProductoSeleccionado}" onclick="PProductoDelete(${idemProductoSeleccionado});">
+                    <i class="ri-delete-bin-line"></i>
+                    </button>
+                    </div>
+                    </div>
+                    </div>`;
+                }
+                soloNumerosPunto();
+                soloNumeros();
+                idemProductoSeleccionado++;
+                card.innerHTML = contenido;
+                // Agregar la tarjeta al contenedor
+                contenedor.appendChild(card);
+            });
+        } else {
+            console.error("Elemento 'divProductosPedir' no encontrado.");
+        }
+    });
+</script>
+@* FIN *@
+<script type="text/javascript">
+    var inicia_form = 0;
+    var inicia_carga_producto = 0;
+    var idemProductoSeleccionado = 1;
+    var d_salidaAlmacen = "AV. CAMINOS DEL INCA NRO. 264 INT. 03 URB. SAN JUAN BAUTISTA DE VILLA - LIMA - CHORRILLOS";
+    var u_salidaAlmacen = "150108";
+
+    $("#btnBucarCliente").click(function () {
+        $("#ClienteBuscarText").val("");
+        document.getElementById('divResultadoCliente').innerHTML = '';
+        if ($("#VendedorCbo").val() != "-1") {
+            document.getElementById('lblValidaCodVendedorSelect').innerHTML = '';
+            $("#ClienteBuscarText").css('visibility', 'visible');
+        }
+        else {
+            document.getElementById('lblValidaCodVendedorSelect').innerHTML = 'Por favor, debe seleccionar su código de vendedor';
+            $("#ClienteBuscarText").css('visibility', 'hidden');
+        }
+    });
+
+    $('#ClienteBuscarText').on('input', function (e) {
+        if ($("#VendedorCbo").val() != "-1") {
+            if (($("#ClienteBuscarText").val().length) > 2) {
+                BuscarCliente();
+            }
+        }
+    });
+
+    $('#VendedorCbo').on('change', function () {
+        if ($('#VendedorCbo').val() != $("#hiddenVendedorCbo").val()) {
+            if (inicia_form == 1) {
+                if (!confirm('¿Está seguro de cambiar el codígo de vendedor?\n Los datos ingresados se perderan')) {
+
+                    $('#VendedorCbo').val($("#hiddenVendedorCbo").val()).trigger('change');
+                    return false;
+                }
+            }
+
+
+
+            limpiarControles();
+            fnProductosProcedencia();
+
+            if ($("#VendedorCbo").val() == "-1") {
+                inicia_form = 0;
+                $("#hiddenVendedorCbo").val("");
+            }
+            else {
+                $("#hiddenVendedorCbo").val($("#VendedorCbo").val());
+                inicia_form = 1;
+            }
+            inicia_carga_producto = 0;
+        }
+
+    });
+
+
+    $('#ProcedenciaCbo').on('change', function () {
+
+        if ($("#hiddenProcedenciaCbo").val() != $("#ProcedenciaCbo").val()) {
+    @*  if (inicia_carga_producto == 1) {
+                if (!confirm('¿Está segudo de cambiar el almacén?\n Los productos ingresados se perderan')) {
+                    //$(this).val($.data(this, 'current'));
+                    $('#ProcedenciaCbo').val($("#hiddenProcedenciaCbo").val()).trigger('change');
+                    return false;
+                }
+            } *@
+            if (inicia_carga_producto == 1) {
+                Swal.fire({
+                    title: '¿Está seguro de cambiar el almacén?',
+                    text: 'Los datos ingresados se perderán',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, cambiarlo',
+                    cancelButtonText: 'Cancelar',
+                    allowOutsideClick: false, // Evita cerrar el modal al hacer clic fuera
+                    allowEscapeKey: false     // Evita cerrar el modal con la tecla Escape
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Si el usuario confirma, vaciar la tabla
+                        $('#divProductosPedir').empty();  // Vacía el contenido de la tabla/div
+                    }
+                });
+            }
+
+
+    @* if (inicia_carga_producto == 1) {
+                alert("Limpiar productos");
+            }
+            *@
+            if ($("#ProcedenciaCbo").val() == "0") {
+                inicia_carga_producto = 0;
+                $("#hiddenProcedenciaCbo").val("");
+            }
+            else {
+                inicia_carga_producto = 1;
+                $("#hiddenProcedenciaCbo").val($("#ProcedenciaCbo").val());
+            }
+        }
+    });
+
+
+    var productosCargados = []; // Variable global
+    $("#btnBucarProducto").click(function () {
+        $("#ProductoBuscarText").val(""); // Limpiar campo de búsqueda
+        document.getElementById('divResultadoProducto').innerHTML = ''; // Limpiar resultados
+
+        if ($("#ClienteCoaInput").val() != "") {
+            if ($("#ProcedenciaCbo").val() != "0") {
+                document.getElementById('lblValidaCodClienteSelect').innerHTML = '';
+                $("#ProductoBuscarText").css('visibility', 'visible');
+
+                // Llamada AJAX para obtener los productos
+                $.ajax({
+                    type: "GET",
+                    url: '../Pedido/listaProductoBusqueda',
+                    data: { tipo: $("#ProcedenciaCbo").val() },
+                    success: function (data) {
+                        if (Array.isArray(data) && data.length > 0) {
+                            productosCargados = data; // Guarda los productos en la variable global
+                            mostrarProductos(productosCargados);
+                        } else {
+                            $('#divResultadoProducto').html('No se encontraron productos.');
+                        }
+                    },
+                    error: function () {
+                        $('#divResultadoProducto').html('Error al cargar los productos.');
+                    }
+                });
+            } else {
+                document.getElementById('lblValidaCodClienteSelect').innerHTML = 'Por favor, debe seleccionar de donde salen los productos';
+                $("#ProductoBuscarText").css('visibility', 'hidden');
+            }
+        } else {
+            document.getElementById('lblValidaCodClienteSelect').innerHTML = 'Por favor, debe seleccionar un cliente';
+            $("#ProductoBuscarText").css('visibility', 'hidden');
+        }
+    });
+
+
+    function mostrarProductos(lista) {
+        let resultHTML = '';
+
+        if (lista.length > 0) {
+            $.each(lista, function (index, producto) {
+                if ($("#ProcedenciaCbo").val() == "03") {
+                    resultHTML += `
+                        <div class="row" style="margin-bottom:15px;border: 1px solid #cacfd2;padding: 10px 0px;border-radius: 10px;">
+                            <div class="col-xl-2"><span class="text-muted fs-12">Código:</span><br/>${producto.codigo}</div>
+                            <div class="col-xl-4"><span class="text-muted fs-12">Producto:</span><br/>${producto.dsc}</div>
+                            <div class="col-xl-4"><span class="text-muted fs-12">Nombre Corto:</span><br/>${producto.dscCorto}</div>
+                            <div class="col-xl-2">
+                                <button class="btn btn-sm btn-success" style="width:100%;margin-top: 8px" id="ButtonSelectProducto_${index}"
+                                    dataP-id="${producto.codigo}"
+                                    dataP-responsableP="${producto.responsable}"
+                                    dataP-codigo="${producto.codigo}"
+                                    dataP-dsc="${producto.dsc}"
+                                    onclick="ProductoSeleccion(${index}); mostrarNotificacion('${producto.dsc}');">Seleccionar
+                                </button>
+                            </div>
+                        </div>`;
+                } else {
+                    resultHTML += `
+                        <div class="row" style="margin-bottom:15px;border: 1px solid #cacfd2;padding: 10px 0px;border-radius: 10px;">
+                            <div class="col-xl-2"><span class="text-muted fs-12">Código:</span><br/>${producto.codigo}</div>
+                            <div class="col-xl-4"><span class="text-muted fs-12">Producto:</span><br/>${producto.dsc}</div>
+                            <div class="col-xl-2"><span class="text-muted fs-12">Lote:</span><br/>${producto.lote}</div>
+                            <div class="col-xl-1"><span class="text-muted fs-12">Stock:</span><br/>${producto.stock}</div>
+                            <div class="col-xl-3">
+                                <button class="btn btn-sm btn-success" style="width:100%;margin-top: 8px" id="ButtonSelectProducto_${index}"
+                                    dataP-id="${index}"
+                                    dataP-lote="${producto.lote}"
+                                    dataP-codigo="${producto.codigo}"
+                                    dataP-dsc="${producto.dsc}"
+                                    onclick="ProductoSeleccion(${index}); mostrarNotificacion('${producto.dsc}');">Seleccionar
+                                </button>
+                            </div>
+                        </div>`;
+                }
+            });
+        } else {
+            resultHTML = 'No se encontraron productos.';
+        }
+
+        document.getElementById('divResultadoProducto').innerHTML = resultHTML;
+    }
+
+
+
+    function mostrarNotificacion(mensaje) {
+            // Crear el div de la notificación
+            let alerta = document.createElement("div");
+            alerta.className = "alert alert-secondary alert-dismissible fade show custom-alert-icon shadow-sm";
+            alerta.setAttribute("role", "alert");
+
+            // Agregar el ícono SVG
+            alerta.innerHTML = `
+                <svg class="svg-secondary" xmlns="http://www.w3.org/2000/svg" height="1.5rem" viewBox="0 0 24 24" width="1.5rem" fill="#000000">
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+                </svg>
+                ${mensaje}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+
+            // Agregar la alerta al contenedor
+            document.getElementById("notificacionContainer").appendChild(alerta);
+
+            // Remover la alerta después de 5 segundos
+            setTimeout(() => {
+                alerta.classList.remove("show");
+                setTimeout(() => alerta.remove(), 300);
+            }, 3000);
+        }
+
+    function fnProductosProcedencia() {
+        document.getElementById('ProcedenciaCbo').innerHTML = '';
+        try {
+            var nalmacen = $("#VendedorCbo").find(':selected').attr("RValamcen");
+            if (nalmacen != "") {
+                $('#ProcedenciaCbo').append(
+                    '<option value="0">¿De donde salen los productos?</option>' +
+                    '<option value="03">Los productos salen de Lima</option>' +
+                    '<option value="' + nalmacen + '">Los productos salen de mi Stock</option>'
+                );
+            }
+            else {
+                $('#ProcedenciaCbo').append(
+                    '<option value="03">Los productos salen de Lima</option>'
+                );
+            }
+        }
+        catch (err) {
+            $('#ProcedenciaCbo').append(
+                '<option value="03">Los productos salen de Lima</option>'
+            );
+        }
+    }
+
+    function limpiarControles() {
+        $("#ClienteCoaInput").val("");
+        $("#ClienteRucInput").val("");
+        $("#ClienteNombreInput").val("");
+        $("#ClienteDireccionInput").val("");
+        $("#hiddenUbigeoFiscalCliente").val("");
+
+        $("#ClienteTipoInput").val("");
+        $("#ClienteCorreoInput").val("");
+        $("#ClienteTelefonoInput").val("");
+        $("#TipoDocumentoCbo").val("-1");
+
+        $('#divProductosPedir').empty();
+        document.getElementById('divUbigeoDirCliente').innerHTML = '';
+    }
+
+    function ClienteSeleccion(idem) {
+
+        limpiarControles();
+        var ndocumento = $("#ButtonSelectCliente_" + idem).attr("data-coa"); //.attr("data-ruc");
+        $("#ClienteCoaInput").val($("#ButtonSelectCliente_" + idem).attr("data-coa"));
+        $("#ClienteRucInput").val(ndocumento);
+        $("#ClienteNombreInput").val($("#ButtonSelectCliente_" + idem).attr("data-razon"));
+        $("#ClienteTipoInput").val($("#ButtonSelectCliente_" + idem).attr("data-tipo"));
+        //$("#ClienteCorreoInput").val($("#ButtonSelectCliente_" + idem).attr("data-correo"));
+        //$("#ClienteTelefonoInput").val($("#ButtonSelectCliente_" + idem).attr("data-telefono"));
+        BuscarDireccion($("#ButtonSelectCliente_" + idem).attr("data-coa"));
+        BuscarContacto($("#ButtonSelectCliente_" + idem).attr("data-coa"));
+
+        document.getElementById('TipoDocumentoCbo').innerHTML = '';
+
+        var largo_ndocumento = ndocumento.length;
+        if (largo_ndocumento == 11) {
+            var inicia_ndocumento = ndocumento.substring(0, 2);
+            if (inicia_ndocumento == "20" || inicia_ndocumento == "10") {
+                $('#TipoDocumentoCbo').append('<option value="-1">Seleccione</option><option value="FV">Factura</option><option value="BV">Boleta</option>');
+            }
+            else {
+                $('#TipoDocumentoCbo').append('<option value="BV">Boleta</option>');
+            }
+        }
+        else {
+            $('#TipoDocumentoCbo').append('<option value="BV">Boleta</option>');
+        }
+
+        $("#staticBackdropBuscarCliente").modal('hide');
+
+    }
+
+    async function BuscarCliente() {
+        document.getElementById('divResultadoCliente').innerHTML = '';
+        var veces = 1;
+        var datos_cliente_busqueda = $("#ClienteBuscarText").val().toUpperCase();
+        $.ajax({
+            url: '../Cliente/listaClienteBusqueda',
+            type: 'GET',
+            data: {
+                ruc_razon: datos_cliente_busqueda,
+            },
+            success: function (response) {
+                //console.log(response);
+                $.each(response, function (key, value) {
+                    //alert(value.razon_social);
+                    if (value.codigoVendedor == $("#VendedorCbo").val()) {
+                        $('#divResultadoCliente').append(
+                            '<div class="row" style="margin-bottom:15px;border: 1px solid #cacfd2;padding: 10px 0px;border-radius: 10px;">' +
+                            '<div class="col-xl-3"><span Class="text-muted fs-12">Ruc:</span><br />' + value.CoaCliente + '</div>' +
+                            '<div class="col-xl-6"><span Class="text-muted fs-12">Cliente:</span><br />' + value.razonSocial + '</div>' +
+                            //'<div class="col-xl-3"><br /><button class="btn btn-sm btn-success" style="width:100%;" id="ButtonSelectCliente_' + veces + '" data-id="' + value.id_cliente + '" data-coa="' + value.coa_cliente + '" data-ruc="' + value.rucdni + '" data-razon="' + value.razon_social + '" data-direccion="' + value.direccion + '" data-tipo="' + value.categoria + '" data-vendedor="' + value.codigo_vendedor + '" data-telefono="' + value.telefono_cliente + '" data-correo="' + value.correo_cliente + '" onclick="ClienteSeleccion(' + veces + ');">Selccionar</button>' +
+                            '<div class="col-xl-3"><button class="btn btn-sm btn-success" style="width:100%;margin-top: 8px" id="ButtonSelectCliente_' + veces + '"  data-coa="' + value.CoaCliente + '" data-ruc="' + value.rucdni + '" data-razon="' + value.razonSocial + '" data-tipo="' + value.categoria + '" data-vendedor="' + value.codigoVendedor + '"  onclick="ClienteSeleccion(' + veces + ');">Seleccionar</button>' +
+                            '</div>'
+                        );
+                        veces++;
+                    }
+                    else {
+                        $('#divResultadoCliente').append(
+                            '<div class="row" style="margin-bottom:15px;border: 1px solid #cacfd2;padding: 10px 0px;border-radius: 10px;">' +
+                            '<div class="col-xl-3"><span Class="text-muted fs-12">Ruc:</span><br />' + value.CoaCliente + '</div>' +
+                            '<div class="col-xl-6"><span Class="text-muted fs-12">Cliente:</span><br />' + value.razonSocial + '</div>' +
+                            '<div class="col-xl-3"><button class="btn btn-sm btn-dark" style="width:100%;margin-top: 8px">No disponible</button></div>' +
+                            '</div>'
+                        );
+                    }
+                })
+                //$("#exampleModalScrollableKardex").modal('hide');
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    async function BuscarDireccion(CoaCliente) {
+        var veces_direcion = 0;
+        $.ajax({
+            url: '../Cliente/listaClienteDireccion',
+            type: 'GET',
+            data: {
+                coa_cliente: CoaCliente,
+            },
+            success: function (response) {
+                //console.log(response);
+                $.each(response, function (key, value) {
+                    //alert(value.razon_social);
+                    $("#ClienteDireccionInput").val(value.direccion);
+                    $("#hiddenUbigeoFiscalCliente").val(value.ubigeo);
+                    $('#divUbigeoDirCliente').append(
+                        '<span class="fw-semibold text-decoration-none text-success">' + value.departamento + ' - ' + value.provincia + ' - ' + value.distrito + ' (' + value.ubigeo + ')</span>'
+                    );
+                    veces_direcion++;
+                    return false;
+                })
+                if (veces_direcion == 0) {
+                    $('#divUbigeoDirCliente').append('<span class="fw-semibold text-decoration-none text-danger">El cliente no tiene dirección registrada</span>');
+                }
+                //$("#exampleModalScrollableKardex").modal('hide');
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    async function BuscarContacto(CoaCliente) {
+        $.ajax({
+            url: '../Cliente/clienteContactoObtener',
+            type: 'GET',
+            data: {
+                coa_cliente: CoaCliente,
+                tipo : 'Principal'
+            },
+            success: function (response) {
+                //console.log(response);
+                //$.each(response, function (key, value) {
+                $("#ClienteTelefonoInput").val(response.telefono);
+                $("#ClienteCorreoInput").val(response.correo);
+                //})
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+
+    $('#ProductoBuscarText').on('input', function () {
+        let filtro = $(this).val().toLowerCase().trim(); // Convertir a minúsculas y eliminar espacios innecesarios
+
+        if (productosCargados.length === 0) return; // Si no hay productos, no hacer nada
+
+        if (filtro.length > 2) { // Evita búsquedas con menos de 3 letras
+            let productosFiltrados = productosCargados.filter(producto =>
+                producto.dsc.toLowerCase().includes(filtro) ||
+                (producto.dscCorto && producto.dscCorto.toLowerCase().includes(filtro)) // Verifica que dscCorto exista
+            );
+            mostrarProductos(productosFiltrados);
+        } else {
+            mostrarProductos(productosCargados); // Muestra todos si el filtro es muy corto
+        }
+    });
+
+        async function BuscarProducto() {
+            document.getElementById('divResultadoProducto').innerHTML = '';  // Limpiar resultados anteriores
+            var veces = 1;
+            var datos_producto_busqueda = $("#ProductoBuscarText").val().toUpperCase();  // Obtener el texto de búsqueda
+
+            $.ajax({
+                url: '../Pedido/listaProductoBusqueda',  // URL de la acción para buscar productos
+                type: 'GET',
+                data: {
+                    artic_dsc: datos_producto_busqueda,  // Enviar la descripción del artículo
+                },
+                success: function (response) {
+                    // Si hay productos encontrados, mostrar la lista
+                    $.each(response, function (key, value) {
+                        $('#divResultadoProducto').append(
+                            '<div class="row" style="margin-bottom:15px;border: 1px solid #cacfd2;padding: 10px 0px;border-radius: 10px;">' +
+                            '<div class="col-xl-3"><span class="text-muted fs-12">Código:</span><br />' + value.articulo + '</div>' +
+                            '<div class="col-xl-6"><span class="text-muted fs-12">Producto:</span><br />' + value.artic_dsc + '</div>' +
+                            '<div class="col-xl-3"><button class="btn btn-sm btn-success" style="width:100%;margin-top: 8px" id="ButtonSelectProducto_' + veces + '" data-id="' + value.articulo + '" data-dsc="' + value.artic_dsc + '" onclick="ProductoSeleccion(' + veces + ');">Seleccionar</button></div>' +
+                            '</div>'
+                        );
+                        veces++;
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    document.getElementById('divResultadoProducto').innerHTML = 'Error al cargar los productos.';
+                }
+            });
+        }
+
+    async function fnDireccionUltimoPedido() {
+        var coa_var = $("#ClienteCoaInput").val();
+
+        if (!coa_var) {
+            console.warn("No hay un valor en ClienteCoaInput");
+            return;
+        }
+
+        try {
+            let response = await $.ajax({
+                url: '../Pedido/direccionUltimoPedido',
+                type: 'GET',
+                data: { coa: coa_var },
+            });
+
+            console.log(response);
+
+            if (response && response.direccion && response.ubigeo) {
+                $("#DireccionEntregaInput").val(response.direccion[0]); // Accede al primer elemento del array
+                $('#UbigeoCbo').val(response.ubigeo[0]).trigger('change');
+                $("#DireccionEntregaInput, #UbigeoCbo").attr('readonly', true).prop('disabled', true);
+            } else {
+                console.warn("No se encontraron datos de dirección.");
+            }
+        } catch (error) {
+            console.error("Error al obtener la dirección del último pedido:", error);
+        }
+    }
+
+
+
+
+
+    function ProductoSeleccion(idem) {
+
+        var tipoSalidaProducto = $("#ProcedenciaCbo").val();
+        document.getElementById('lblValidaCodClienteSelect').innerHTML = '';
+        var nom_producto = $("#ButtonSelectProducto_" + idem).attr("dataP-dsc");
+        var cod_producto = $("#ButtonSelectProducto_" + idem).attr("dataP-codigo");
+        var resposableP = $("#ButtonSelectProducto_" + idem).attr("datap-responsableP");
+        var tipoCliente = $("#ClienteTipoInput").val(); // Tipo de cliente
+
+        if (tipoSalidaProducto == "03") {
+            //limpiarControles();
+            $('#divProductosPedir').append('<div class="row" style="margin-bottom: 15px; border: 1px solid #cacfd2; padding: 15px 0px; border-radius: 10px" id="PProductoSelect_' + idemProductoSeleccionado + '">' +
+                '<div class="col-xl-3 colPP3" style="margin-bottom:15px">' +
+                '<label for="ProductoNombreLabel_' + idemProductoSeleccionado + '" class="text-muted txtProd">Producto:</label>' +
+                '<h6 class="card-title fw-semibold" id="ProductoNombreLabel_' + idemProductoSeleccionado + '">' + nom_producto + '</h6>' +
+                '<input type="hidden" id="IdPedidoDetalleInput_' + idemProductoSeleccionado + '" value="0">'+
+                '<input type="hidden" id="ProductoNombreInput_' + idemProductoSeleccionado + '" value="' + nom_producto + '">' +
+                '<input type="hidden" id="ProductoCodigoInput_' + idemProductoSeleccionado + '" value="' + cod_producto + '">' +
+                '<label for="DescuentoLabel_' + idemProductoSeleccionado + '" class="text-muted" data-bs-toggle="modal" data-bs-target="#staticBackdropBuscarPromocion" id="btnBucarPromocion" onclick="buscarPromocion(' + idemProductoSeleccionado + ')" style="margin-top: 10px; margin-bottom: 20px;'+
+                'border: 1px solid; border-radius: 50px; color: #ff7800 !important; font-size: 12px;padding: 5px 5px 5px 5px; cursor: pointer;">+ Agregar Promocion </label>' +
+                '</div>' +
+                '<div class="col-xl-1 colPP11" style="text-align:center">' +
+                '<button class="btn btn-icon btn-danger-transparent rounded-pill btn-wave me-5" id="PProductoDelete_"' + idemProductoSeleccionado + ' onclick="PProductoDelete(' + idemProductoSeleccionado + ');">' +
+                '<i class="ri-delete-bin-line"></i>' +
+                '</button>' +
+                '</div>' +
+                '<input type="hidden" id="UsuarioResponsableInput' + idemProductoSeleccionado + '" value="' + resposableP + '">' +
+                '<div class="col-xl-2 colPP2">' +
+                '<label for="ProductoCantidadInput_' + idemProductoSeleccionado + '" class="text-muted">Cantidad <span class="obligatorio">*</span></label>' +
+                '<input class="form-control form-control-sm mb-2 ProductoCantidadInput cend vn0 is-invalid" type="text" id="ProductoCantidadInput_' + idemProductoSeleccionado + '" placeholder="" aria-label=".form-control-sm example" value="0" onkeyup="fnActualizarPrecioYCantidad(' + idemProductoSeleccionado + ')">' +
+                '</div>' +
+                '<div class="col-xl-2 colPP2">' +
+                '<label for="ProductoPrecioInput_' + idemProductoSeleccionado + '" class="text-muted">Precio  <span class="obligatorio">*</span></label>' +
+                '<input class="form-control form-control-sm mb-2 ProductoPrecioInput cend vn1" type="text" id="ProductoPrecioInput_' + idemProductoSeleccionado + '" placeholder="" aria-label=".form-control-sm example" value="" onkeyup="fnCalcularSubTotal(' + idemProductoSeleccionado + ')">' +
+                '</div>' +
+                '<div class="col-xl-2 colPP2">' +
+                '<label for="DescuentoLabel_" class="text-muted">Descuento </label>' +
+                '<input type="hidden" id="idPromo' + idemProductoSeleccionado + '">' +
+                '<input type="text" class="form-control form-control-sm mb-2 cend" id="DescuentoInput_' + idemProductoSeleccionado + '" value="0" disabled>' +
+                '</div>' +
+                '<div class="col-xl-2 colPP2">' +
+                '<label for="ProductoSubTotalInput_1" class="text-muted">Sub Total <span class="obligatorio">*</span></label>' +
+                '<input class="form-control form-control-sm mb-2 ProductoSubTotalInput cend" type="text" id="ProductoSubTotalInput_' + idemProductoSeleccionado + '" placeholder="" aria-label=".form-control-sm example" value="0" disabled >' +
+                '</div>' +
+                '<div class="col-xl-1 colPP1" style="text-align:center">' +
+                '<button class="btn btn-icon btn-danger-transparent rounded-pill btn-wave me-5" id="PProductoDelete_"' + idemProductoSeleccionado + ' onclick="PProductoDelete(' + idemProductoSeleccionado + ');">' +
+                '<i class="ri-delete-bin-line"></i>' +
+                '</button>' +
+                '</div>' +
+                '</div>');
+
+        }
+        else {
+            var varlotes = $("#ButtonSelectProducto_" + idem).attr("datap-lote");
+            console.log(varlotes);
+            var _lotes = '';  // Inicializamos la variable para almacenar las opciones
+
+            $('#divProductosPedir').append('<div class="row" style="margin-bottom: 15px; border: 1px solid #cacfd2; padding: 15px 0px; border-radius: 10px" id="PProductoSelect_' + idemProductoSeleccionado + '">' +
+                '<div class="col-xl-3 colPP32" style="margin-bottom:15px">' +
+                '<label for="ProductoNombreLabel_' + idemProductoSeleccionado + '" class="text-muted txtProd">Producto:</label>' +
+                '<h6 class="card-title fw-semibold" id="ProductoNombreLabel_' + idemProductoSeleccionado + '">' + nom_producto + '</h6>' +
+                '<input type="hidden" id="IdPedidoDetalleInput_' + idemProductoSeleccionado + '" value="0">'+
+                '<input type="hidden" id="ProductoNombreInput_' + idemProductoSeleccionado + '" value="' + nom_producto + '">' +
+                '<input type="hidden" id="ProductoCodigoInput_' + idemProductoSeleccionado + '" value="' + cod_producto + '">' +
+                '<label for="DescuentoLabel_' + idemProductoSeleccionado + '" class="text-muted" data-bs-toggle="modal" data-bs-target="#staticBackdropBuscarPromocion" id="btnBucarPromocion" onclick="buscarPromocion(' + idemProductoSeleccionado + ')" style="margin-top: 10px; margin-bottom: 20px;'+
+                'border: 1px solid; border-radius: 50px; color: #ff7800 !important; font-size: 12px;padding: 5px 5px 5px 5px; cursor: pointer;">+ Agregar Promocion </label>' +
+                '</div>' +
+                '<div class="col-xl-1 colPP11" style="text-align:center">' +
+                '<button class="btn btn-icon btn-danger-transparent rounded-pill btn-wave me-5" id="PProductoDelete_"' + idemProductoSeleccionado + ' onclick="PProductoDelete(' + idemProductoSeleccionado + ');">' +
+                '<i class="ri-delete-bin-line"></i>' +
+                '</button>' +
+                '</div>' +
+                '<div class="col-xl-2 colPP2">' +
+                '<label for="LoteCbo_' + varlotes + '" class="text-muted">Lote</label>' +
+                // Input visible al usuario, mostrando el valor del lote
+                '<input type="hidden" id="ProductoLoteInput' + idemProductoSeleccionado + '" value="' + varlotes + '">' +
+                '<input class="form-control form-control-sm mb-2 LoteInput" type="text" id="LoteCbo_' + varlotes + '" value="' + varlotes + '" readonly disabled/>' +
+                '</div>' +
+                '<div class="col-xl-2 colPP2">' +
+                '<label for="ProductoCantidadInput_' + idemProductoSeleccionado + '" class="text-muted">Cantidad <span class="obligatorio">*</label>' +
+                '<input class="form-control form-control-sm mb-2 ProductoCantidadInput cend vn0 is-invalid" type="text" id="ProductoCantidadInput_' + idemProductoSeleccionado + '" placeholder="" aria-label=".form-control-sm example" value="0" onkeyup="fnActualizarPrecioYCantidad(' + idemProductoSeleccionado + ')">' +
+                '</div>' +
+                '<div class="col-xl-2 colPP2">' +
+                '<label for="ProductoPrecioInput_' + idemProductoSeleccionado + '" class="text-muted">Precio <span class="obligatorio">*</label>' +
+                '<input class="form-control form-control-sm mb-2 ProductoPrecioInput cend vn1" type="text" id="ProductoPrecioInput_' + idemProductoSeleccionado + '" placeholder="" aria-label=".form-control-sm example" value="0" onkeyup="fnCalcularSubTotal(' + idemProductoSeleccionado + ')">' +
+                '</div>' +
+                '<div class="col-xl-2 colPP2">' +
+                '<label for="DescuentoLabel_" class="text-muted">Descuento </label>' +
+                '<input type="hidden" id="idPromo' + idemProductoSeleccionado + '">' +
+                '<input type="text" class="form-control form-control-sm mb-2 cend" id="DescuentoInput_' + idemProductoSeleccionado + '" value="0" disabled>' +
+                '</div>' +
+                '<div class="col-xl-2 colPP2">' +
+                '<label for="ProductoSubTotalInput_1" class="text-muted">Sub Total <span class="obligatorio">*  </label>' +
+                '<input class="form-control form-control-sm mb-2 ProductoSubTotalInput cend" type="text" id="ProductoSubTotalInput_' + idemProductoSeleccionado + '" placeholder="" aria-label=".form-control-sm example" value="0" disabled >' +
+                '</div>' +
+                '<div class="col-xl-1 colPP1" style="text-align:center">' +
+                '<button class="btn btn-icon btn-danger-transparent rounded-pill btn-wave me-5" id="PProductoDelete_"' + idemProductoSeleccionado + ' onclick="PProductoDelete(' + idemProductoSeleccionado + ');">' +
+                '<i class="ri-delete-bin-line"></i>' +
+                '</button>' +
+                '</div>' +
+                '</div>');
+        }
+
+
+        fnAsignarPrecioFijo(idemProductoSeleccionado);
+        soloNumerosPunto();
+        soloNumeros();
+        idemProductoSeleccionado++;
+
+
+    }
+
+
+    var promocionesCargadas = []; // Variable global
+    var filaSeleccionada = null; // Variable global para almacenar la fila seleccionada
+
+    function buscarPromocion(idemProductoSeleccionado) {
+        let resultHTML = '';
+
+        const codigoProductoPromo = $("#ProductoCodigoInput_" + idemProductoSeleccionado).val();
+        const coa = $("#ClienteTipoInput").val();
+
+        if (codigoProductoPromo && coa) {
+            $.ajax({
+                type: "GET",
+                url: '../Pedido/listaPromociones',
+                data: {
+                    codigo: codigoProductoPromo,
+                    coa: coa
+                },
+                success: function (data) {
+                    console.log("Respuesta recibida:", data);
+
+                    if (data.idpromo && data.tipoPromocion && Array.isArray(data.tipoPromocion) && data.tipoPromocion.length > 0) {
+                        promocionesCargadas = data.tipoPromocion.map((tipo, index) => ({
+                            idpromo: data.idpromo?.[index]|| 'No especificado', // Asegurar que se extrae correctamente el ID de la promoción
+                            tipoPromocion: tipo,
+                            bonificacion: data.bonificacion?.[index] || 'No especificado',
+                            codigoProducto: data.codigoProducto?.[index] || 'No disponible',
+                            cantidad_hasta: data.cantidad_hasta?.[index] || 'No disponible',
+                            cantidad_desde: data.cantidad_desde?.[index] || 'No disponible',
+                        }));
+
+                        $.each(promocionesCargadas, function (index, promocion) {
+                            resultHTML +=
+                                '<div class="row" style="margin-bottom:15px;border: 1px solid #cacfd2;padding: 10px 0px;border-radius: 10px;">' +
+                                '<div class="col-xl-1"><span class="text-muted fs-12">ID:</span><br />' + promocion.idpromo + '</div>' +
+                                '<div class="col-xl-3"><span class="text-muted fs-12">Promoción:</span><br />' + promocion.tipoPromocion + '</div>' +
+                                '<div class="col-xl-1"><span class="text-muted fs-12">Desde:</span><br />' + promocion.cantidad_desde + '</div>' +
+                                '<div class="col-xl-1"><span class="text-muted fs-12">Hasta:</span><br />' + promocion.cantidad_hasta + '</div>' +
+                                '<div class="col-xl-2"><span class="text-muted fs-12">Bonificación:</span><br />' + promocion.bonificacion + '</div>' +
+                                '<div class="col-xl-4">' +
+                                '<button class="btn btn-sm btn-success" style="width:100%;margin-top: 8px" ' +
+                                'id="ButtonSelectPromocion_' + index + '" ' +
+                                'dataP-idpromo="' + promocion.idpromo + '" ' +
+                                'dataP-tipo="' + promocion.tipoPromocion + '" ' +
+                                'dataP-bonificacion="' + promocion.bonificacion + '" ' +
+                                'data-idemProducto="' + idemProductoSeleccionado + '" ' +
+                                'onclick="PromocionSeleccion(' + index + ');">' +
+                                'Seleccionar</button>' +
+                                '</div>' +
+                                '</div>';
+                        });
+                    }else {
+                        resultHTML = 'No se encontraron promociones.';
+                    }
+
+                    document.getElementById('divResultadoPromocion').innerHTML = resultHTML;
+                },
+                error: function () {
+                    document.getElementById('divResultadoPromocion').innerHTML = 'Error al cargar las promociones.';
+                }
+            });
+        } else {
+            document.getElementById('divResultadoPromocion').innerHTML = 'Por favor, verifique los parámetros.';
+        }
+    }
+
+    // Modificar función para recibir el ID del producto seleccionado
+   function PromocionSeleccion(index) {
+        let button = $("#ButtonSelectPromocion_" + index);
+        let bonificacion = button.attr("dataP-bonificacion");
+        let id_promo = button.attr("dataP-idpromo");
+        let idemProductoSeleccionado = button.attr("data-idemProducto"); // Obtener el producto asociado
+
+        // Asegurar que el input de descuento existe para este producto
+        let inputDescuento = $("#DescuentoInput_" + idemProductoSeleccionado);
+        let idPromo = $("#idPromo" + idemProductoSeleccionado);
+
+        if (inputDescuento.length) {
+            $("#DescuentoInput_" + idemProductoSeleccionado).val(bonificacion).attr("value", bonificacion);
+            $("#idPromo" + idemProductoSeleccionado).val(id_promo).attr("value", id_promo);
+
+        } else {
+            alert("No se encontró el campo de descuento para el producto seleccionado.");
+        }
+
+        fnCalcularSubTotal(idemProductoSeleccionado);
+
+        // Cerrar el modal
+        $("#staticBackdropBuscarPromocion").modal("hide");
+    }
+
+
+
+    $(document).ready(function () {
+    // Bloquear la dirección al inicio
+        $("#DireccionEntregaInput").prop('readonly', true);
+        $("#DireccionEntregaInput").prop('disabled', true);
+        $("#UbigeoCbo").prop('disabled', true);
+
+        $('#PuntoLlegadaCbo').on('change', function () {
+                let puntoLlegada = $(this).val();
+
+                // Restablecer dirección y habilitar Ubigeo
+                $("#DireccionEntregaInput").val("").prop('readonly', true);
+                $('#UbigeoCbo').val('-1').trigger('change').prop('disabled', false);
+
+                if (puntoLlegada === "DIR-FISCAL") {
+                    $("#DireccionEntregaInput").val($("#ClienteDireccionInput").val()).prop('readonly', true);
+                    $('#UbigeoCbo').val($('#hiddenUbigeoFiscalCliente').val()).trigger('change').prop('disabled', true);
+                }
+                else if (puntoLlegada === "DIR-ULTPED") {
+                    fnDireccionUltimoPedido();
+                }
+                else if (puntoLlegada === "DIR-TERMINAL") {
+                    $("#DireccionEntregaInput").val("").prop('readonly', false);
+                    $("#DireccionEntregaInput").val("").prop('disabled', false);
+                    $('#UbigeoCbo').prop('disabled', false);
+                    $('#UbigeoCbo').prop('readonly', false);
+                }
+            });
+        });
+
+
+    // Guardar las opciones originales
+    const originalOptions = $('#AgenciaCbo').html();
+
+    $('#TipoModalidadCbo').on('change', function () {
+        var selectedValue = $(this).val();
+        var $agenciaCbo = $('#AgenciaCbo');
+
+        if (selectedValue === "PRIVADO") {
+            // PRIVADO: Mostrar solo MONT GROUP y desactivar el select
+            $agenciaCbo.html('<option value="20509532622">MONT GROUP SAC</option>');
+            $agenciaCbo.prop('disabled', true).attr('readonly', true);
+        } else if (selectedValue === "PUBLICO") {
+            // PÚBLICO: Restaurar opciones originales y activar el select
+            $agenciaCbo.html(originalOptions);
+            $agenciaCbo.prop('disabled', false).removeAttr('readonly');
+        } else {
+            // Sin selección: Resetear y desactivar el select
+            $agenciaCbo.html('<option value="-1">Seleccione</option>');
+            $agenciaCbo.prop('disabled', true);
+        }
+    });
+
+    @* function fnAignaPrecio(idem) {
+        $("#ProductoPrecioInput_" + idem).val("5.50");
+    } *@
+
+        //DETERMINA El Precio FIJO
+        function fnAsignarPrecioFijo(idemProductoSeleccionado) {
+            // Obtén el código del producto desde el input hidden correspondiente
+            const codigoProducto = $("#ProductoCodigoInput_" + idemProductoSeleccionado).val();
+            const coa = $("#ClienteCoaInput").val(); // Obtiene el Coa
+
+            if (codigoProducto && coa) {
+                $.ajax({
+                    url: "../Pedido/listaPreciosFijo", // URL del backend
+                    type: "GET", // Método HTTP
+                    data: { codigo: codigoProducto, coa: coa }, // Enviar código y coa al servidor
+                    success: function (response) {
+                        if (response && response.precio) {
+                            $("#ProductoPrecioInput_" + idemProductoSeleccionado).val(response.precio);
+                        } else {
+                            console.error("El precio no está disponible en la respuesta.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error al obtener el precio:", error);
+                    }
+                });
+            } else {
+                console.error("Falta el código de producto o el Coa:", { idemProductoSeleccionado, codigoProducto, coa });
+            }
+        }
+
+    function fnActualizarPrecioYCantidad(idemProductoSeleccionado) {
+        fnPrecioCategoria(idemProductoSeleccionado);
+        fnCalcularSubTotal(idemProductoSeleccionado);
+
+    }
+
+
+    function fnPrecioCategoria(idemProductoSeleccionado) {
+        const codigoProducto = $("#ProductoCodigoInput_" + idemProductoSeleccionado).val();
+        let cantidadPro = $("#ProductoCantidadInput_" + idemProductoSeleccionado).val();
+        const tipoClient = $("#ClienteTipoInput").val();
+
+        if (!cantidadPro || isNaN(cantidadPro) || cantidadPro <= 0) {
+            $("#ProductoCantidadInput_" + idemProductoSeleccionado).addClass("is-invalid");
+            $("#ProductoCantidadInput_" + idemProductoSeleccionado).removeClass("is-valid");
+            return; // Detener la ejecución si la cantidad no es válida
+        } else {
+            $("#ProductoCantidadInput_" + idemProductoSeleccionado).removeClass("is-invalid");
+            $("#ProductoCantidadInput_" + idemProductoSeleccionado).addClass("is-valid");
+        }
+
+
+        if (codigoProducto && tipoClient) {
+            $.ajax({
+                url: "../Pedido/listaPrecios",
+                type: "GET",
+                data: { codigo: codigoProducto, cant: cantidadPro, tipo: tipoClient },
+                success: function (response) {
+                    if (response && response.precio) {
+                        $("#ProductoPrecioInput_" + idemProductoSeleccionado).val(response.precio);
+                    } else {
+                        fnAsignarPrecioFijo(idemProductoSeleccionado);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error al obtener el precio:", error);
+                }
+            });
+        } else {
+            console.error("Falta el código de producto o tipo de cliente.");
+        }
+    }
+
+
+    function PProductoDelete(idem) {
+        $("#PProductoSelect_" + idem).remove();
+        fnCalcularSubTotal(idemProductoSeleccionado);
+    }
+
+
+
+    function fnCalcularSubTotal(idem) {
+        setTimeout(function () {
+            var subtotal = 0;
+
+            try {
+                var cantidad = $("#ProductoCantidadInput_" + idem).val();
+                var precio = $("#ProductoPrecioInput_" + idem).val();
+                var descuento = $("#DescuentoInput_" + idem).val();
+
+                subtotal = (cantidad * precio) - descuento;
+            }
+            catch (err) {
+                subtotal = 0;
+            }
+            $("#ProductoSubTotalInput_" + idem).val(subtotal.toFixed(3));
+
+            fnCalcularTotal();
+        }, 200);
+    }
+
+    function fnCalcularTotal() {
+        var sub_total = 0;
+        var total_venta = 0;
+        var igv_venta = 0;
+        var sub_total_venta = 0;
+        var cantidad = 0;
+        var precio = 0;
+        var descuento = 0;
+
+        $(".ProductoSubTotalInput").each(function () {
+            var idem = ($(this).attr('id')).replace("ProductoSubTotalInput_", "");
+            try {
+                cantidad = $("#ProductoCantidadInput_" + idem).val();
+                precio = $("#ProductoPrecioInput_" + idem).val();
+                var descuento = $("#DescuentoInput_" + idem).val();
+                sub_total = (cantidad * precio) - descuento;
+            }
+            catch (err) {
+                sub_total = 0;
+            }
+            total_venta = total_venta + sub_total;
+        });
+
+        if (total_venta > 0) {
+            igv_venta = ((total_venta / 1.18) * 0.18);
+            sub_total_venta = total_venta - igv_venta;
+        }
+
+        $("#PedidoSubTotalInput").val(sub_total_venta.toFixed(2));
+        $("#PedidoIgvInput").val(igv_venta.toFixed(2));
+        $("#PedidoTotalInput").val(total_venta.toFixed(2));
+    }
+
+    function soloNumerosPunto() {
+        $('.vn1').keypress(function (e) {
+            if (isNaN(this.value + String.fromCharCode(e.charCode)))
+                return false;
+        })
+            .on("cut copy paste", function (e) {
+                e.preventDefault();
+            });
+    }
+
+    function soloNumeros() {
+        $('.vn0').on('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    }
+
+    function quitarAcentos(texto) {
+        return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+
+    function fnValidarRegistro() {
+
+        $("#msjEspera").css('display', 'block');
+        $("#msjError").css('display', 'none');
+        document.getElementById('textmsjErrores').innerHTML = '';
+        $("#msjWarning").css('display', 'none');
+        document.getElementById('textmsjWarning').innerHTML = '';
+
+
+        $('#exampleModalScrollableStock').modal('show');
+        var mensaje_validacion = "";
+
+        if ($("#VendedorCbo").val() == "-1") {
+            mensaje_validacion += "Seleccione un código de vendedor";
+        }
+
+        if ($("#ClienteCoaInput").val() == "") {
+            mensaje_validacion += "<br/>Seleccione un cliente";
+        }
+
+        if ($("#ClienteDireccionInput").val() == "") {
+            mensaje_validacion += "<br/>El cliente no tiene dirección fiscal registrado";
+        }
+
+        if ($("#hiddenUbigeoFiscalCliente").val() == "") {
+            mensaje_validacion += "<br/>El cliente no tiene ubigeo fiscal registrado";
+        }
+
+        if ($("#TipoDocumentoCbo").val() == "-1") {
+            mensaje_validacion += "<br/>Seleccione un tipo de documento de venta";
+        }
+
+        if ($("#CondicionPagoCbo").val() == "-1") {
+            mensaje_validacion += "<br/>Seleccione una condición de pago";
+        }
+
+        if ($("#date").val() == "") {
+            mensaje_validacion += "<br/>Indique la fecha de entrega del pedido";
+        }
+
+        if ($("#PuntoLlegadaCbo").val() == "-1") {
+            mensaje_validacion += "<br/>Seleccione un tipo de entrega de los productos";
+        }
+
+        if ($("#DireccionEntregaInput").val().trim() == "" || $("#UbigeoCbo").val() == "-1") {
+            mensaje_validacion += "<br/>Ingrese la dirección y ubigeo de entrega del pedido";
+        } else {
+            if ($("#PuntoLlegadaCbo").val() === "DIR-TERMINAL") {
+                var selectedText = $("#UbigeoCbo option:selected").text();
+                var distrito = quitarAcentos(selectedText.split(" - ")[0].toLowerCase().replace(/\s+/g, " ").trim());
+                var direccion = quitarAcentos($("#DireccionEntregaInput").val().toLowerCase().replace(/\s+/g, " ").trim());
+
+                if (!direccion.includes(distrito)) {
+                    mensaje_validacion += "<br/>La dirección debe contener el distrito seleccionado: " + distrito;
+                }
+            }
+        }
+
+        if ($("#UbigeoCbo").val() == "-1") {
+            mensaje_validacion += "<br/>Seleccione el ubigeo de la dirección de llegeda del pedido";
+        }
+
+        if ($("#TipoModalidadCbo").val() == "-1") {
+            mensaje_validacion += "<br/>Seleccione el Tipo y modalidad de transporte del pedido para la entrega";
+        }
+
+        if ($("#TipoModalidadCbo").val() == "PÚBLICO" && $("#AgenciaCbo").val() == "20509532622") {
+            mensaje_validacion += "<br/>El tipo de movilidad PÚBLICO no puede ser MONT GROUP SAC";
+        }
+
+        let listProductos = [];
+
+        var sub_total = 0;
+        var total_venta = 0;
+
+
+        $(".ProductoSubTotalInput").each(function () {
+            var idem = ($(this).attr('id')).replace("ProductoSubTotalInput_", "");
+            try {
+                var p_x_nombre = $("#ProductoNombreInput_" + idem).val();
+                var p_x_codigo = $("#ProductoCodigoInput_" + idem).val();
+                var p_x_almacen = $("#ProcedenciaCbo").val();
+                var p_x_lote = $("#ProductoLoteInput" + idem).val();
+                var p_x_usuarioResponsable = $("#UsuarioResponsableInput" + idem).val();
+                var p_x_descuento = $("#DescuentoInput_"+ idem).val();
+                var p_x_idpromo = $("#idPromo"+ idem).val();
+                var p_x_idDetalle = $("#IdPedidoDetalleInput_"+ idem).val();
+
+
+
+                var p_x_cantidad = $("#ProductoCantidadInput_" + idem).val();
+                var p_x_precio = $("#ProductoPrecioInput_" + idem).val();
+                var p_x_promocion = $("#PromocionCbo_" + idem).val();
+                var p_x_subtotal = $("#ProductoSubTotalInput_" + idem).val();
+                var p_x_descuento = $("#DescuentoInput_" + idem).val();
+
+                if (p_x_cantidad == "0" || p_x_cantidad.trim() == "" || p_x_precio == "0" || p_x_precio.trim() == "") {
+                    mensaje_validacion = "<br/>Error en el producto " + p_x_nombre + " valide precio y cantidad";
+                    return false;
+                }
+
+                sub_total = (p_x_cantidad * p_x_precio) - p_x_descuento;
+
+                var itemProducto = {
+                    "IdPedidoDetalle": p_x_idDetalle,
+                    "Almacen": p_x_almacen,
+                    "Lote": p_x_lote,
+                    "Articulo": p_x_codigo,
+                    "ArticuloDesc": p_x_nombre,
+                    "Cantidad": p_x_cantidad,
+                    "Precio": p_x_precio,
+                    "Promocion": p_x_promocion,
+                    "SubTotal": p_x_subtotal,
+                    "UsuarioResponsable" : '',
+                    "Descuento": p_x_descuento,
+                    "TipoPromocion": p_x_idpromo,
+                    "AplicaPromocion": 0
+                }
+                listProductos.push(itemProducto);
+            }
+            catch (err) {
+                mensaje_validacion += "<br/>Se contró un error en el listado de productos infresados. Por favor, revise las cantidades y precios";
+            }
+            total_venta = total_venta + sub_total;
+        });
+
+        //console.log(JSON.stringify(listProductos));
+        //console.log(listProductos.length);
+
+        if (listProductos.length < 1) {
+            mensaje_validacion += "<br/>Debe ingresar productos";
+        }
+
+        @* console.log("total_venta.toFixed(2):", total_venta.toFixed(2));
+        console.log("PedidoTotalInput:", $("#PedidoTotalInput").val()); *@
+
+        if (total_venta > 0) {
+            if (total_venta.toFixed(2) != $("#PedidoTotalInput").val()) {
+                mensaje_validacion += "<br/>Se ha encontrado una incosistencia entre el calculo de total";
+            }
+        }
+        else {
+            mensaje_validacion += "<br/>El total de la venta debe ser mayor a 0";
+        }
+
+
+        if (mensaje_validacion == "") {
+
+            var x_zona = "LIMA";
+            if ($("#ProcedenciaCbo").val() != "03") {
+                x_zona = "PROVINCIA";
+            }
+
+            var PedidoDatos = {
+                "IdPedido": $("#IdPedidoInput").val(),
+                "Documento": "PD",
+                "Serie": $("#VendedorCbo").val(),
+                "Coa": $("#ClienteCoaInput").val(),
+                "TipoDocumentoFiscal": $("#TipoDocumentoCbo").val(),
+                "CodigoTipoPago": $("#CondicionPagoCbo").val(),
+                "Moneda": "soles",
+                "TipoCambio": "0",
+                "FechaEntrega": $("#date").val(),
+                "RucDni": $("#ClienteRucInput").val(),
+                "Cliente": $("#ClienteNombreInput").val(),
+                "DireccionCliente": $("#ClienteDireccionInput").val(),
+                "Ubigeo": $("#hiddenUbigeoFiscalCliente").val(),
+                "OrdenCompra": $("#OrdenCompraNombreInput").val(),
+                "DocOrdenCompra": $("#formFile")[0].files.length > 0 ? $("#formFile")[0].files[0].name : null,
+                "CodCategoriaCliente": $("#ClienteTipoInput").val(),
+                "CodVendedor": $("#VendedorCbo").val(),
+                "Vendedor": $("#VendedorCbo option:selected").text(),
+                "ObservacionCredito": $("#PedidoObjCreditosInput").val(),
+                "ObservacionPrecio": $("#PedidoObjPreciosInput").val(),
+                "ObservacionAlmacen": $("#PedidoObjAlacenFacturInput").val(),
+                "ZonaVenta": x_zona,
+
+                "SubTotal": $("#PedidoSubTotalInput").val(),
+                "TotalDescuento": "0",
+                "igvPorcentaje": "0.18",
+                "Igv": $("#PedidoIgvInput").val(),
+                "Total": $("#PedidoTotalInput").val(),
+
+
+                pedido_guia: {
+
+                    "idPedidoGuia": $("#IdPedidoGuiaInput").val(),
+                    "GuiaRegion": x_zona,
+                    "GuiaDireccionPartida": d_salidaAlmacen,
+                    "GuiaUbigeoPartida": u_salidaAlmacen,
+
+                    "GuiaPuntoEntrega": $("#PuntoLlegadaCbo").val(), /* agregar*/
+                    "GuiaDireccionEntrega": $("#DireccionEntregaInput").val(),
+                    "GuiaUbigeoEntrega": $("#UbigeoCbo").val(),
+
+                    "GuiaTransporte": $("#TipoModalidadCbo").val(),
+                    "GuiaTransporteEmpRuc": $("#AgenciaCbo").val(),
+                    "GuiaTransporteEmpresa": $("#AgenciaCbo option:selected").text(),
+
+                    "RepcionTipo1": $("#TipoDocumentoCbo1").val(),  /* agregar*/
+                    "Dni1": $("#TipoDocumentoContacto1").val(),
+                    "Nombre1": $("#TipoNombreContacto1").val(),
+                    "Telefono1": $("#TipoTelefonoContacto1").val(),
+
+                    "RepcionTipo2": $("#TipoDocumentoCbo2").val(),  /* agregar*/
+                    "Dni2": $("#TipoDocumentoContacto2").val(),
+                    "Nombre2": $("#TipoNombreContacto2").val(),
+                    "Telefono2": $("#TipoTelefonoContacto2").val()
+                },
+
+                "pedido_detalle": listProductos
+            }
+            fnDinsertaPedido(PedidoDatos);
+            //console.log(JSON.stringify(PedidoDatos));
+        }
+        else {
+            $("#msjEspera").css('display', 'none');
+            $("#msjError").css('display', 'none');
+            $("#msjWarning").css('display', 'block');
+            document.getElementById('textmsjErrores').innerHTML = "";
+            document.getElementById('textmsjWarning').innerHTML = mensaje_validacion;
+        }
+        //AgenciaCbo
+    }
+
+        async function validarCredito() {
+            let coa_var = $("#ClienteCoaInput").val();
+            if (!coa_var) {
+                return false;
+            }
+
+            try {
+                let response = await $.ajax({
+                    url: `../Pedido/validacionCredito?coa=${coa_var}`,
+                    type: 'GET',
+                    dataType: 'json'
+                });
+                return response.Aprobado === "SI";
+            } catch (error) {
+                console.log('Error en la validación de crédito:', error);
+                return false;
+            }
+        }
+
+
+        async function subirDoc() {
+            let formData = new FormData();
+            let fileInput = $("#formFile")[0];
+
+            if (fileInput.files.length > 0) {
+                formData.append("archivoOC", fileInput.files[0]);
+            } else {
+                return null; // Si no hay archivo, retorna null
+            }
+
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '../Pedido/guardarArchivo',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            console.log('Archivo subido correctamente:', response.rutaArchivo);
+                            resolve(response.rutaArchivo); // Retorna la ruta del archivo
+                        } else {
+                            console.log('No se pudo cargar el archivo');
+                            resolve(null); // Devuelve null si falla
+                        }
+                    },
+                    error: function (error) {
+                        console.log('Error al subir el archivo:', error);
+                        reject(error);
+                    }
+                });
+            });
+        }
+
+        async function fnDinsertaPedido(datos) {
+            try {
+                // Esperar la subida del archivo y obtener la ruta
+                let rutaArchivo = await subirDoc();
+
+                // Si se subió correctamente, agregar la ruta al pedido
+                if (rutaArchivo) {
+                    datos.DocOrdenCompra = rutaArchivo;
+                }
+
+                // Enviar el pedido con la ruta del archivo incluida
+                $.ajax({
+                    url: '../Pedido/insert_Pedido',
+                    type: 'POST',
+                    data: datos,
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
+
+                        if (parseInt(response.valor_1) > 0 && parseInt(response.valor_2) > 0) {
+                            let mensaje = response.valor_4 === "insertado"
+                                ? "El pedido se guardó correctamente."
+                                : "El pedido se actualizó correctamente.";
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Éxito!',
+                                text: mensaje,
+                                confirmButtonText: 'Ok, Ver detalle pedido'
+                            }).then(() => {
+                                window.location.href = `../Pedido/PedidoVer?idPedido=${response.valor_1}`;
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: '¡Error!',
+                                text: response.valor_3 || 'Ocurrió un problema al guardar el pedido.',
+                                confirmButtonText: 'Entendido',
+                            });
+                        }
+                    }
+                });
+            } catch (error) {
+                console.log('Error en la carga del pedido:', error);
+            }
+        }
+
+
+    $("#btnValidarDocumentoContacto1").on("click", function () {
+        // Mostrar el icono de carga, ocultar el icono de búsqueda y el texto
+        $("#loading-icon").show();
+        $("#search-icon").hide();
+        $("#btn-text").hide();
+
+        // Deshabilitar el botón mientras se procesa
+        $("#btnValidarDocumentoContacto1").prop('disabled', true);
+
+        // Capturar datos del formulario
+        const numeroDocumento = $("#TipoDocumentoContacto1").val();
+        const tipoDocumento = $("#TipoDocumentoCbo1").val();
+
+        // Validar que el campo no esté vacío y el tipo de documento esté seleccionado
+        if (numeroDocumento.trim() === "" || tipoDocumento === "-1") {
+            Swal.fire({
+                icon: 'error',
+                title: '¡Oops!',
+                text: 'Por favor, complete todos los campos antes de validar.',
+                confirmButtonText: 'Entendido'
+            }).then(() => {
+                // Ocultar el icono de carga y habilitar el botón después del mensaje de error
+                $("#loading-icon").hide();
+                $("#search-icon").show();
+                $("#btn-text").show();
+                $("#btnValidarDocumentoContacto1").prop('disabled', false);
+            });
+            return;
+        }
+
+        // Validación de longitud dependiendo del tipo de documento
+        if (tipoDocumento === "PERUANO" && numeroDocumento.length !== 8) {
+            Swal.fire({
+                icon: 'error',
+                title: '¡Oops!',
+                text: 'El número de documento para un peruano debe tener 8 dígitos.',
+                confirmButtonText: 'Entendido'
+            }).then(() => {
+                // Ocultar el icono de carga y habilitar el botón después del mensaje de error
+                $("#loading-icon").hide();
+                $("#search-icon").show();
+                $("#btn-text").show();
+                $("#btnValidarDocumentoContacto1").prop('disabled', false);
+            });
+            return;
+        }
+
+        // Si pasa la validación, hacer la solicitud Ajax
+        $.ajax({
+            url: '../Util/ConsultarReniec',
+            type: "GET",
+            data: { documento: numeroDocumento },
+            success: function (response) {
+                if (response.mensaje === "OK" && response.data) {
+                    const datos = JSON.parse(response.data);
+                    const nombreCompleto = `${datos.apellidoPaterno} ${datos.apellidoMaterno}, ${datos.nombres} `.trim() || "No disponible";
+                    $("#TipoNombreContacto1").val(nombreCompleto);
+                } else {
+                    $("#TipoNombreContacto1").val("No disponible");
+                }
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al realizar la validación: ' + error,
+                    confirmButtonText: 'Entendido'
+                });
+            },
+            complete: function () {
+                // Ocultar el icono de carga y habilitar el botón cuando termine la solicitud
+                $("#loading-icon").hide();
+                $("#search-icon").show();
+                $("#btn-text").show();
+                $("#btnValidarDocumentoContacto1").prop('disabled', false);
+            }
+        });
+    });
+
+    // Evento para manejar cambios en el tipo de documento
+    $("#TipoDocumentoCbo1").on("change", function () {
+        const tipoDocumento = $(this).val();
+        $("#TipoNombreContacto1").val("");
+        $("#TipoDocumentoContacto1").val("");
+
+        if (tipoDocumento === "EXTRANJERO") {
+            // Ocultar el botón y habilitar el campo de texto
+            $("#btnValidarDocumentoContacto1").hide(); // Ocultar el botón
+            $("#TipoNombreContacto1").prop('disabled', false); // Habilitar el campo de texto
+        } else {
+            // Mostrar el botón y deshabilitar el campo de texto
+            $("#btnValidarDocumentoContacto1").show(); // Mostrar el botón
+            $("#TipoNombreContacto1").prop('disabled', true); // Deshabilitar el campo de texto
+        }
+    });
+
+
+
+
+    $("#btnValidarDocumentoContacto2").on("click", function () {
+        // Mostrar el icono de carga, ocultar el icono de búsqueda y el texto
+        $("#loading-icon2").show();
+        $("#search-icon2").hide();
+        $("#btn-text2").hide();
+
+        // Deshabilitar el botón mientras se procesa
+        $("#btnValidarDocumentoContacto2").prop('disabled', true);
+
+        // Capturar datos del formulario
+        const numeroDocumento = $("#TipoDocumentoContacto2").val();
+        const tipoDocumento = $("#TipoDocumentoCbo2").val();
+
+        // Validar que el campo no esté vacío y el tipo de documento esté seleccionado
+        if (numeroDocumento.trim() === "" || tipoDocumento === "-1") {
+            Swal.fire({
+                icon: 'error',
+                title: '¡Oops!',
+                text: 'Por favor, complete todos los campos antes de validar.',
+                confirmButtonText: 'Entendido'
+            }).then(() => {
+                // Ocultar el icono de carga y habilitar el botón después del mensaje de error
+                $("#loading-icon2").hide();
+                $("#search-icon2").show();
+                $("#btn-text2").show();
+                $("#btnValidarDocumentoContacto2").prop('disabled', false);
+            });
+            return;
+        }
+
+        // Validación de longitud dependiendo del tipo de documento
+        if (tipoDocumento === "PERUANO" && numeroDocumento.length !== 8) {
+            Swal.fire({
+                icon: 'error',
+                title: '¡Oops!',
+                text: 'El número de documento para un peruano debe tener 8 dígitos.',
+                confirmButtonText: 'Entendido'
+            }).then(() => {
+                // Ocultar el icono de carga y habilitar el botón después del mensaje de error
+                $("#loading-icon2").hide();
+                $("#search-icon2").show(); //falta poner para 2
+                $("#btn-text2").show();
+                $("#btnValidarDocumentoContacto2").prop('disabled', false);
+            });
+            return;
+        }
+        // Si pasa la validación, hacer la solicitud Ajax
+        $.ajax({
+            url: '../Util/ConsultarReniec',
+            type: "GET",
+            data: { documento: numeroDocumento },
+            success: function (response) {
+                if (response.mensaje === "OK" && response.data) {
+                    const datos = JSON.parse(response.data);
+                    const nombreCompleto = `${datos.apellidoPaterno} ${datos.apellidoMaterno}, ${datos.nombres} `.trim() || "No disponible";
+                    $("#TipoNombreContacto2").val(nombreCompleto);
+                } else {
+                    $("#TipoNombreContacto2").val("No disponible");
+                }
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al realizar la validación: ' + error,
+                    confirmButtonText: 'Entendido'
+                });
+            },
+            complete: function () {
+                // Ocultar el icono de carga y habilitar el botón cuando termine la solicitud
+                $("#loading-icon2").hide();
+                $("#search-icon2").show();
+                $("#btn-text2").show();
+                $("#btnValidarDocumentoContacto2").prop('disabled', false);
+            }
+        });
+    });
+
+
+    // Evento para manejar cambios en el tipo de documento
+    $("#TipoDocumentoCbo2").on("change", function () {
+        const tipoDocumento = $(this).val();
+        $("#TipoNombreContacto2").val("");
+        $("#TipoDocumentoContacto2").val("");
+
+        if (tipoDocumento === "EXTRANJERO") {
+            // Ocultar el botón y habilitar el campo de texto
+            $("#btnValidarDocumentoContacto2").hide(); // Ocultar el botón
+            $("#TipoNombreContacto2").prop('disabled', false); // Habilitar el campo de texto
+        } else {
+            // Mostrar el botón y deshabilitar el campo de texto
+            $("#btnValidarDocumentoContacto2").show(); // Mostrar el botón
+            $("#TipoNombreContacto2").prop('disabled', true); // Deshabilitar el campo de texto
+        }
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        flatpickr("#date", {
+            minDate: "today", // Bloquea fechas anteriores a la actual
+            dateFormat: "Y-m-d"
+        });
+    });
+</script>
+<script>
+    document.addEventListener("keydown", function (e) {
+        // Deshabilitar F12
+        if (e.keyCode === 123) {
+            e.preventDefault();
+            return false;
+        }
+
+        // Deshabilitar Ctrl+Shift+I (DevTools)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+            e.preventDefault();
+            return false;
+        }
+
+        // Deshabilitar Ctrl+U (Ver fuente)
+        if (e.ctrlKey && e.keyCode === 85) {
+            e.preventDefault();
+            return false;
+        }
+
+    });
+
+    document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+    });
+</script>
+
+@* LIBERIA PARA ALERT *@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@* Font awesonme para iconos *@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+<link href="~/assets/css/cssMG.css" rel="stylesheet" />
+
