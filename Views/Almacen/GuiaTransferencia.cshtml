@@ -10,7 +10,7 @@
 
     int x_nveces = 1;
     var data_guia = ViewData["mGuia"] as WebAppMontGroup.Entity.GuiaTransferencia;
-    string metodo = "inserta_guia_transferencia";
+    string metodo = "Almacen/inserta_guia_transferencia";
     string tipometodo = "POST";
     string fecha_traslado = "";
     if (data_guia == null)
@@ -20,7 +20,7 @@
     else
     {
         <input type="hidden" id="IdGuia" value="@data_guia.IdGuiaTransferencia">
-        metodo = "actualiza_guia_transferencia";
+        metodo = "Almacen/actualiza_guia_transferencia";
 
         if (data_guia.fecha_traslado < DateTime.Now)
         {
@@ -619,10 +619,10 @@
         document.getElementById('divResultadoProducto').innerHTML = '';
         var veces = 1;
         $.ajax({
-            url: '../StockAlmacen',
+            url: '../Almacen/StockAlmacen',
             type: 'GET',
             data: {
-                aniomes: fnFechaActual(),
+                aniomes: '2403',
                 almacen: '',
                 articulo: ''
             },
@@ -916,8 +916,8 @@
     }
 
     async function fninsertaGuia(datos) {
-        //console.log(JSON.stringify(datos));
-        //console.log(datos);
+        console.log(JSON.stringify(datos));
+        console.log(datos);
         //debugger;
         $.ajax({
             url: '../@metodo',
@@ -929,7 +929,7 @@
             dataType: 'json',
             //contentType: "application/json; charset=utf-8",
             success: function (response) {
-                //console.log(response);
+                console.log(response);
 
                 $("#msjEspera").css('display', 'none');
                 $("#msjError").css('display', 'none');

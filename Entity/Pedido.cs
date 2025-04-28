@@ -16,12 +16,14 @@ namespace WebAppMontGroup.Entity
         public string NombreTipoPago { get; set; }
         public string Coa { get; set; }
         public string Cliente { get; set; }
+        public string CorreoCliente { get; set; }
+        public string TelefonoCliente { get; set; }
         public string RucDni { get; set; }
         public string DireccionCliente { get; set; }
         public string Ubigeo { get; set; }
         public string CodCategoriaCliente { get; set; }
         public string TipoDocumentoFiscal { get; set; }
-        public string DocumentoFiscal { get; set; }   
+        public string DocumentoFiscal { get; set; }
         public string CodigoTipoPago { get; set; }
         public string Moneda { get; set; }
         public string TipoCambio { get; set; }
@@ -30,7 +32,7 @@ namespace WebAppMontGroup.Entity
         public string DocOrdenCompra { get; set; }
         public string CodVendedor { get; set; }
         public string Vendedor { get; set; }
-        public DateTime FechaRegistro { get; set; } 
+        public DateTime FechaRegistro { get; set; }
         public string ZonaVenta { get; set; }
         public double SubTotal { get; set; }
         public double TotalDescuento { get; set; }
@@ -52,47 +54,31 @@ namespace WebAppMontGroup.Entity
         public DateTime FechaActualizacion { get; set; }
         public string UsuarioActualizacion { get; set; }
 
-        public PedidoGuia pedido_guia { get; set; } = new PedidoGuia();
-        public List<PedidoDetalle> pedido_detalle { get; set; } = new List<PedidoDetalle>();
-    }
 
-    public class PedidoTotales
-    {
-        public decimal SumaTotal { get; set; }
-        public decimal UltimoTotal { get; set; }
-        public string Coa { get; set; }
-    }
-
-    public class RespuestaValidacion
-    {
-        public string Aprobado { get; set; }
-        public string Mensaje { get; set; }
-    }
-
-    public class PedidoAprobaciones
-    {
+        /* Aprobaciones */
         public int IdPedidoAprobacion { get; set; }
         public string UsuarioAprobador { get; set; }
         public string Observacion { get; set; }
         public string Decision { get; set; }
-        public string Proviene { get; set; }
+        
         public List<int> IdPedidoDetalle { get; set; }
-    }
+         // FIN APROBACIONES
 
-
-    public class PedidoLog { 
-    
-        public int IdPedido { get; set; }
+        /* LOG PEDIDO */
         public DateTime Fecha { get; set; }
         public string Usuario { get; set; }
         public string Accion { get; set; }
         public string Obs { get; set; }
         public string Detalle1 { get; set; }
         public string Detalle2 { get; set; }
+        public string Proviene { get; set; }
+
+
+        public PedidoGuia pedido_guia { get; set; } = new PedidoGuia();
+        public List<PedidoDetalle> pedido_detalle { get; set; } = new List<PedidoDetalle>();
+        public ClienteContacto ClienteContacto { get; set; }
+
     }
-
-
-
     public class Pedido95
     {
         public string idPedido { get; set; }
@@ -119,5 +105,4 @@ namespace WebAppMontGroup.Entity
         public string aprob1 { get; set; }
         public string aprob2 { get; set; }
     }
-
 }

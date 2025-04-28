@@ -103,11 +103,13 @@ namespace WebAppMontGroup.Models
 
                 while (reader.Read())
                 {
-                        Agencia m_agencia = new Agencia();
-                        m_agencia.ruc = reader["ruc"].ToString();
-                        m_agencia.razon_social = reader["razon_social"].ToString();
-                        m_agencia.estado = reader["estado"].ToString();
-                        lst_agencia.Add(m_agencia);
+                    Agencia m_agencia = new Agencia();
+                    m_agencia.idAgencia = (int)reader["IdAgencia"];
+                    m_agencia.ruc = reader["ruc"].ToString();
+                    m_agencia.razon_social = reader["razon_social"].ToString();
+                    m_agencia.nombre_corto = reader["nombre_corto"].ToString();
+                    m_agencia.estado = reader["estado"].ToString();
+                    lst_agencia.Add(m_agencia);
                 }
 
                 //var itemToRemove = lst_agencia.Single(r => r.ruc == ruc_omitir);
@@ -162,6 +164,79 @@ namespace WebAppMontGroup.Models
             }
 
             return m_general;
+        }
+
+        /*  public General direccionUltimoPedido(string coa)
+         {
+             ConeccionMysql con = new ConeccionMysql("MYSQL_Conexion_Pedido");
+             MySqlCommand cmd = new MySqlCommand();
+             General m_general = new General();
+             try
+             {
+
+                 con.conectar();
+                 cmd = new MySqlCommand("PROC_PEDIDO_ULTIMA_ENTREGA", con.retConeccion());
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 cmd.Parameters.Add(new MySqlParameter("@x_coa", coa));
+                 MySqlDataReader reader = cmd.ExecuteReader();
+
+
+                 m_general.valor_1 = "-1";
+                 while (reader.Read())
+             {
+                 m_general.valor_1 = reader["GuiaUbigeoLlegada"].ToString();  // Cambiado de "ruc"
+                 m_general.valor_2 = reader["GuiaDireccionLlegada"].ToString();  // Cambiado de "razon_social"
+             }
+
+             }
+             catch (Exception ex)
+             {
+                 //util_log.Escribir_Log("listarUSuario," + ex.ToString());
+                 return null;
+             }
+             finally
+             {
+                 cmd.Dispose();
+                 con.desconectar();
+             }
+
+             return m_general;
+         } */
+
+         public int LOG_AUDITORIA( string proviene, string accion,int usuarioId,string descripcion)
+        {
+            int result = 0;
+            ConeccionMysql con = new ConeccionMysql("MYSQL_Conexion_Pedido");
+            MySqlCommand cmd = new MySqlCommand();
+
+            try
+            {
+                con.conectar();
+
+                cmd = new MySqlCommand("PROC_REGISTRAR_AUDITORIA", con.retConeccion());
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Clear(); // Limpiar parámetros antes de usarlos
+                cmd.Parameters.AddWithValue("@x_usuarioId", usuarioId);
+                cmd.Parameters.Add(new MySqlParameter("@x_modulo", proviene));
+                cmd.Parameters.Add(new MySqlParameter("@x_accion", accion));
+                cmd.Parameters.Add(new MySqlParameter("@x_descripcion", descripcion));
+
+                cmd.ExecuteNonQuery();
+                result = 1; // Indicar éxito
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error en insert_Pedido_Log: " + ex.Message);
+                result = -1; // Indicar error
+            }
+            finally
+            {
+                cmd.Dispose();
+                con.desconectar();
+            }
+
+            return result;
         }
 
     }

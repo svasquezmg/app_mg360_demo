@@ -233,6 +233,7 @@
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PedidoAprController.cs" />
     <Compile Include="Controllers\PedidoController.cs" />
     <Compile Include="Controllers\UtilController.cs" />
     <Compile Include="Controllers\VentasController.cs" />
@@ -272,6 +273,7 @@
     <Compile Include="Models\ModelKardex.cs" />
     <Compile Include="Models\ModelPagoTipo.cs" />
     <Compile Include="Models\ModelPedido.cs" />
+    <Compile Include="Models\ModelPedidoApr.cs" />
     <Compile Include="Models\ModelProducto.cs" />
     <Compile Include="Models\ModelPromocion.cs" />
     <Compile Include="Models\ModelStock.cs" />
@@ -14814,6 +14816,8 @@
     <Content Include="Views\Cliente\View.cshtml" />
     <Content Include="Views\Pedido\CotizacionList.cshtml" />
     <Content Include="Views\Almacen\Agencia.cshtml" />
+    <Content Include="Views\PedidoApr\AprobacionPrecio.cshtml" />
+    <Content Include="Views\PedidoApr\AprobacionCredito.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

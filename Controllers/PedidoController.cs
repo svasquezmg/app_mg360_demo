@@ -1,29 +1,4 @@
 ﻿
-/*using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Security;
-using System.Web;
-using System.Web.Configuration;
-using System.Web.Management;
-using System.Web.Mvc;
-using System.Xml.Linq;
-using WebAppMontGroup.Entity;
-using WebAppMontGroup.Models;
-using static Mysqlx.Expect.Open.Types.Condition.Types;
-using SecurityManager = WebAppMontGroup.Models.SecurityManager;
-using System.Security.Cryptography;
-using System.Threading.Tasks;*/
-
-
-
 using Newtonsoft.Json;
 using System;
 using System.Web;
@@ -39,11 +14,6 @@ using System.Web.Mvc;
 using WebAppMontGroup.Entity;
 using WebAppMontGroup.Models;
 using SecurityManager = WebAppMontGroup.Models.SecurityManager;
-using MySqlX.XDevAPI;
-using iText.Commons.Bouncycastle.Asn1.X509;
-using System.Xml;
-using Microsoft.SharePoint.Client;
-using iText.Layout.Splitting;
 
 
 namespace WebAppMontGroup.Controllers
@@ -157,6 +127,15 @@ namespace WebAppMontGroup.Controllers
 
                 if (pedidos != null && pedidos.Any())
                 {
+
+                    var listaGuia = new List<string>();
+
+                    foreach (var p in pedidos)
+                    {
+                        var guiaData = model_pedido.PedidoGuia(p.IdPedido);
+                        listaGuia.Add(guiaData?.Guia ?? ""); // Puedes agregar más campos si lo deseas
+                    }
+
                     return Json(new
                     {
                         idPedido = pedidos.Select(p => p.IdPedido),
@@ -170,7 +149,12 @@ namespace WebAppMontGroup.Controllers
                         TipoDocumentoFiscal = pedidos.Select(p => p.TipoDocumentoFiscal), // Se agregó
                         CodigoTipoPago = pedidos.Select(p => p.CodigoTipoPago), // Se agregó
                         NombreTipoPago = pedidos.Select(p => p.NombreTipoPago), // Se agregó
-                        vendedor = pedidos.Select(p => p.Vendedor) // Se agregó
+                        estadoAlmacen = pedidos.Select(p => p.EstadoAlmacen), // Se agregó
+                        estadoCredito = pedidos.Select(p => p.EstadoCredito), // Se agregó
+                        estadoProducto = pedidos.Select(p => p.EstadoProducto), // Se agregó
+                        vendedor = pedidos.Select(p => p.Vendedor), // Se agregó
+                        doc_FvBv = pedidos.Select(p => p.DocumentoFiscal), // Se agregó
+                        doc_guia = listaGuia // Agregamos la guía
                     }, JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -201,22 +185,22 @@ namespace WebAppMontGroup.Controllers
             var usuario = Session["SessionUsuario"] as Usuario;
             var lst_usuario = Session["VendedorAsociado"] as List<Usuario>;
             ViewData["Usuario"] = usuario;
-            ViewData["VendedorAsociado"] = lst_usuario;   
-            ViewData["PagoTipo"] = m_tipoPago.listaTipoPago("");            
+            ViewData["VendedorAsociado"] = lst_usuario;
+            ViewData["PagoTipo"] = m_tipoPago.listaTipoPago("");
             ViewData["Ubigeo"] = m_gelera.listaUbigeo("");
             ViewData["Agencia"] = m_gelera.listaAgencia("");
 
-            
+
             Session["lst_produtoAlmacenVent"] = model_producto.listaProductoBusquedaAlamcen(usuario.codigoalmacen, DateTime.Now.ToString("yyMM"));
 
             if (!String.IsNullOrEmpty(id) && id != "0")
             {
 
-                ViewBag.id = id;       
+                ViewBag.id = id;
                 Pedido ePedido = new Pedido();
                 ePedido = model.PedidoPorId(Convert.ToInt32(id));
                 bool accesoConsulta = security_manager.validaAccesoUserData(ePedido.CodVendedor);
-                
+
                 if (accesoConsulta == true)
                 {
                     ViewData["PedidoCab"] = ePedido;
@@ -224,7 +208,7 @@ namespace WebAppMontGroup.Controllers
                 else
                 {
                     return RedirectToAction("PedidoCrear", "Pedido");
-                }           
+                }
             }
             else
             {
@@ -249,6 +233,7 @@ namespace WebAppMontGroup.Controllers
             ModelPedido m_pedido = new ModelPedido();
             Pedido e_pedido = new Pedido();
             e_pedido = m_pedido.PedidoPorId(id.Value);
+            ModelPedidoApr modelSeg = new ModelPedidoApr();
 
             bool accesoConsulta = security_manager.validaAccesoUserData(e_pedido.CodVendedor);
 
@@ -257,16 +242,39 @@ namespace WebAppMontGroup.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            ViewData["PedidoPorId"] = e_pedido;
-            ViewData["PedidoSeguimiento"] = model.lista_Pedido_log(id.Value, "");
+            ViewData["PedidoPorId"] = m_pedido.PedidoPorId(id.Value);
+            ViewData["PedidoSeguimiento"] = modelSeg.lista_Pedido_log(id.Value, "", "");
             return View();
         }
-
         [HttpPost]
         public JsonResult insert_Pedido(Pedido pedido)
         {
             ModelPedido m_pedido = new ModelPedido();
+            ModelPedidoApr m_pedidoapr = new ModelPedidoApr();
+            ModelGeneral m_auditoria = new ModelGeneral();
             General general = new General();
+
+            bool acceso = false;
+            Usuario user = null;
+
+            try
+            {
+                if (security_manager.validaAcceso("") || security_manager.validaAccesoPagina("Pedido/PedidoCrear", "E"))
+                {
+                    acceso = true;
+                    user = (Usuario)Session["SessionUsuario"];
+                    pedido.UsuarioActualizacion = user.usuario;
+                }
+
+                if (!acceso)
+                {
+                    return Json(new { error = "Acceso denegado" });
+                }
+            }
+            catch
+            {
+                return Json(new { error = "Error al validar el acceso" });
+            }
 
             if (!security_manager.validaSesion())
                 return Json(new { error = "Sesión no válida" });
@@ -274,11 +282,14 @@ namespace WebAppMontGroup.Controllers
             int res_cabecera = 0;
             int res_guia = 0;
             var usuario = Session["SessionUsuario"] as Usuario;
+            // Aquí, capturamos el ID del usuario logueado
+            int usuarioId = usuario.idusuario; // Suponiendo que la propiedad del ID se llama "idusuario"
             if (usuario == null)
                 return Json(new { error = "Usuario no autenticado" });
 
             pedido.UsuarioActualizacion = usuario.usuario;
             string mensaje_detalle = "";
+            string descripcion = ""; // Variable para la descripción de la auditoría
 
             try
             {
@@ -288,11 +299,13 @@ namespace WebAppMontGroup.Controllers
                     res_cabecera = m_pedido.insert_Pedido_Cabecera(pedido, "CREATE");
                     if (res_cabecera == 0)
                         return Json(new { error = "Error al registrar la cabecera del pedido" });
+                    descripcion += "Se ha creado una nueva cabecera de pedido. "; // Descripción
 
                     // Insertar guía del pedido
                     pedido.pedido_guia.IdPedido = res_cabecera;
                     pedido.pedido_guia.UsuarioActualizacion = usuario.usuario;
                     res_guia = m_pedido.insert_Pedido_Guia(pedido.pedido_guia, "CREATE");
+                    descripcion += "Se ha creado una nueva guía de pedido. "; // Descripción
 
                     // Insertar detalles del pedido
                     foreach (var item in pedido.pedido_detalle)
@@ -302,10 +315,19 @@ namespace WebAppMontGroup.Controllers
                         int resultado = m_pedido.insert_Pedido_Detalle(item, "CREATE");
                         if (resultado < 1)
                             mensaje_detalle += $"\nError al registrar el producto: {item.ArticuloDesc} (Resultado: {resultado})";
+                        descripcion += $"Producto agregado: {item.ArticuloDesc}. "; // Descripción del producto
                     }
-                    m_pedido.actualizar_Pedido_datos(res_cabecera);
+
                     // Validación de crédito
                     validacionCredito(pedido.Coa, res_cabecera);
+
+                    // Insertar aprobaciones automáticamente, por ahora no es neceario
+                    ModelPedidoApr model = new ModelPedidoApr();
+                    //paraseguimiento
+                    int result1 = model.insert_Pedido_Log2(pedido, "CREATE", "SE GUARDO CORRECTAMENTE", "");
+                    //paraauditoria
+                    int result3 = m_auditoria.LOG_AUDITORIA("Formulario Pedido", "Create", usuarioId, descripcion);
+
                 }
                 else
                 {
@@ -314,10 +336,12 @@ namespace WebAppMontGroup.Controllers
                     if (res_cabecera == 0)
                         return Json(new { error = "Error al actualizar la cabecera del pedido" });
 
+                    descripcion += "Se ha actualizado la cabecera de pedido. "; // Descripción
                     // Actualizar guía del pedido
                     pedido.pedido_guia.IdPedido = pedido.IdPedido;
                     pedido.pedido_guia.UsuarioActualizacion = usuario.usuario;
                     res_guia = m_pedido.insert_Pedido_Guia(pedido.pedido_guia, "UPDATE");
+                    descripcion += "Se ha actualizado la guía de pedido. "; // Descripción
 
                     // Obtener detalles actuales y gestionar eliminaciones
                     var detallesActuales = m_pedido.listaPedidoDetalle(pedido.IdPedido, "RE");
@@ -325,6 +349,7 @@ namespace WebAppMontGroup.Controllers
                     foreach (var item in itemsEliminar)
                     {
                         m_pedido.insert_Pedido_Detalle(item, "DELETE");
+                        descripcion += $"Producto eliminado: {item.ArticuloDesc}. "; // Descripción de eliminación
                     }
 
                     // Insertar o actualizar los detalles
@@ -336,16 +361,27 @@ namespace WebAppMontGroup.Controllers
                         int resultado = m_pedido.insert_Pedido_Detalle(item, accion);
                         if (resultado < 1)
                             mensaje_detalle += $"\nError al registrar el producto: {item.ArticuloDesc} (Resultado: {resultado})";
+                        if (accion == "CREATE")
+                            descripcion += $"Nuevo producto agregado: {item.ArticuloDesc}. "; // Descripción de nuevo producto
+                        else
+                            descripcion += $"Producto actualizado: {item.ArticuloDesc}. "; // Descripción de actualización de producto
                     }
 
                     // Validación de crédito
-                    m_pedido.actualizar_Pedido_datos(pedido.IdPedido);
-                    validacionCredito(pedido.Coa, pedido.IdPedido);
+                    validacionCredito(pedido.Coa, res_cabecera);
+
+                    ModelPedidoApr model = new ModelPedidoApr();
+                    //paraseguimiento
+                    int result2 = model.insert_Pedido_Log2(pedido, "UPDATE", "SE ACTUALIZO CORRECTAMENTE", "");
+                    //para auditoria
+                    int result3 = m_auditoria.LOG_AUDITORIA("Formulario Pedido", "Update", usuarioId, descripcion);
                 }
             }
             catch (Exception ex)
             {
+                int result3 = m_auditoria.LOG_AUDITORIA("Formulario Pedido", "Error", usuarioId, $"Error en la transacción: {ex.Message}");
                 return Json(new { error = $"Error en la transacción: {ex.Message}" });
+
             }
 
             general.valor_1 = res_cabecera.ToString();
@@ -354,10 +390,6 @@ namespace WebAppMontGroup.Controllers
             general.valor_4 = pedido.IdPedido == 0 ? "insertado" : "actualizado";
             return Json(general);
         }
-
-
-
-
 
 
 
@@ -521,7 +553,7 @@ namespace WebAppMontGroup.Controllers
 
             if (security_manager.validaSesion())
             {
-                PedidoTotales totales = m_pedido.ObtenerTotalesPedido(coa, idpedido); // Obtiene los totales desde la BD
+                ModelPedido.PedidoTotales totales = m_pedido.ObtenerTotalesPedido(coa, idpedido); // Obtiene los totales desde la BD
 
                 if (totales != null)
                 {
@@ -575,13 +607,10 @@ namespace WebAppMontGroup.Controllers
 
             // Generar nombre aleatorio para el archivo
             string nombreArchivoAleatorio = $"{Guid.NewGuid()}_{Path.GetFileName(archivoOC.FileName)}";
-
             // Construir la ruta completa
             string rutaCompleta = Path.Combine(rutaCarpetaAbsoluta, nombreArchivoAleatorio);
-
             // Guardar el archivo
             archivoOC.SaveAs(rutaCompleta);
-
             // Devolver la ruta relativa (útil para acceder desde la web)
             return $"{rutaCarpetaRelativa}{nombreArchivoAleatorio}";
         }
@@ -617,8 +646,8 @@ namespace WebAppMontGroup.Controllers
             }
         }
 
-        [HttpGet]
-        /*public JsonResult listaPedidos(int anio, int mes, string estado)
+        /* [HttpGet]
+        public JsonResult listaPedidosGeneral(int anio, int mes, int CodVendedor, string estado)
         {
             ModelPedido model_pedido = new ModelPedido();
 
@@ -628,36 +657,31 @@ namespace WebAppMontGroup.Controllers
                 return Json(new { error = "Sesión no válida" }, JsonRequestBehavior.AllowGet);
             }
 
-            var pedidos = model_pedido.listaPedido(anio, mes, estado);
+            var pedidos = model_pedido.listaPedidoGeneral(anio, mes, CodVendedor, estado);
 
             if (pedidos != null && pedidos.Any())
             {
                 return Json(new
                 {
                     idPedido = pedidos.Select(p => p.IdPedido),
+                    CodigoPedido = pedidos.Select(p => p.CodigoPedido),
+                    estado = pedidos.Select(p => p.Estado),
                     fechaRegistro = pedidos.Select(p => p.FechaRegistro.ToString("yyyy-MM-dd HH:mm:ss")),
                     fechaEntrega = pedidos.Select(p => p.FechaEntrega.ToString("yyyy-MM-dd HH:mm:ss")),
-                    estado = pedidos.Select(p => p.Estado),
                     coa = pedidos.Select(p => p.Coa),
                     cliente = pedidos.Select(p => p.Cliente),
-                    total = pedidos.Select(p => p.Total)
+                    total = pedidos.Select(p => p.Total),
+                    TipoDocumentoFiscal = pedidos.Select(p => p.TipoDocumentoFiscal), // Se agregó
+                    CodigoTipoPago = pedidos.Select(p => p.CodigoTipoPago), // Se agregó
+                    NombreTipoPago = pedidos.Select(p => p.NombreTipoPago), // Se agregó
+                    vendedor = pedidos.Select(p => p.Vendedor) // Se agregó
                 }, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 return Json(new { error = "No se encontraron pedidos" }, JsonRequestBehavior.AllowGet);
             }
-        }
-        */
-
-
-
-
-
-
-
-
-
+        } */
         public ActionResult CotizacionCrear(string id)
         {
             if (security_manager.validaSesion() == false)
@@ -730,7 +754,7 @@ namespace WebAppMontGroup.Controllers
 
                 bool accesoConsulta = security_manager.validaAccesoUserData(codVendedor);
 
-                if(accesoConsulta == false)
+                if (accesoConsulta == false)
                 {
                     return Json("0", JsonRequestBehavior.AllowGet);
                 }

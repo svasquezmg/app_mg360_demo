@@ -32,6 +32,8 @@ namespace WebAppMontGroup.Controllers
         {
             ModelCliente m_cliente = new ModelCliente();
             General general = new General();
+            ModelGeneral m_auditoria = new ModelGeneral(); // Auditoría
+            string descripcion = ""; // Descripción para auditoría
 
             bool permiso = false;
             permiso = security_manager.validaSesion();
@@ -40,17 +42,18 @@ namespace WebAppMontGroup.Controllers
                 permiso = false;
             }
 
-            if (permiso == true)
+            if (permiso)
             {
                 int respuesta = 0;
                 bool usuariohabilitado = false;
                 var usuario = Session["SessionUsuario"] as Usuario;
+                int usuarioId = usuario.idusuario; // ID del usuario logueado
                 cliente.UsuarioActualizacion = usuario.usuario;
                 string tipoUsuario = Session["TipoUsuario"].ToString();
 
                 if (tipoUsuario == "1")
                 {
-                    if (String.IsNullOrEmpty(cliente.CoaCliente)) //if (cliente.CoaCliente == "" || cliente.CoaCliente == null)
+                    if (String.IsNullOrEmpty(cliente.CoaCliente))
                     {
                         if (cliente.rucdni.Length == 11)
                         {
@@ -63,6 +66,7 @@ namespace WebAppMontGroup.Controllers
                         }
 
                         respuesta = m_cliente.insert_Cliente(cliente);
+                        descripcion += $"[CREACIÓN CLIENTE] RUC/DNI: {cliente.rucdni}, Razón Social: {cliente.razonSocial}. ";
 
                         if (respuesta == 1)
                         {
@@ -70,17 +74,20 @@ namespace WebAppMontGroup.Controllers
                             clienteDireccion.tipo = "Fiscal";
                             clienteDireccion.UsuarioActualizacion = usuario.usuario;
                             int res = m_cliente.insertUpdate_ClienteDireccion(clienteDireccion, "CREATE");
+                            descripcion += $"[DIRECCIÓN FISCAL] Dirección: {clienteDireccion.direccion}, Departamento: {clienteDireccion.departamento}, Provincia: {clienteDireccion.provincia}, Distrito: {clienteDireccion.distrito}. ";
+
 
                             clienteContacto.CoaCliente = cliente.CoaCliente;
                             clienteContacto.tipo = "Principal";
                             clienteContacto.UsuarioActualizacion = usuario.usuario;
                             int res2 = m_cliente.insertUpdate_ClienteContacto(clienteContacto, "CREATE");
+                            descripcion += $"[CONTACTO PRINCIPAL] Teléfono: {clienteContacto.telefono}, Correo: {clienteContacto.correo}. ";
+
                         }
                     }
                     else
                     {
-                        List<Cliente> LstCliente = new List<Cliente>(); ;
-                        LstCliente = m_cliente.listaClienteBusqueda( "id", cliente.CoaCliente, "");
+                        var LstCliente = m_cliente.listaClienteBusqueda("id", cliente.CoaCliente, "");
 
                         if (usuario.codigovendedor == LstCliente[0].codigoVendedor)
                         {
@@ -100,16 +107,21 @@ namespace WebAppMontGroup.Controllers
                                 }
                             }
                         }
-                        if (usuariohabilitado == true)
+
+                        if (usuariohabilitado)
                         {
                             clienteContacto.CoaCliente = cliente.CoaCliente;
                             clienteContacto.tipo = "Principal";
                             clienteContacto.UsuarioActualizacion = usuario.usuario;
                             respuesta = m_cliente.insertUpdate_ClienteContacto(clienteContacto, "UPDATE-RV");
+                            descripcion += $"[ACTUALIZACIÓN CONTACTO] Cliente: {cliente.CoaCliente}, Nuevo Nombre: {clienteContacto.CoaCliente}, Nuevo Teléfono: {clienteContacto.telefono}, Nuevo Correo: {clienteContacto.correo}. ";
+
 
                             if (cliente.EstadoEasy.ToString() == "1" && clienteContacto.tipo == "Principal")
                             {
                                 m_cliente.updateEasyClienteCorreoTelefono(cliente.CoaCliente, clienteContacto.telefono, clienteContacto.correo);
+                                descripcion += $"[EASY CLIENTE] Se actualizó correo: {clienteContacto.correo} y teléfono: {clienteContacto.telefono} en Easy Cliente. ";
+
                             }
                         }
                         else
@@ -126,10 +138,14 @@ namespace WebAppMontGroup.Controllers
                 {
                     general.valor_2 = "El Ruc o Dni ya se encuentran registrado";
                 }
-                if (respuesta == 1)
+                else if (respuesta == 1)
                 {
                     general.valor_1 = cliente.CoaCliente;
                     general.valor_2 = "";
+
+                    // ✅ Registro en auditoría
+                    string accionAuditoria = string.IsNullOrEmpty(cliente.CoaCliente) ? "CREATE" : "UPDATE-RV";
+                    m_auditoria.LOG_AUDITORIA("Formulario Cliente", accionAuditoria, usuarioId, descripcion);
                 }
             }
             else
@@ -138,9 +154,9 @@ namespace WebAppMontGroup.Controllers
                 general.valor_2 = "No tiene permiso para editar cliente";
             }
 
-
             return Json(general, JsonRequestBehavior.AllowGet);
         }
+
 
         [HttpGet]
         public JsonResult listaClienteBusqueda(string ruc_razon)
@@ -149,7 +165,7 @@ namespace WebAppMontGroup.Controllers
             List<Cliente> lst_cliente = new List<Cliente>();
             if (security_manager.validaSesion() == true)
             {
-                lst_cliente = model_cliente.listaClienteBusqueda("like", ruc_razon,"");
+                lst_cliente = model_cliente.listaClienteBusqueda("like", ruc_razon, "");
             }
             return Json(lst_cliente, JsonRequestBehavior.AllowGet);
         }
@@ -224,7 +240,7 @@ namespace WebAppMontGroup.Controllers
 
                 bool accesoConsulta = security_manager.validaAccesoUserData(codVendedor);
 
-                if(accesoConsulta == false)
+                if (accesoConsulta == false)
                 {
                     return Json("0", JsonRequestBehavior.AllowGet);
                 }
@@ -344,7 +360,7 @@ namespace WebAppMontGroup.Controllers
             {
                 ViewBag.id = id;
                 List<Cliente> lstClient = new List<Cliente>();
-                lstClient = modelCliente.listaClienteBusqueda("vendedor", codVendedor, id );
+                lstClient = modelCliente.listaClienteBusqueda("vendedor", codVendedor, id);
                 if (lstClient.Count > 0)
                 {
                     ViewData["Cliente"] = lstClient;
@@ -353,7 +369,7 @@ namespace WebAppMontGroup.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("ClienteCrear","Cliente");
+                    return RedirectToAction("ClienteCrear", "Cliente");
                 }
             }
             else

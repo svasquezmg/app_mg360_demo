@@ -37,7 +37,9 @@
         xNombre2 = "",
         xTelefono2 = "",
         xIdGuia = "0",
-        xUbigeo = "";
+        xUbigeo = "",
+        xTelefono = "",
+        xCorreo = "";
 
     bool bloquearBoton = false; // Variable para bloquear el botón
     bool ocultarTipoDocumento = string.IsNullOrEmpty(xTipoDocumentoFiscal); //BloquearTipoDocumento
@@ -82,6 +84,8 @@
         xNombre2 = dataPedido.pedido_guia.Nombre2;
         xTelefono2 = dataPedido.pedido_guia.Telefono2;
         xUbigeo = dataPedido.Ubigeo;
+        xTelefono = dataPedido.ClienteContacto.telefono;
+        xCorreo = dataPedido.ClienteContacto.correo;
         bloquearBoton = true; // Bloquear el botón si ViewBag.id no es "0"
 
         @* Productos *@
@@ -108,12 +112,12 @@
                 <input class="form-control form-control-sm mb-3" type="hidden" id="IdPedidoInput" value="@xId" placeholder=""
                        aria-label=".form-control-sm example" disabled>
                 <input class="form-control form-control-sm mb-3" type="hidden" id="IdPedidoGuiaInput" value="@xIdGuia" placeholder=""
-                       aria-label=".form-control-sm example" disabled>
+                               aria-label=".form-control-sm example" disabled>
 
                 <label for="VendedorCbo" class="form-label" style="margin-top:10px">
                     Vendedor <span class="obligatorio">*</span>
                 </label>
-                <select class="js-example-basic-single" id="VendedorCbo" name="state" @(bloquearBoton ? "disabled" : "") required>
+                <select class="js-example-basic-single" id="VendedorCbo" name="state" @(bloquearBoton ? "disabled" : "") required >
                     <option value="-1" selected>Seleccione Vendedor</option>
                     @{
                         var usu_data = ViewData["Usuario"] as WebAppMontGroup.Entity.Usuario;
@@ -158,7 +162,7 @@
                 <textarea class="form-control form-control-sm mb-3" id="ClienteDireccionInput" value="@xDireccionCliente" placeholder=""
                           required="" disabled>@xDireccionCliente</textarea>
                 <div id="divUbigeoDirCliente" style="margin-top: -10px; font-size:11px">
-                    @*  <span class="fw-semibold text-decoration-none text-success">@xDepartamento- @xProvincia - @xDistrito (@xUbigeo)</span> *@
+                   @*  <span class="fw-semibold text-decoration-none text-success">@xDepartamento- @xProvincia - @xDistrito (@xUbigeo)</span> *@
                 </div>
                 <input type="hidden" id="hiddenUbigeoFiscalCliente" name="hiddenUbigeoFiscalCliente" value="@xUbigeo">
                 <label for="ClienteTipoInput" class="form-label" style="margin-top:13px">Tipo Cliente</label>
@@ -180,11 +184,10 @@
                 <div class="row">
                     <div class="col-xl-8">
                         <label for="ClienteCorreoInput" class="form-label" style="margin-top:10px">
-
                             Correo Cliente
                         </label>
                         <input class="form-control" type="text" id="ClienteCorreoInput" placeholder=""
-                               aria-label=".form-control-sm example" disabled>
+                               aria-label=".form-control-sm example" value="@xCorreo" disabled>
                     </div>
                     <div class="col-xl-4">
                         <label for="ClienteTelefonoInput" class="form-label" style="margin-top:10px">
@@ -192,7 +195,7 @@
 
                         </label>
                         <input class="form-control" type="text" id="ClienteTelefonoInput" placeholder=""
-                               aria-label=".form-control-sm example" disabled>
+                               aria-label=".form-control-sm example" value="@xTelefono" disabled>
                     </div>
                 </div>
 
@@ -216,7 +219,7 @@
                     @{
                         foreach (var data in ViewData["PagoTipo"] as IList<WebAppMontGroup.Entity.PagoTipo>)
                         {
-                            if (data.estado == "1")
+                            if (data.estado == "1") //verificar
                             {
                                 <option value="@data.codigo" @(data.codigo == @xCodigoTipoPago ? "selected" : "")>@data.descripcion</option>
                             }
@@ -473,14 +476,7 @@
                     <option value="-1" @(xGuiaTransporteEmpRuc == "-1" ? "selected" : "")>Seleccione</option>
                     @foreach (var usu in ViewData["Agencia"] as IList<WebAppMontGroup.Entity.Agencia>)
                     {
-                        if (usu.ruc != "20509532622")
-                        {
-                            <option value="@usu.ruc" @(usu.ruc == xGuiaTransporteEmpRuc ? "selected" : "")>@usu.razon_social</option>
-                        }
-                        else
-                        {
-                            <option value="@usu.ruc" @(usu.ruc == xGuiaTransporteEmpRuc ? "selected" : "") disabled>MONT GROUP SAC</option>
-                        }
+                        <option value="@usu.ruc" @(usu.ruc == xGuiaTransporteEmpRuc ? "selected" : "")>@usu.razon_social</option>
                     }
                 </select>
             </div>
@@ -572,7 +568,7 @@
             </div>
         </div>
     </div>
-
+    
     <div class="card-footer d-none border-top-0">
         <!-- Prism Code -->
         <!-- Prism Code -->
@@ -663,7 +659,6 @@
                         <input class="form-control mb-3" type="text" id="ProductoBuscarText"
                                placeholder="Ingrese el nombre o nombre corto del producto"
                                aria-label=".form-control-sm example" style="visibility: hidden;">
-
 
                     </div>
                 </div>
@@ -811,25 +806,26 @@
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Obtener los detalles del pedido desde Razor como JSON
-        var pedido_Detalles = @Html.Raw(JsonSerializer.Serialize(pedidoDetalles));
-        var tipoSalidaProducto = $("#VendedorCbo").find(':selected').attr("RValamcen");
-        var zonaVenta = "@xZonaVenta"; // Variable desde backend
-        var tipoCliente = $("#ClienteTipoInput").val(); // Tipo de cliente
-        console.log("ess: ",tipoSalidaProducto)
-
+    // Obtener los detalles del pedido desde Razor como JSON
+    var pedidoDetalles = @Html.Raw(JsonSerializer.Serialize(pedidoDetalles));
+    var tipoSalidaProducto = $("#VendedorCbo").find(':selected').attr("RValamcen");
+     var zonaVenta = "@xZonaVenta"; // Variable desde backend
+    var tipoCliente = $("#ClienteTipoInput").val(); // Tipo de cliente
+@*     console.log("ess: ",tipoSalidaProducto)
+ *@
     // Obtener el div donde se agregarán los productos
     let contenedor = document.getElementById("divProductosPedir");
         if (contenedor) {
-            pedido_Detalles.forEach(detalle => {
+            pedidoDetalles.forEach(detalle => {
                 // Crear la estructura HTML para cada producto
                 let card = document.createElement("div");
-        card.classList.add("card", "mb-2");
+                card.classList.add("card", "mb-2");
                 let contenido = '';
 
                 if (zonaVenta == "LIMA") {
                     contenido = `
                         <div class="row" style="margin-bottom: 15px; border: 1px solid #cacfd2; padding: 15px 0px; border-radius: 10px" id="PProductoSelect_${idemProductoSeleccionado}">
+                           
                             <div class="col-xl-3 colPP3" style="margin-bottom:15px">
                                 <label for="ProductoNombreLabel_${idemProductoSeleccionado}" class="text-muted txtProd">Producto:</label>
                                 <h6 class="card-title fw-semibold" id="ProductoNombreLabel_${idemProductoSeleccionado}">${detalle.ArticuloDesc}</h6>
@@ -863,7 +859,7 @@
                             </div>
                             <div class="col-xl-2 colPP2">
                                 <label for="DescuentoLabel_${idemProductoSeleccionado}" class="text-muted">Descuento</label>
-                                <input type="hidden" id="idPromo${idemProductoSeleccionado}">
+                                <input type="text" id="idPromo${idemProductoSeleccionado}" value="${detalle.TipoPromocion}">
                                 <input type="text" class="form-control form-control-sm mb-2 cend" id="DescuentoInput_${idemProductoSeleccionado}" value="${detalle.Descuento}" disabled>
                             </div>
                             <div class="col-xl-2 colPP2">
@@ -906,23 +902,23 @@
 
                     <div class="col-xl-2 colPP2">
                     <label for="ProductoCantidadInput_${idemProductoSeleccionado}" class="text-muted">Cantidad <span class="obligatorio">*</span></label>
-                    <input class="form-control form-control-sm mb-2 ProductoCantidadInput cend vn0 is-valid"
+                    <input class="form-control form-control-sm mb-2 ProductoCantidadInput cend vn0 is-valid" 
                     type="text" id="ProductoCantidadInput_${idemProductoSeleccionado}" placeholder="" aria-label=".form-control-sm example" value="${detalle.Cantidad}" onkeyup="fnActualizarPrecioYCantidad(${idemProductoSeleccionado})">
                     </div>
                     <div class="col-xl-2 colPP2">
                     <label for="ProductoPrecioInput_${idemProductoSeleccionado}" class="text-muted">Precio <span class="obligatorio">*</span></label>
-                    <input class="form-control form-control-sm mb-2 ProductoPrecioInput cend vn1" type="text"
+                    <input class="form-control form-control-sm mb-2 ProductoPrecioInput cend vn1" type="text" 
                     id="ProductoPrecioInput_${idemProductoSeleccionado}" placeholder="" aria-label=".form-control-sm example"
                     value="${detalle.Precio}" onkeyup="fnCalcularSubTotal(${idemProductoSeleccionado})">
                     </div>
                     <div class="col-xl-2 colPP2">
                     <label for="DescuentoLabel_" class="text-muted">Descuento </label>
-                    <input type="hidden" id="idPromo${idemProductoSeleccionado}">
+                    <input type="text" id="idPromo${idemProductoSeleccionado}" value="${detalle.TipoPromocion}">
                     <input type="text" class="form-control form-control-sm mb-2 cend" id="DescuentoInput_${idemProductoSeleccionado}" value="${detalle.Descuento}" disabled>
                     </div>
                     <div class="col-xl-2 colPP2">
                     <label for="ProductoSubTotalInput_1" class="text-muted">Sub Total <span class="obligatorio">*</span></label>
-                    <input class="form-control form-control-sm mb-2 ProductoSubTotalInput cend" type="text" id="ProductoSubTotalInput_${idemProductoSeleccionado}"
+                    <input class="form-control form-control-sm mb-2 ProductoSubTotalInput cend" type="text" id="ProductoSubTotalInput_${idemProductoSeleccionado}" 
                     placeholder="" aria-label=".form-control-sm example" value="${detalle.SubTotal}" disabled >
                     </div>
                     <div class="col-xl-1 colPP1 text-center">
@@ -1911,14 +1907,14 @@
                 var p_x_descuento = $("#DescuentoInput_"+ idem).val();
                 var p_x_idpromo = $("#idPromo"+ idem).val();
                 var p_x_idDetalle = $("#IdPedidoDetalleInput_"+ idem).val();
-
+  
 
 
                 var p_x_cantidad = $("#ProductoCantidadInput_" + idem).val();
                 var p_x_precio = $("#ProductoPrecioInput_" + idem).val();
                 var p_x_promocion = $("#PromocionCbo_" + idem).val();
                 var p_x_subtotal = $("#ProductoSubTotalInput_" + idem).val();
-                var p_x_descuento = $("#DescuentoInput_" + idem).val();
+
 
                 if (p_x_cantidad == "0" || p_x_cantidad.trim() == "" || p_x_precio == "0" || p_x_precio.trim() == "") {
                     mensaje_validacion = "<br/>Error en el producto " + p_x_nombre + " valide precio y cantidad";
@@ -1937,11 +1933,11 @@
                     "Precio": p_x_precio,
                     "Promocion": p_x_promocion,
                     "SubTotal": p_x_subtotal,
-                    "UsuarioResponsable" : '',
+                    "UsuarioResponsable": '',
                     "Descuento": p_x_descuento,
                     "TipoPromocion": p_x_idpromo,
-                    "AplicaPromocion": 0
-                }
+                    "AplicaPromocion": p_x_idpromo ? 1 : 0 // Indicar si aplica promoción
+                };
                 listProductos.push(itemProducto);
             }
             catch (err) {
@@ -2009,7 +2005,7 @@
 
 
                 pedido_guia: {
-
+                    
                     "idPedidoGuia": $("#IdPedidoGuiaInput").val(),
                     "GuiaRegion": x_zona,
                     "GuiaDireccionPartida": d_salidaAlmacen,
@@ -2133,7 +2129,7 @@
                                 text: mensaje,
                                 confirmButtonText: 'Ok, Ver detalle pedido'
                             }).then(() => {
-                                window.location.href = `../Pedido/PedidoVer?idPedido=${response.valor_1}`;
+                                window.location.href = `../Pedido/PedidoVer?id=${response.valor_1}`;
                             });
                         } else {
                             Swal.fire({
@@ -2354,8 +2350,8 @@
         });
     });
 </script>
-<script>
-    document.addEventListener("keydown", function (e) {
+@*<script>
+    document.addEventListener("keydown", function(e) {
         // Deshabilitar F12
         if (e.keyCode === 123) {
             e.preventDefault();
@@ -2376,10 +2372,10 @@
 
     });
 
-    document.addEventListener("contextmenu", function (e) {
+    document.addEventListener("contextmenu", function(e) {
         e.preventDefault();
     });
-</script>
+</script>*@
 
 @* LIBERIA PARA ALERT *@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

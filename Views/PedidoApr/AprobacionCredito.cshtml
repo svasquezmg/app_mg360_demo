@@ -1,0 +1,815 @@
+﻿@{
+    ViewBag.Title = "AprobacionCredito";
+}
+<link rel="stylesheet" href="~/assets/descargados/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="~/assets/descargados/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="~/assets/descargados/buttons.bootstrap5.min.css">
+<!-- Start:: row-2 -->
+<div class="row">
+    <div class="col-xl-8">
+        <div class="card custom-card">
+            <div class="card custom-card">
+                @* @{
+                    var usu_data2 = Session["SessionUsuario"] as WebAppMontGroup.Entity.Usuario; *@
+                <div class="card-header fs-18 fw-semibold mb-0 text-primary">
+                    Departamento de creditos y cobranzas
+                </div>
+                @* } *@
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-xl-2">
+                            <label for="CboEstado" class="form-label">Mostrar</label>
+                            <select id="CboEstado" class="form-select form-control-sm mb-2">
+                                <option value="-1">Seleccione</option>
+                                <option value="PE">Pendiente</option>
+                                <option value="APR">Aprobados</option>
+                                <option value="DES">Desprobados</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-2">
+                            <label for="CboAnio" class="form-label">Año</label>
+                            <select id="CboAnio" class="form-select form-control-sm mb-2">
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-2">
+                            <label for="CboMes" class="form-label">Mes</label>
+                            <select id="CboMes" class="form-select form-control-sm mb-2">
+                                <option value="01">Enero</option>
+                                <option value="02">Febrero</option>
+                                <option value="03">Marzo</option>
+                                <option value="04">Abril</option>
+                                <option value="05">Mayo</option>
+                                <option value="06">Junio</option>
+                                <option value="07">Julio</option>
+                                <option value="08">Agosto</option>
+                                <option value="09">Setiembre</option>
+                                <option value="10">Octubre</option>
+                                <option value="11">Noviembre</option>
+                                <option value="12">Diciembre</option>
+                            </select>
+                        </div>
+                        @* <div class="col-xl-2">
+            <label for="CboResponsable" class="form-label">Responsable</label>
+            @{
+                var usu_data = Session["SessionUsuario"] as WebAppMontGroup.Entity.Usuario;
+                <select id="CboResponsable" class="form-select form-control-sm mb-2">
+                    <option value="@usu_data.usuario">@usu_data.usuario </option>
+                </select>
+            }
+        </div> *@
+                        <div class="col-xl-3" style="margin-bottom: 10px;">
+                            <label for="divButton" class="form-label">&nbsp;</label>
+                            <div id="divButton">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        id="btnBuscarDetalle" data-bs-target="#exampleModalScrollable3"
+                                        style="width: 100%;">
+                                    <i class="fe fe-search" aria-hidden="true"></i> Buscar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-xl-3" style="margin-bottom: 10px;">
+                            <label for="divButton" class="form-label">&nbsp;</label>
+                            <div id="divButton">
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" id="btnDescargar"
+                                        data-bs-target="#exampleModalScrollable3" style="width: 100%;">
+                                    <i class="fe fe-download" aria-hidden="true"></i> Descargar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-xl-2">
+                            @* <label for="TxtResponsable" class="form-label">Responsable</label> *@
+                            @{
+                                var usu_data = Session["SessionUsuario"] as WebAppMontGroup.Entity.Usuario;
+                            }
+                            <input type="hidden" id="CboResponsable" class="form-control form-control-sm mb-2"
+                                   value="@usu_data.usuario" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" style="padding-top:0px">
+                <div class="table-responsive">
+                    <table id="responsiveDataTable" class="table table-bordered text-nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th class="thMG1">ID</th>
+                                <th class="thMG1">Pedido</th>
+                                <th class="thMG1">Coa</th>
+                                <th class="thMG1">Cliente</th>
+                                @* <th class="thMG1" style="width: 15%;">Tipo del Pago</th> *@
+                                <th class="thMG1">Vendedor</th>
+                                @* <th class="thMG1" style="width: 10%;">Tipo Cliente</th> *@
+                                <th class="thMG1">F. Registro</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @* <tr>
+                                    <td>0</td>
+                                    <td>TP-0001-121412</td>
+                                    <<td>02/11/2024 9:55 am</td>
+                                        <td>20522658945</td>
+                                        <td>FISIOSERVICE EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA - FISIOSERVICE
+                                            E.I.R.L.
+                                        </td>
+                                        <td></td>
+                                        <td>Jhoyson Casanova Adriano</td>
+                                </tr> *@
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card custom-card">
+            <div class="card-header justify-content-between">
+                <div class="card-title">
+                    Detalle Pedido
+                </div>
+
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="responsiveDataTable3" class="table text-nowrap">
+                        <thead>
+                            <tr>
+                                <th class="thMG1">ID</th>
+                                <th class="thMG1">Codigo</th>
+                                <th class="thMG1">Descripcion</th>
+                                <th class="thMG1">Cantidad</th>
+                                <th class="thMG1">Precio</th>
+                                <th class="thMG1">Monto</th>
+                                <th class="thMG1">Descuento</th>
+                                <th class="thMG1">Responsable</th>
+                                <th class="thMG1">Decisión</th>
+                                @* <th class="thMG1">Obs.</th> *@
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @* <tr>
+                                    <td>00001</td>
+                                    <td>Nombre del producto</td>
+                                    <td>01</td>
+                                    <td>20.00</td>
+                                    <td>20.00</td>
+                                    <td>Descuento</td>
+                                    <td>Sebastian V</td>
+                                </tr> *@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="row gy-3">
+                    <div class="col-xl-12">
+                        <label for="input-rounded1" class="form-label">Observaciones</label>
+                        <textarea class="form-control form-control-sm mb-3" id="ObservacionCrInput"
+                            name="ObservacionCrInput" placeholder="" disabled></textarea>
+                    </div>
+                    <div class="col-xl-12">
+                        <label for="input-rounded1" class="form-label">No Aprobado por</label>
+                        <textarea class="form-control form-control-sm mb-3" id="NoAprobadoInput" placeholder=""
+                            disabled></textarea>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="card custom-card p-3">
+            <div class="btn-group " role="group" aria-label="Button group with nested dropdown">
+                <div class="btn-group w-100" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle "
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Opciones
+                    </button>
+                    <ul class="dropdown-menu col-xl-12" aria-labelledby="btnGroupDrop1">
+                        <li><a class="dropdown-item" href="javascript:void(0);">Crédito</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);">Consultar
+                                Crédito</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);">Historial de
+                                Ventas</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);">Tipo Pago</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);">Ver detalle del
+                                cliente</a></li>
+                        <li><a class="dropdown-item" href="javascript:void(0);">Ver cliente
+                                referenciado</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card custom-card">
+            @* <div class="col-xl-12">
+                <div id="estado-alerta" class="card-body">
+                    <div class="alert alert-primary d-flex align-items-center" role="alert">
+                        <i id="estado-icono" class="fe fe-info me-2"></i>
+                        <div id="estado-texto">Sin estado</div>
+                    </div>
+                </div>
+            </div> *@
+            <div class="card-header justify-content-between">
+                <div class="card-title">
+                    Datos del Pedido
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row gy-3">
+                    <div class="col-xl-12">
+                        <input class="form-control form-control-sm mb-3" type="hidden" id="IdPedidoInput" value=""
+                            placeholder="" aria-label=".form-control-sm example" disabled>
+                        <input class="form-control form-control-sm mb-3" type="hidden" id="IdPedidoLogInput" value=""
+                            placeholder="" aria-label=".form-control-sm example" disabled>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                Pedido :
+                            </span><span class="text-success">No disponible</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                Coa :
+                            </span>No disponible
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                Cliente :
+                            </span>No disponible
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                Dirección :
+                            </span>No disponible
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                Telefono :
+                            </span>No disponible
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                Correo :
+                            </span>No disponible
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                Vendedor :
+                            </span>No disponible
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                Monto Total :
+                            </span>No disponible
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                T. Pago:
+                            </span>No disponible
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                F. Pedido:
+                            </span>No disponible
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                F. Entrega:
+                            </span>No disponible
+                        </div>
+                    </div>
+                    @* <div class="col-xl-12">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                Tipo Cliente:
+                            </span>No disponible
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                Departamento:
+                            </span>No disponible
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                Provincia:
+                            </span>No disponible
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="fs-14 text-muted">
+                            <span class="me-2 text-default fw-semibold">
+                                Distrito:
+                            </span>No disponible
+                        </div>
+                    </div> *@
+
+                    <div class="col-xl-6">
+                        <div class="d-grid gap-2 mb-4">
+                            <button class="btn btn-danger-light btn-wave waves-effect waves-light"
+                                onclick="fnAprobar('DES');" id="btnDesaprobar">
+                                <i class="fe fe-x-circle"></i> Desaprobar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="d-grid gap-2 mb-4">
+                            <button class="btn btn-warning btn-wave waves-effect waves-light"
+                                onclick="fnAprobar('APR');" id="btnAprobar">
+                                <i class="fe fe-check-circle"></i> Aprobar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-xl-12">
+                    <label for="input-rounded2" class="form-label">Comentarios</label>
+                    <textarea class="form-control form-control-sm mb-3" id="ComentariosInput" placeholder=""
+                        required=""></textarea>
+                </div>
+                <hr>
+                <div class="card custom-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            Seguimiento del pedido
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="order-track">
+                            <div class="accordion" id="basicAccordion1">
+                                <div class="accordion-item border-0 bg-transparent mb-2">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+
+
+<br />
+<br />
+<br />
+
+
+<div class="modal fade" id="exampleModalScrollablePedidosLst" tabindex="-1" data-bs-backdrop="static"
+    aria-labelledby="exampleModalScrollablePedidosLst" data-bs-keyboard="false" aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!--<div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel2">
+                    Modal title
+                </h6>
+            </div>-->
+            <div class="modal-body" style="text-align:center">
+                <img src="~/assets/images/loading.gif" />
+                <p>
+                    Estamos cargando la información. Por favor, espere.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@* LIBERIA PARA ALERT *@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="~/assets/descargados/jquery.dataTables.min.js"></script>
+<script src="~/assets/descargados/dataTables.bootstrap5.min.js"></script>
+<script src="~/assets/descargados/dataTables.responsive.min.js"></script>
+<script src="~/assets/descargados/dataTables.buttons.min.js"></script>
+
+@* <script src="~/assets/descargados/buttons.html5.min.js"></script> *@
+<script src="~/assets/descargados/jszip.min.js"></script>
+
+<script src="~/assets/js/datatables.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $("#CboEstado").change(function () {
+            if ($(this).val() === "APR") {
+                $("#CboAnio, #CboMes").closest('.col-xl-2').show();
+            } else {
+                $("#CboAnio, #CboMes").closest('.col-xl-2').hide();
+            }
+        }).trigger("change"); // Ejecutar al cargar la página
+
+
+
+        $("#btnBuscarDetalle").click(function () {
+            // Limpiar la tabla si es DataTable
+            let table = $("#responsiveDataTable3").DataTable();
+            table.clear().draw();
+
+            // Limpiar los inputs ocultos
+            $("#IdPedidoInput, #IdPedidoLogInput").val("");
+
+            // Limpiar los textos dinámicos
+            $(".fs-14.text-muted span.text-success, .fs-14.text-muted span:not(.fw-semibold)").text("No disponible");
+
+            // Llamar a la función de consulta
+            fnConsultarPedido();
+        });
+
+
+        async function fnConsultarPedido() {
+            let estado = $("#CboEstado").val();
+            @* let responsable = $("#CboResponsable").val(); *@
+            let responsable = "";
+            let tip = "CREDITO";
+
+            let params = {
+                estado: estado,
+                responsable: responsable,
+                tipo: tip
+            };
+
+            if (estado === "PE") {
+                params.anio = 0;
+                params.mes = 0;
+            } else if (estado == "DES") {
+                params.anio = 0;
+                params.mes = 0;
+            } else {
+                params.anio = $("#CboAnio").val();
+                params.mes = $("#CboMes").val();
+            }
+
+            let table = $('#responsiveDataTable').DataTable();
+            table.clear().draw();
+
+            try {
+                let response = await $.ajax({
+                    url: '../PedidoApr/listaPedidosApr',
+                    type: 'GET',
+                    data: params
+                });
+
+                if (response.error) {
+                    console.error(response.error);
+                    return;
+                }
+
+                response.idPedido.forEach((id, index) => {
+                    let row = [
+                        id, // ID
+                        response.pedido[index], // Pedido
+                        response.coa[index], // Coa
+                        response.cliente[index], // Cliente
+                        @* response.tipoPago[index], *@ // T.Pago
+                        response.vendedor[index],
+                        @* response.codCategoriaCliente[index]  *@ // Vendedor
+                        response.fechaRegistro[index] // Registrado
+                    ];
+                    table.row.add(row);
+                });
+                table.draw(); // Para actualizar la tabla
+
+            } catch (error) {
+                console.error("Error en la consulta: ", error);
+            }
+        }
+
+
+        $('#responsiveDataTable tbody').on('click', 'tr', function () {
+            $('#responsiveDataTable tbody tr').removeClass('selected');
+            $(this).addClass('selected');
+
+            let idPedido = $(this).find("td:eq(0)").text().trim();
+            let res = "";
+            let es = $("#CboEstado").val();
+            let pro = "CREDITO";
+
+            $.ajax({
+                url: '../PedidoApr/ObtenerPedidoPorId',
+                type: 'GET',
+                data: { idPedido: idPedido, responsable: res, estado: es, proviene: pro },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        $(".text-success").text(response.codigoPedido);
+                        $(".fs-14:contains('Coa :')").html(`<span class="me-2 text-default fw-semibold">Coa :</span>${response.coa}`);
+                        $(".fs-14:contains('Cliente :')").html(`<span class="me-2 text-default fw-semibold">Cliente :</span> ${response.cliente}`);
+                        $(".fs-14:contains('Vendedor :')").html(`<span class="me-2 text-default fw-semibold">Vendedor :</span> ${response.vendedor}`);
+                        $(".fs-14:contains('Monto Total :')").html(`<span class="me-2 text-default fw-semibold">Monto Total :</span> S/ ${parseFloat(response.total).toFixed(2)}`);
+                        $(".fs-14:contains('T. Pago:')").html(`<span class="me-2 text-default fw-semibold">T. Pago:</span> ${response.tipoPago}`);
+                        $(".fs-14:contains('F. Pedido:')").html(`<span class="me-2 text-default fw-semibold">F. Pedido:</span> ${response.fechaRegistro}`);
+                        $(".fs-14:contains('F. Entrega:')").html(`<span class="me-2 text-default fw-semibold">F. Entrega:</span> ${response.fechaEntrega}`);
+                        $(".fs-14:contains('Tipo Cliente:')").html(`<span class="me-2 text-default fw-semibold">Tipo Cliente:</span> ${response.codCategoriaCliente}`);
+                        $('#ObservacionCrInput').val(response.observacionCredito || 'No hay observaciones');
+                        $('#NoAprobadoInput').val(response.seguimientoCredito || 'No hay observaciones');
+                        $('#IdPedidoInput').val(response.idPedido);
+
+                        // Limpiar la variable antes de llenar nuevos valores
+                        idPedidoDetalles = [];
+                        // Limpiar la tabla de detalles
+                        let detallesPedido = '';
+
+                        // Recorrer los detalles del pedido y agregarlos a la tabla
+                        response.pedidoDetalle.forEach(detalle => {
+
+                            idPedidoDetalles.push(detalle.idPedidoDetalle); // Guardar ID en la variable global
+
+                            detallesPedido += `
+                            <tr style="height: 100px !important;">
+                                <td>${detalle.idPedidoDetalle}</td>
+                                <td>${detalle.codigo}</td>
+                                <td><textarea class="form-control aiCliente" rows="2" disabled readonly>${detalle.articulo}</textarea></td>
+                                <td>${detalle.cantidad}</td>
+                                <td>${detalle.precio.toFixed(2)}</td>
+                                <td>${detalle.subTotal.toFixed(2)}</td>
+                                <td>${detalle.descuento.toFixed(2)}</td>
+                                <td>${detalle.responsable}</td>
+                                <td>
+                                    <span class="${detalle.decision === 'PE' ? 'bg-warning-transparent cssPendiente' :
+                                    detalle.decision === 'APR' ? 'bg-success-transparent cssFinalizado' :
+                                        detalle.decision === 'DES' ? 'bg-danger-transparent cssDesaprobado' : ''
+                                }">
+                                        ${detalle.decision === 'PE' ? 'Pendiente' :
+                                    detalle.decision === 'APR' ? 'Aprobado' :
+                                        detalle.decision === 'DES' ? 'Desaprobado' :
+                                            detalle.decision}
+                                    </span>
+                                </td>
+                            </tr>
+                        `;
+
+                        });
+                        // Insertar en la tabla
+                        $("#responsiveDataTable3 tbody").html(detallesPedido);
+
+
+                        // Limpiar la sección del pedido log antes de agregar nuevos datos
+                        let pedidoLogHTML = '';
+                        response.pedidoLog.forEach((log, index) => {
+                            let icono = "bx bxs-info-circle"; // Ícono por defecto
+                            let colorClase = "text-muted"; // Clase de color por defecto
+
+                            switch (log.accion) {
+                                case "APROBADO":
+                                    icono = "bx bxs-check-circle";
+                                    colorClase = "text-success";
+                                    break;
+                                case "DESAPROBADO":
+                                    icono = "bx bxs-x-circle";
+                                    colorClase = "text-danger";
+                                    break;
+                                case "UPDATE":
+                                    icono = "bx bxs-edit";
+                                    colorClase = "text-warning";
+                                    break;
+                            }
+
+                            pedidoLogHTML += `
+                            <div class="border-0 bg-transparent mb-2">
+                                <div class="d-flex">
+                                    <div class="me-3">
+                                        <span class="avatar avatar-md avatar-rounded bg-light ${colorClase}">
+                                            <i class="${icono}"></i>
+                                        </span>
+                                    </div>
+                                    <div class="flex-fill">
+                                        <p class="fw-semibold mb-0 fs-14 ${colorClase}">${log.accion}</p>
+                                        <span class="fs-12">${log.fecha}</span>
+                                    </div>
+                                </div>
+                                <div class="ps-5 ms-2">
+                                    <div class="fs-12">
+                                        <p class="mb-0"><span class="fw-semibold">Usuario:</span> ${log.usuario}</p>
+                                        <p class="mb-0"><span class="fw-semibold">Obs:</span> ${log.obs ? log.obs : 'Sin comentarios'}</p>
+                                    </div>
+                                </div>
+                            </div>`;
+                        });
+
+
+                        // Insertar el HTML generado dentro del acordeón
+                        $('#basicAccordion1').html(pedidoLogHTML);
+
+
+
+                        let estado = $("#CboEstado").val();
+                        // Ahora puedes usar 'decision' para habilitar o deshabilitar botones
+                        if (estado !== "PE") {
+                            document.getElementById("btnAprobar").disabled = true;
+                            document.getElementById("btnDesaprobar").disabled = true;
+                        } else {
+                            document.getElementById("btnAprobar").disabled = false;
+                            document.getElementById("btnDesaprobar").disabled = false;
+                        }
+
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("Error al obtener los datos.");
+                }
+            });
+        });
+    });
+</script>
+<!-- Tus botones -->
+<script>
+    async function fnAprobar(decision) {
+        try {
+            // Obtener valores de los campos
+            let IdPedido = $("#IdPedidoInput").val().trim();
+            let usuario = $("#CboResponsable").val().trim();
+            let comentario = $("#ComentariosInput").val().trim();
+            let pro = "CREDITO";
+
+            // Validar si hay campos vacíos
+            if (!IdPedido || !usuario || !idPedidoDetalles) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos Vacíos',
+                    text: 'Todos los campos son obligatorios.',
+                    confirmButtonText: 'Entendido'
+                });
+                return;
+            }
+
+            // Si todos los campos están completos, continúa con la ejecución
+            // Definir el mensaje según la decisión
+            let mensajeConfirmacion = decision === "APR"
+                ? "¿Estás seguro de que deseas APROBAR este pedido?"
+                : "¿Estás seguro de que deseas DESAPROBAR este pedido?";
+
+            let confirmacion = await Swal.fire({
+                icon: 'question',
+                title: 'Confirmación',
+                text: mensajeConfirmacion,
+                showCancelButton: true,
+                confirmButtonText: 'Sí, continuar',
+                cancelButtonText: 'Cancelar'
+            });
+
+
+            if (!confirmacion.isConfirmed) {
+                return; // Si el usuario cancela, no hace nada
+            }
+
+            let datos = {
+                IdPedido: IdPedido,
+                UsuarioAprobador: usuario,
+                Obs: comentario,
+                Decision: decision,
+                IdPedidoDetalle: idPedidoDetalles, // Enviamos la lista de IDs de detalles
+                Proviene: pro
+            };
+
+            console.log("Datos enviados:", datos);
+
+            $.ajax({
+                url: '../PedidoApr/crudAprobar',
+                type: 'POST',
+                data: JSON.stringify(datos),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (response) {
+                    console.log("Respuesta del servidor:", response);
+
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Éxito!',
+                            text: response.message,
+                            confirmButtonText: 'Aceptar'
+                        }).then(() => {
+                            location.reload(); // Solo actualiza la página
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '¡Error!',
+                            text: response.message || 'Error desconocido',
+                            confirmButtonText: 'Entendido'
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error AJAX:", xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: '¡Error!',
+                        text: 'No se pudo procesar la solicitud.',
+                        confirmButtonText: 'Entendido'
+                    });
+                }
+            });
+        } catch (error) {
+            console.error('Error en la función fnAprobar:', error);
+        }
+    }
+
+</script>
+<style>
+    .choices {
+        margin-bottom: 15px !important;
+    }
+
+    .divFecha {
+        margin-top: 0px !important;
+    }
+
+    .tdCendter {
+        text-align: center !important;
+    }
+
+    .rowRed {
+        background-color: rgba(var(--danger-rgb), .1) !important;
+        color: rgb(var(--danger-rgb)) !important;
+        border-color: rgba(var(--danger-rgb), .1) !important;
+    }
+
+    .dtr-details {
+        width: 100%
+    }
+
+    .cssPendiente {
+        padding: 5px 5px 5px 5px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .cssFinalizado {
+        padding: 5px 5px 5px 5px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .cssDesaprobado {
+        padding: 5px 5px 5px 5px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .btplstDoc {
+        font-size: 12px;
+    }
+
+    /* Efecto de cursor en las filas */
+    #responsiveDataTable tbody tr {
+        cursor: pointer;
+        /* Hace que aparezca la "manito" */
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    /* Efecto hover: cambia el color al pasar el mouse */
+    #responsiveDataTable tbody tr:hover {
+        background-color: #f0f0f0;
+        /* Color de fondo al pasar el mouse */
+    }
+
+    /* Resalta la fila seleccionada */
+    #responsiveDataTable tbody tr.selected {
+        background-color: #d1e7fd !important;
+        /* Azul claro */
+    }
+</style>

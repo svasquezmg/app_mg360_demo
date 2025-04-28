@@ -1,5 +1,4 @@
-﻿
-<link rel="stylesheet" href="~/assets/descargados/dataTables.bootstrap5.min.css">
+﻿<link rel="stylesheet" href="~/assets/descargados/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="~/assets/descargados/responsive.bootstrap.min.css">
 <link rel="stylesheet" href="~/assets/descargados/buttons.bootstrap5.min.css">
 <!--<link href="~/assets/descargados/select2.min.css" rel="stylesheet">-->
@@ -90,7 +89,9 @@
 
                             <label for="divButton" class="form-label">&nbsp;</label>
                             <div id="divButton">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" id="btnBuscarPedido" data-bs-target="#exampleModalScrollable3">Buscar Pedidos</button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    id="btnBuscarPedido" data-bs-target="#exampleModalScrollable3">Buscar
+                                    Pedidos</button>
                             </div>
                         </div>
                     </div>
@@ -124,7 +125,7 @@
                         <tbody>
                             <tr>
                                 <td>TP-0001-121412</td>
-                                <td>En Facturaciób</td>
+                                <td>En Facturación</td>
                                 <td>20522658945</td>
                                 <td>
                                     FISIOSERVICE EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA - FISIOSERVICE E.I.R.L.
@@ -157,8 +158,7 @@
 
 
 <div class="modal fade" id="exampleModalScrollablePedidosLst" tabindex="-1" data-bs-backdrop="static"
-     aria-labelledby="exampleModalScrollablePedidosLst" data-bs-keyboard="false"
-     aria-hidden="true">
+    aria-labelledby="exampleModalScrollablePedidosLst" data-bs-keyboard="false" aria-hidden="true">
     <!-- Scrollable modal -->
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -262,19 +262,89 @@
                 onclick='verPedido("${res[0]}");'>
                 <i class="ti ti-eye me-2"></i>Ver Pedido</button>`;
 
+                // Validaciones para los estados
+                let _estado = response.estado?.[index] ?? '';
+                let _css = "";
+                let _estadoCredito = response.estadoCredito?.[index] ?? '';
+                let _estadoProducto = response.estadoProducto?.[index] ?? '';
+                let _estadoAlmacen = response.estadoAlmacen?.[index] ?? '';
+
+                // Cambiar el estado y la clase según las condiciones
+                if (_estado === "RE") {
+                    let pendientes = [];
+                    let desaprobados = [];
+                    let aprobados = [];
+
+                    if (_estadoCredito === "PE") pendientes.push("[Crédito]");
+                    if (_estadoProducto === "PE") pendientes.push("[Producto]");
+                    if (_estadoAlmacen === "PE") pendientes.push("[Almacén]");
+
+                    if (_estadoCredito === "DES") desaprobados.push("[Crédito]");
+                    if (_estadoProducto === "DES") desaprobados.push("[Producto]");
+                    if (_estadoAlmacen === "DES") desaprobados.push("[Almacén]");
+
+                    if (_estadoCredito === "APR") aprobados.push("[Crédito]");
+                    if (_estadoProducto === "APR") aprobados.push("[Producto]");
+                    if (_estadoAlmacen === "APR") aprobados.push("[Almacén]");
+
+                    let estadosFinales = [];
+
+                    if (pendientes.length > 0) estadosFinales.push("Pendiente " + pendientes.join(" "));
+                    if (desaprobados.length > 0) estadosFinales.push("Desaprobado " + desaprobados.join(" "));
+                    if (aprobados.length > 0) estadosFinales.push("Aprobado " + aprobados.join(" "));
+
+                    _estado = estadosFinales.join(" - ");
+
+                    if (desaprobados.length > 0) {
+                        _css = "cssDesaprobado";
+                    } else if (pendientes.length > 0) {
+                        _css = "cssPendiente";
+                    } else if (aprobados.length > 0) {
+                        _css = "cssAprobado";
+                    }
+                }
+                else if (_estado === "DES") {
+                    _estado = "Desaprobado";
+                    _css = "cssDesaprobado";
+                }
+                else if (_estado === "APR") {
+                    _estado = "Aprobado";
+                    _css = "cssAprobado";
+                }
+
+                // Botones de documento
+                let _btn_guia = "", _btn_fac = "";
+
+                if (response.doc_guia?.[index] && response.doc_guia[index] !== "null" && response.doc_guia[index] !== "") {
+                    let guiaRes = response.doc_guia[index].split("-");
+                    _btn_guia = `<button type='button' class='badge bg-outline-info btplstDoc' id='btnGuia' 
+                onclick='consultarGuiaElectronica("${guiaRes[1]}", "${guiaRes[2]}");'>${response.doc_guia[index]}</button>`;
+                }
+
+                if (response.doc_FvBv?.[index] && response.doc_FvBv[index] !== "null" && response.doc_FvBv[index] !== "") {
+                    let facRes = response.doc_FvBv[index].split("-");
+                    _btn_fac = `<button type='button' class='badge bg-outline-success btplstDoc' id='btnFac' 
+                onclick='consultarFacturaElectronica("${facRes[0]}", "${facRes[1]}", "${facRes[2]}");'>${response.doc_FvBv[index]}</button>`;
+                }
+
+
                 let row = [
                     response.CodigoPedido?.[index] ?? '',
-                    response.estado?.[index] ?? '',
+                    _estado,
                     response.coa?.[index] ?? '',
                     response.cliente?.[index] ?? '',
                     response.fechaRegistro?.[index] ?? '',
                     response.fechaEntrega?.[index] ?? '',
                     response.NombreTipoPago?.[index] ?? '',
-                    response.TipoDocumentoFiscal?.[index] ?? '',
+                    response.TipoDocumentoFiscal?.[index] === 'BV'
+                        ? 'BOLETA'
+                        : response.TipoDocumentoFiscal?.[index] === 'FV'
+                            ? 'FACTURA'
+                            : '',
                     response.total?.[index] ?? '',
                     response.vendedor?.[index] ?? '',
-                    '', // Factura
-                    '', // Guia
+                    _btn_fac,  // Columna Factura
+                    _btn_guia, // Columna Guía
                     '', // F. Aprob Crédito
                     '', // F. Aprob Producto
                     '', // F. Aprob Almacen
@@ -301,7 +371,7 @@
         window.location.href = `../Pedido/PedidoCrear?id=${id}`;
     }
 
-    async function fnConsularPedido95() {
+    @* async function fnConsularPedido95() {
 
         $('#exampleModalScrollablePedidosLst').modal('show');
         var table = new DataTable('#responsiveDataTable');
@@ -441,40 +511,40 @@
                 console.error(error);
             }
         });
-    }
+    } *@
 
 
-    function consultarFacturaElectronica(doc, ser, num) {
+        function consultarFacturaElectronica(doc, ser, num) {
 
-        $("#btnFac").prop("disabled", true);
-        $.ajax({
-            url: '/Almacen/consultarFacturaElectronica',
-            type: 'GET',
-            data: {
-                doc: doc,
-                ser: ser,
-                num: num
-            },
-            success: function (response) {
-                //console.log(response);
-                if (response == "-1") {
-                    document.location.href = "/MG360";
+            $("#btnFac").prop("disabled", true);
+            $.ajax({
+                url: '/Almacen/consultarFacturaElectronica',
+                type: 'GET',
+                data: {
+                    doc: doc,
+                    ser: ser,
+                    num: num
+                },
+                success: function (response) {
+                    //console.log(response);
+                    if (response == "-1") {
+                        document.location.href = "/MG360";
+                    }
+                    if (response != "0") {
+                        window.open(response, "Documento:" + doc + "-" + ser + "-" + num);
+                        //window.open(response, "Documento:" + doc + "-" + ser + "-" + num, "toolbar = 0, scrollbars = 0, location = 0, statusbar = 0, menubar = 0, resizable = 1, width = 80%, height = 50%,");
+                    }
+                    else {
+                        alert("El documento no puede ser descargado, intento más tarde o validelo con su asistente");
+                    }
+                    $("#btnFac").prop("disabled", false);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    $("#btnFac").prop("disabled", false);
                 }
-                if (response != "0") {
-                    window.open(response, "Documento:" + doc + "-" + ser + "-" + num);
-                    //window.open(response, "Documento:" + doc + "-" + ser + "-" + num, "toolbar = 0, scrollbars = 0, location = 0, statusbar = 0, menubar = 0, resizable = 1, width = 80%, height = 50%,");
-                }
-                else {
-                    alert("El documento no puede ser descargado, intento más tarde o validelo con su asistente");
-                }
-                $("#btnFac").prop("disabled", false);
-            },
-            error: function (xhr, status, error) {
-                console.error(error);
-                $("#btnFac").prop("disabled", false);
-            }
-        });
-    }
+            });
+        }
 
     function consultarGuiaElectronica(serie, num) {
 
@@ -514,7 +584,6 @@
 </script>
 
 <style>
-
     .choices {
         margin-bottom: 15px !important;
     }
@@ -538,17 +607,20 @@
     }
 
     .cssPendiente {
-        color: #d4ac0d !important; /*#fff3cd*/
+        color: #d4ac0d !important;
+        /*#fff3cd*/
         font-weight: bold;
     }
 
     .cssFinalizado {
-        color: #45b39d !important; /*#d5f5e3*/
+        color: #45b39d !important;
+        /*#d5f5e3*/
         font-weight: bold;
     }
 
     .cssDesaprobado {
-        color: #c0392b !important; /*#f5b7b1*/
+        color: #c0392b !important;
+        /*#f5b7b1*/
         font-weight: bold;
     }
 

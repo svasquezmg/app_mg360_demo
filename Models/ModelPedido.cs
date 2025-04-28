@@ -18,8 +18,6 @@ namespace WebAppMontGroup.Models
     public class ModelPedido
     {
 
-
-
         public int insert_Pedido_Cabecera(Pedido pedido, string accion)
         {
             int result = 0;
@@ -141,7 +139,7 @@ namespace WebAppMontGroup.Models
                 con.conectar();
                 cmd = new MySqlCommand("PROC_PEDIDO_GUIA", con.retConeccion());
                 cmd.CommandType = CommandType.StoredProcedure;
-
+                
                 cmd.Parameters.Add(new MySqlParameter("@x_opcion", accion));
                 cmd.Parameters.Add(new MySqlParameter("@x_idPedidoGuia", pedido_guia.idPedidoGuia));
                 cmd.Parameters.Add(new MySqlParameter("@x_IdPedido", pedido_guia.IdPedido));
@@ -188,6 +186,7 @@ namespace WebAppMontGroup.Models
         public Pedido PedidoPorId(int idPedido)
         {
             Pedido m_pedido = new Pedido();
+            ClienteContacto c_contacto = new ClienteContacto();
             ConeccionMysql con = new ConeccionMysql("MYSQL_Conexion_Pedido");
             MySqlCommand cmd = new MySqlCommand();
             try
@@ -208,7 +207,7 @@ namespace WebAppMontGroup.Models
                     m_pedido.CodigoPedido = reader["CodigoPedido"].ToString();
                     m_pedido.Coa = reader["Coa"].ToString();
                     m_pedido.TipoDocumentoFiscal = reader["TipoDocumentoFiscal"].ToString();
-                    m_pedido.DocumentoFiscal = reader["DocumentoFiscal"].ToString(); 
+                    m_pedido.DocumentoFiscal = reader["DocumentoFiscal"].ToString();
                     m_pedido.CodigoTipoPago = reader["CodigoTipoPago"].ToString();
                     m_pedido.NombreTipoPago = reader["NombreTipoPago"].ToString();
                     m_pedido.Moneda = reader["Moneda"].ToString();
@@ -240,7 +239,10 @@ namespace WebAppMontGroup.Models
                     m_pedido.SeguimientoCredito = reader["SeguimientoCredito"].ToString();
                     m_pedido.FechaActualizacion = Convert.ToDateTime(reader["FechaActualizacion"]);
                     m_pedido.UsuarioActualizacion = reader["UsuarioActualizacion"].ToString();
+                    c_contacto.correo = reader["correo"].ToString();
+                    c_contacto.telefono = reader["telefono"].ToString();
 
+                    m_pedido.ClienteContacto = c_contacto; // datocontacto
                     m_pedido.pedido_detalle = listaPedidoDetalle(m_pedido.IdPedido, "RE");
                     m_pedido.pedido_guia = PedidoGuia(m_pedido.IdPedido);
                 }
@@ -404,50 +406,6 @@ namespace WebAppMontGroup.Models
 
             return estado_rex;
         }
-
-       /* public List<Pedido> listaPedido(int anio, int mes, string estado)
-        {
-            List<Pedido> lst_pedidos = new List<Pedido>();
-            ConeccionMysql con = new ConeccionMysql("MYSQL_Conexion_Pedido");
-            MySqlCommand cmd = new MySqlCommand();
-
-            try
-            {
-                con.conectar();
-                cmd = new MySqlCommand("PROC_PEDIDOLISTADO_OBTENER", con.retConeccion());
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("p_Anio", anio));
-                cmd.Parameters.Add(new MySqlParameter("p_Mes", mes));
-                cmd.Parameters.Add(new MySqlParameter("p_Estado", estado));
-                MySqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    Pedido pedido = new Pedido();
-                    pedido.IdPedido = (int)reader["IdPedido"];
-                    pedido.FechaRegistro = Convert.ToDateTime(reader["FechaRegistro"]);
-                    pedido.FechaEntrega = Convert.ToDateTime(reader["FechaEntrega"]);
-                    pedido.Estado = reader["Estado"].ToString();
-                    pedido.Coa = reader["Coa"].ToString();
-                    pedido.Cliente = reader["Cliente"].ToString();
-                    pedido.Total = (double)reader["Total"];
-                    lst_pedidos.Add(pedido);
-                }
-            }
-            catch (Exception ex)
-            {
-                // util_log.Escribir_Log("listaPedido, " + ex.ToString());
-                return null;
-            }
-            finally
-            {
-                cmd.Dispose();
-                con.desconectar();
-            }
-
-            return lst_pedidos;
-        }
-       */
         public List<Pedido> listaPedido(int anio, int mes, string CodVendedor, string estado)
         {
             List<Pedido> lst_pedidos = new List<Pedido>();
@@ -480,6 +438,10 @@ namespace WebAppMontGroup.Models
                     pedido.NombreTipoPago = reader["NombreTipoPago"].ToString();
                     pedido.TipoDocumentoFiscal = reader["TipoDocumentoFiscal"].ToString();
                     pedido.Total = (double)reader["Total"];
+                    pedido.EstadoProducto = reader["EstadoProducto"].ToString();
+                    pedido.EstadoAlmacen = reader["EstadoAlmacen"].ToString();
+                    pedido.EstadoCredito = reader["EstadoCredito"].ToString();
+                    pedido.DocumentoFiscal = reader["DocumentoFiscal"].ToString();
                     pedido.Vendedor = reader["Vendedor"].ToString();
 
                     lst_pedidos.Add(pedido);
@@ -499,6 +461,12 @@ namespace WebAppMontGroup.Models
             return lst_pedidos;
         }
 
+
+        public class RespuestaValidacion
+        {
+            public string Aprobado { get; set; }
+            public string Mensaje { get; set; }
+        }
 
         public RespuestaValidacion ValidarCredito(string coa, double montoventa, double montoVentaPendiente)
         {
@@ -553,6 +521,13 @@ namespace WebAppMontGroup.Models
             }
 
             return respuesta;
+        }
+
+        public class PedidoTotales
+        {
+            public decimal SumaTotal { get; set; }
+            public decimal UltimoTotal { get; set; }
+            public string Coa { get; set; }
         }
 
         public PedidoTotales ObtenerTotalesPedido(string coa, int idpedido)
@@ -614,77 +589,5 @@ namespace WebAppMontGroup.Models
         }
 
 
-
-        public int actualizar_Pedido_datos(int idPedido)
-        {
-            int result = 0;
-            ConeccionMysql con = new ConeccionMysql("MYSQL_Conexion_Pedido");
-            MySqlCommand cmd = new MySqlCommand();
-            try
-            {
-
-                con.conectar();
-                cmd = new MySqlCommand("PROC_ACTUALIZAR_DATOS_PEDIDO", con.retConeccion());
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("@x_IdPedido", idPedido));
-                cmd.ExecuteNonQuery();
-                result = cmd.ExecuteNonQuery();
-                return result;
-            }
-            catch (Exception ex)
-            {
-                //new Escribir_Log("update_insert_Producto_95," + ex.ToString(), false);
-                return -1;
-            }
-            finally
-            {
-                cmd.Dispose();
-                con.desconectar();
-            }
-        }
-        
-
-        public List<PedidoLog> lista_Pedido_log(int idPedido, string accion)
-        {
-            List<PedidoLog> lst_pedidoLog = new List<PedidoLog>();
-            ConeccionMysql con = new ConeccionMysql("MYSQL_Conexion_Pedido");
-            MySqlCommand cmd = new MySqlCommand();
-            try
-            {
-
-                con.conectar();
-                cmd = new MySqlCommand("PROC_PEDIDO_LOG_OBTENER", con.retConeccion());
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new MySqlParameter("@x_IdPedido", idPedido));
-                cmd.Parameters.Add(new MySqlParameter("@x_accion", accion));
-                MySqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    PedidoLog m_pedidoLog = new PedidoLog();
-
-                    m_pedidoLog.IdPedido = (int)reader["IdPedido"];
-                    m_pedidoLog.Fecha = Convert.ToDateTime(reader["Fecha"]);
-                    m_pedidoLog.Usuario = reader["Usuario"].ToString();
-                    m_pedidoLog.Accion = reader["Accion"].ToString();
-                    m_pedidoLog.Obs = reader["Obs"].ToString();
-                    m_pedidoLog.Detalle1 = reader["Detalle1"].ToString();
-                    m_pedidoLog.Detalle2 = reader["Detalle2"].ToString();
-                    lst_pedidoLog.Add(m_pedidoLog);
-                }
-            }
-            catch (Exception ex)
-            {
-                //util_log.Escribir_Log("listarUSuario," + ex.ToString());
-                return null;
-            }
-            finally
-            {
-                cmd.Dispose();
-                con.desconectar();
-            }
-
-            return lst_pedidoLog;
-        }
     }
 }
