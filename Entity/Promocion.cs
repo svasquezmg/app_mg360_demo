@@ -14,5 +14,13 @@ namespace WebAppMontGroup.Entity
         public string cantidad_desde { get; set; }
         public string cantidad_hasta { get; set; }
         public string bonificacion { get; set; }
+
+        public DateTime fechaInicio { get; set; }
+        public DateTime fechaFin { get; set; }
+        public string descripcionProducto { get; set; }
+
+        public string accion { get; set; }
+        public string estado { get; set; }
+        public string created_at { get; set; }
     }
 }

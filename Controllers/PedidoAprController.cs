@@ -194,6 +194,90 @@ namespace WebAppMontGroup.Controllers
             }
         }
 
+        [HttpGet]
+        public JsonResult listaPromocionesTodos()
+        {
+            ModelPromocion model_promocion = new ModelPromocion();
+
+            // Verificar si la sesión es válida
+            if (!security_manager.validaSesion())
+            {
+                return Json(new { error = "Sesión no válida" }, JsonRequestBehavior.AllowGet);
+            }
+
+            var promociones = model_promocion.listaPreciosPromocionesGeneral();
+
+            if (promociones != null && promociones.Any())
+            {
+                return Json(new
+                {
+                    idpromo = promociones.Select(p => p.idPromocion),
+                    tipoPromocion = promociones.Select(p => p.tipoPromocion), // Solo mandamos los tipos de promoción
+                    categoriaCliente = promociones.Select(p => p.categoriaCliente),
+                    codigoProducto = promociones.Select(p => p.codigoProducto),
+                    descripcionProducto = promociones.Select(p => p.descripcionProducto),
+                    bonificacion = promociones.Select(p => p.bonificacion),
+                    cantidad_desde = promociones.Select(p => p.cantidad_desde),
+                    cantidad_hasta = promociones.Select(p => p.cantidad_hasta),
+                    fechaInicio = promociones.Select(p => p.fechaInicio.ToString("yyyy-MM-dd")),
+                    fechaFin = promociones.Select(p => p.fechaFin.ToString("yyyy-MM-dd"))
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { error = "No se encontró una promoción válida" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult crudPromociones(Promocion promocion)
+        {
+            ModelPromocion model_promocion = new ModelPromocion();
+            ModelGeneral m_auditoria = new ModelGeneral();
+            string descripcion = "";
+            var usuario = Session["SessionUsuario"] as Usuario;
+            // Aquí, capturamos el ID del usuario logueado
+            int usuarioId = usuario.idusuario; // Suponiendo que la propiedad del ID se llama "idusuario"
+
+            if (promocion == null || string.IsNullOrEmpty(promocion.accion))
+            {
+                return Json(new { success = false, message = "Los datos de la promoción son inválidos o falta la acción." });
+            }
+
+            try
+            {
+                int result = model_promocion.crud_promocion(promocion);
+
+                if (result > 0)
+                {
+                    // Descripción personalizada para la auditoría
+                    descripcion = $"Se realizó la acción '{promocion.accion}' en la promoción con título '{promocion.tipoPromocion}' y fecha de inicio '{promocion.fechaInicio}'.";
+
+                    // Guardar auditoría con la acción específica
+                    int resultAuditoria = m_auditoria.LOG_AUDITORIA("Formulario Promoción", promocion.accion, usuarioId, descripcion);
+
+                    return Json(new { success = true, message = "Promoción procesada correctamente." });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Error al procesar la promoción." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error: {ex.Message}" });
+            }
+        }
+
+        /*  PROGRAMAR SEGUIR */
+        /* [HttpPost]
+        public JsonResult crudPreciosFijos(ProductoPrecio precioxcategoria)
+        {
+            
+        } */
+
+
+
 
         // GET: PedidoApr
         public ActionResult Index()

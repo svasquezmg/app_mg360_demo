@@ -178,6 +178,32 @@
                     </div>
                 </div>
             </div> *@
+
+            <div class="card custom-card p-3">
+                <div class="btn-group " role="group" aria-label="Button group with nested dropdown">
+                    <div class="btn-group w-100" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle "
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Opciones adicionales
+                        </button>
+                        <ul class="dropdown-menu col-xl-12" aria-labelledby="btnGroupDrop1">
+                            <li><a class="dropdown-item" id="btnListadoPrecio" href="#staticBackdropListadoPrecio"
+                                    data-bs-toggle="modal">
+                                    Listado de precios por promociones
+                                </a>
+
+                            </li>
+                            <li><a class="dropdown-item" href="#staticBackdropListadoPrecio"
+                                    data-bs-toggle="modal">Listado de precios fijos por cliente
+                                </a>
+                            </li>
+                            <li><a class="dropdown-item" href="#staticBackdropListadoPrecio"
+                                    data-bs-toggle="modal">Listado de precios por categoria</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <div class="card-header justify-content-between">
                 <div class="card-title">
                     Datos del Pedido
@@ -326,14 +352,11 @@
 </div>
 </div>
 
-
-
 <br />
 <br />
 <br />
 
-
-<div class="modal fade" id="exampleModalScrollablePedidosLst" tabindex="-1" data-bs-backdrop="static"
+@* <div class="modal fade" id="exampleModalScrollablePedidosLst" tabindex="-1" data-bs-backdrop="static"
     aria-labelledby="exampleModalScrollablePedidosLst" data-bs-keyboard="false" aria-hidden="true">
     <!-- Scrollable modal -->
     <div class="modal-dialog modal-dialog-centered">
@@ -351,7 +374,231 @@
             </div>
         </div>
     </div>
+</div> *@
+
+<div class="modal fade" id="exampleModalScrollablePromocion" tabindex="-1" data-bs-backdrop="static"
+     aria-labelledby="exampleModalScrollablePromocion" data-bs-keyboard="false" aria-hidden="true">
+    <!-- Scrollable modal -->
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!--<div class="modal-header">
+                <h6 class="modal-title" id="staticBackdropLabel2">
+                    Modal title
+                </h6>
+            </div>-->
+            <div class="modal-body" style="text-align:center;padding:0px">
+                <div id="msjEspera">
+                    <img src="~/assets/images/loading.gif" />
+                    <p>
+                        Estamos cargando la información. Por favor, espere.
+                    </p>
+                </div>
+                <div class="col-xxl-12 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="msjError">
+                    <div class="card bg-white border-0">
+                        <div class="alert custom-alert1 alert-danger">
+
+                            <div class="text-center px-5 pb-0">
+                                <svg class="custom-alert-icon svg-danger" height="1.5rem" viewBox="0 0 24 24"
+                                     width="1.5rem" fill="#000000">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M15.73 3H8.27L3 8.27v7.46L8.27 21h7.46L21 15.73V8.27L15.73 3zM12 17.3c-.72 0-1.3-.58-1.3-1.3 0-.72.58-1.3 1.3-1.3.72 0 1.3.58 1.3 1.3 0 .72-.58 1.3-1.3 1.3zm1-4.3h-2V7h2v6z" />
+                                </svg>
+                                <h5>Alerta!</h5>
+                                <p id="textmsjErrores">..</p>
+                                <div class="">
+                                    <button class="btn btn-sm btn-danger m-1">Cerrar</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xxl-12 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12" id="msjWarning">
+                    <div class="card bg-white border-0">
+                        <div class="alert custom-alert1 alert-warning">
+                            <div class="text-center px-6 pb-0">
+                                <svg class="custom-alert-icon svg-warning" height="1.5rem" viewBox="0 0 24 24"
+                                     width="1.5rem" fill="#000000">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+                                </svg>
+                                <h5>Alerta!</h5>
+                                <p id="textmsjWarning">..</p>
+                                <div class="">
+                                    <button class="btn btn-sm btn-warning m-1" data-bs-dismiss="modal">Cerrar</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@* MODALES *@
+@* Listar promocion precio *@
+<div class="modal fade" id="staticBackdropListadoPrecio" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropBuscarClienteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info d-flex align-items-center justify-content-between">
+                <h6 class="modal-title" id="staticBackdropBuscarClienteLabel">
+                    Listado de precios
+                </h6>
+                @* <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn btn-success btn-sm" id="btnAbrirRegistroPromocion">
+                        <i class="fe fe-plus"></i> Nuevo Precio
+                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div> *@
+            </div>
+
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="responsiveDataTable2" class="table text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th class="thMG1">ID Promoción</th>
+                                    <th class="thMG1">Nombre Promoción</th>
+                                    <th class="thMG1">Tipo cliente</th>
+                                    <th class="thMG1">Articulo</th>
+                                    <th class="thMG1">Descripcion</th>
+                                    <th class="thMG1">Cantidad Mínima</th>
+                                    <th class="thMG1">Cantidad Máxima</th>
+                                    <th class="thMG1">Bonificacion</th>
+                                    <th class="thMG1">fecha Inicio</th>
+                                    <th class="thMG1">fecha Termino</th>
+                                    <th class="thMG1">Estado</th>
+                                    <th class="thMG1">Opciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyPromociones">
+                                @* <tr>
+                                    <td>00001</td>
+                                    <td>Nombre del producto</td>
+                                    <td>01</td>
+                                    <td>20.00</td>
+                                    <td>20.00</td>
+                                    <td>Descuento</td>
+                                    <td>Sebastian V</td>
+                                </tr> *@
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success btn-m" id="btnAbrirRegistroPromocion">
+                    <i class="fe fe-plus"></i> Nuevo Precio
+                </button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@* Editar y crear nueva promoción *@
+<div class="modal fade" id="staticBackdropRegistroPrecioPromocion" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropBuscarClienteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center justify-content-between"
+                style="background-color: #ffe5b4;">
+                <h6 class="modal-title text-dark fw-bold" id="staticBackdropBuscarClienteLabel">
+                    Registro de precio por promociones
+                </h6>
+            </div>
+
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row g-3">
+                       
+                            <input class="form-control" type="hidden" id="inputIdPromocion" value="0"
+                                placeholder="Código del artículo">
+                        
+                        <div class="col-xl-6">
+                            <label class="form-label">Artículo</label>
+                            <input class="form-control" type="text" id="inputArticulo"
+                                placeholder="Código del artículo">
+                        </div>
+                        <div class="col-xl-6">
+                            <label class="form-label">Nombre de promocion</del></label>
+                            <input class="form-control" type="text" id="inputNomPromocion"
+                                placeholder="Nombre de la promocion">
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="alert alert-light" style="text-align:center">
+                        <div class="card-title" style="color: #74829c; font-size: 13px; ">
+                            Rangos de cantidades
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div class="col-xl-6">
+                            <label class="form-label">Cantidad Desde</label>
+                            <input class="form-control" type="number" id="inputCantidadDesde"
+                                placeholder="Cantidad mínima">
+                        </div>
+                        <div class="col-xl-6">
+                            <label class="form-label">Cantidad Hasta</label>
+                            <input class="form-control" type="number" id="inputCantidadHasta"
+                                placeholder="Cantidad máxima">
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                    <div class="alert alert-light" style="text-align:center">
+                        <div class="card-title" style="color: #74829c; font-size: 13px; ">
+                            Fecha de vigencia
+                        </div>
+                    </div>
+                    <div class="row g-3 mt-2">
+                        <div class="col-xl-6">
+                            <label class="form-label">Fecha Desde</label>
+                            <input class="form-control" type="date" id="inputFechaDesde">
+                        </div>
+                        <div class="col-xl-6">
+                            <label class="form-label">Fecha Hasta</label>
+                            <input class="form-control" type="date" id="inputFechaHasta">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div class="col-xl-6">
+                            <label class="form-label">Tipo Cliente</label>
+                            <input class="form-control" type="text" id="inputTipoCliente"
+                                placeholder="Ej: CLIENTE FINAL, DISTRIBUIDOR" value="">
+                        </div>
+                        <div class="col-xl-6">
+                            <label class="form-label">Bonificación</label>
+                            <input class="form-control" type="text" id="inputBonificacion" placeholder="Ej: 500, 800">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+                <button type="button" class="btn btn-primary" id="btnRegistrarPromocion"
+                    onclick="fnValidarRegistroPromocion()">
+                    Registrar
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 @* LIBERIA PARA ALERT *@
@@ -367,135 +614,381 @@
 
 <script src="~/assets/js/datatables.js"></script>
 
-
 <script>
-    $(document).ready(function () {
-        $("#CboEstado").change(function () {
-            if ($(this).val() === "APR") {
-                $("#CboAnio, #CboMes").closest('.col-xl-2').show();
-            } else {
-                $("#CboAnio, #CboMes").closest('.col-xl-2').hide();
-            }
-        }).trigger("change"); // Ejecutar al cargar la página
+    var modoEdicionPromocion = false;
 
 
 
-        $("#btnBuscarDetalle").click(function () {
-            // Limpiar la tabla si es DataTable
-            let table = $("#responsiveDataTable3").DataTable();
-            table.clear().draw();
-
-            // Limpiar los inputs ocultos
-            $("#IdPedidoInput, #IdPedidoLogInput").val("");
-
-            // Limpiar los textos dinámicos
-            $(".fs-14.text-muted span.text-success, .fs-14.text-muted span:not(.fw-semibold)").text("No disponible");
-
-            // Llamar a la función de consulta
-            fnConsultarPedido();
-        });
+    $("#btnListadoPrecio").click(function () {
+        listarPrecioPromociones();
+    });
 
 
-        async function fnConsultarPedido() {
-            let estado = $("#CboEstado").val();
-            let responsable = $("#CboResponsable").val();
-            let tip = "PRECIO";
+    function listarPrecioPromociones() {
+        let resultHTML = '';
 
-            let params = {
-                estado: estado,
-                responsable: responsable,
-                tipo: tip
-            };
+        $.ajax({
+            type: "GET",
+            url: '../PedidoApr/listaPromocionesTodos',
+            data: {},
+            success: function (data) {
+                console.log("Respuesta recibida:", data);
 
-            if (estado === "PE") {
-                params.anio = 0;
-                params.mes = 0;
-            } else if (estado == "DES") {
-                params.anio = 0;
-                params.mes = 0;
-            } else {
-                params.anio = $("#CboAnio").val();
-                params.mes = $("#CboMes").val();
-            }
+                if (data.idpromo && data.tipoPromocion && Array.isArray(data.tipoPromocion) && data.tipoPromocion.length > 0) {
+                    promocionesCargadas = data.tipoPromocion.map((tipo, index) => ({
+                        idpromo: data.idpromo?.[index] || 'No especificado',
+                        tipoPromocion: tipo,
+                        bonificacion: data.bonificacion?.[index] || 'No especificado',
+                        categoriaCliente: data.categoriaCliente?.[index] || 'No especificado',
+                        codigoProducto: data.codigoProducto?.[index] || 'No disponible',
+                        descripcionProducto: data.descripcionProducto?.[index] || 'No disponible',
+                        cantidad_hasta: data.cantidad_hasta?.[index] || 'No disponible',
+                        cantidad_desde: data.cantidad_desde?.[index] || 'No disponible',
+                        fechaFin: data.fechaFin?.[index] || 'No especificado',
+                        fechaInicio: data.fechaInicio?.[index] || 'No especificado',
+                    }));
 
-            let table = $('#responsiveDataTable').DataTable();
-            table.clear().draw();
+                    $.each(promocionesCargadas, function (index, promocion) {
+                        var hoy = new Date();
+                        var fechaFin = new Date(promocion.fechaFin);
+                        var estado = (fechaFin >= hoy) ? 'Activo' : 'Inactivo';
 
-            try {
-                let response = await $.ajax({
-                    url: '../PedidoApr/listaPedidosApr',
-                    type: 'GET',
-                    data: params
-                });
+                        resultHTML +=
+                            '<tr>' +
+                            '<td>' + promocion.idpromo + '</td>' +
+                            '<td>' + promocion.tipoPromocion + '</td>' +
+                            '<td>' + promocion.categoriaCliente + '</td>' +
+                            '<td>' + promocion.codigoProducto + '</td>' +
+                            '<td>' + promocion.descripcionProducto + '</td>' +
+                            '<td>' + promocion.cantidad_desde + '</td>' +
+                            '<td>' + promocion.cantidad_hasta + '</td>' +
+                            '<td>' + promocion.bonificacion + '</td>' +
+                            '<td>' + promocion.fechaInicio + '</td>' +
+                            '<td>' + promocion.fechaFin + '</td>' +
+                            '<td>' + estado + '</td>' +
+                            '<td>' +
+                            '<div class="d-flex gap-2">' +
+                            '<button class="btn btn-primary btn-sm" onclick="editarPromocion(' + index + ')">' +
+                            '<i class="fe fe-edit"></i> Editar' +
+                            '</button>' +
+                            '<button class="btn btn-danger btn-sm">' +
+                            '<i class="fe fe-trash"></i> Eliminar' +
+                            '</button>' +
+                            '</div>' +
+                            '</td>' +
+                            '</tr>';
+                    });
 
-                if (response.error) {
-                    console.error(response.error);
-                    return;
+                } else {
+                    resultHTML = '<tr><td colspan="9" class="text-center text-muted">No se encontraron promociones.</td></tr>';
                 }
 
-                response.idPedido.forEach((id, index) => {
-                    let row = [
-                        id, // ID
-                        response.pedido[index], // Pedido
-                        response.coa[index], // Coa
-                        response.cliente[index], // Cliente
-                        @* response.tipoPago[index], *@ // T.Pago
-                        response.vendedor[index],
-                        @* response.codCategoriaCliente[index]  *@ // Vendedor
-                        response.fechaRegistro[index] // Registrado
-                    ];
-                    table.row.add(row);
-                });
-                table.draw(); // Para actualizar la tabla
-
-            } catch (error) {
-                console.error("Error en la consulta: ", error);
+                // Ahora llenamos el tbody de tu tabla
+                document.querySelector('#responsiveDataTable2 tbody').innerHTML = resultHTML;
+            },
+            error: function () {
+                document.querySelector('#responsiveDataTable2 tbody').innerHTML = '<tr><td colspan="9" class="text-center text-danger">Error al cargar promociones.</td></tr>';
             }
+        });
+    }
+
+    //PARA ABRIR MODAL NUEVO PRECIO PROMOCION
+    $(document).on('click', '#btnAbrirRegistroPromocion', function () {
+        // Limpiar inputs
+        $('#inputIdPromocion').val('0');
+        $('#inputArticulo').val('');
+        $('#inputNomPromocion').val('');
+        $('#inputCantidadDesde').val('');
+        $('#inputCantidadHasta').val('');
+        $('#inputFechaDesde').val('');
+        $('#inputFechaHasta').val('');
+        $('#inputTipoCliente').val('');
+        $('#inputBonificacion').val('');
+
+        // Cambiar modo a nuevo
+        modoEdicionPromocion = false;
+
+        // Cambiar el botón
+        actualizarBotonPromocion();
+
+        // Mostrar modal
+        var modal = new bootstrap.Modal(document.getElementById('staticBackdropRegistroPrecioPromocion'));
+        modal.show();
+    });
+
+    //PARA ABRIR MODAL EDITAR PRECIO PROMOCION
+    function editarPromocion(index) {
+        var promocion = promocionesCargadas[index];
+
+        // Llenar los inputs
+        $('#inputIdPromocion').val(promocion.idpromo);
+        $('#inputArticulo').val(promocion.codigoProducto);
+        $('#inputNomPromocion').val(promocion.tipoPromocion);
+        $('#inputCantidadDesde').val(promocion.cantidad_desde);
+        $('#inputCantidadHasta').val(promocion.cantidad_hasta);
+        $('#inputFechaDesde').val(promocion.fechaInicio);
+        $('#inputFechaHasta').val(promocion.fechaFin);
+        $('#inputTipoCliente').val(promocion.categoriaCliente);
+        $('#inputBonificacion').val(promocion.bonificacion);
+
+        // Cambiar modo a edición
+        modoEdicionPromocion = true;
+
+        // Cambiar el botón
+        actualizarBotonPromocion();
+
+        // Mostrar el modal
+        var modal = new bootstrap.Modal(document.getElementById('staticBackdropRegistroPrecioPromocion'));
+        modal.show();
+    }
+
+    function actualizarBotonPromocion() {
+        if (modoEdicionPromocion) {
+            $('#btnRegistrarPromocion')
+                .removeClass('btn-primary')
+                .addClass('btn-warning')
+                .html('<i class="fa fa-edit"></i> Editar Promoción');
+        } else {
+            $('#btnRegistrarPromocion')
+                .removeClass('btn-warning')
+                .addClass('btn-primary')
+                .html('<i class="fa fa-save"></i> Registrar Promoción');
+        }
+    }
+
+    function fnValidarRegistroPromocion() {
+        $("#msjEspera").css('display', 'block');
+        $("#msjError").css('display', 'none');
+        $("#msjWarning").css('display', 'none');
+        document.getElementById('textmsjErrores').innerHTML = '';
+        document.getElementById('textmsjWarning').innerHTML = '';
+
+            $('#exampleModalScrollablePromocion').modal('show');
+        var mensaje_validacion = "";
+
+        if ($("#inputNomPromocion").val() === "") {
+            mensaje_validacion += "Ingrese el tipo de promoción<br/>";
+        }
+        if ($("#inputTipoCliente").val() === "") {
+            mensaje_validacion += "Ingrese la categoría de cliente<br/>";
+        }
+        if ($("#inputArticulo").val() === "") {
+            mensaje_validacion += "Ingrese el código de producto<br/>";
+        }
+        if ($("#inputFechaDesde").val() === "") {
+            mensaje_validacion += "Seleccione la fecha de inicio<br/>";
+        }
+        if ($("#inputFechaHasta").val() === "") {
+            mensaje_validacion += "Seleccione la fecha de término<br/>";
+        }
+        if ($("#inputBonificacion").val() === "") {
+            mensaje_validacion += "Ingrese la bonificación<br/>";
+        }
+        if ($("#inputCantidadDesde").val() === "") {
+            mensaje_validacion += "Ingrese la cantidad desde<br/>";
+        }
+        if ($("#inputCantidadHasta").val() === "") {
+            mensaje_validacion += "Ingrese la cantidad hasta<br/>";
         }
 
+        if (mensaje_validacion === "") {
+            const idPromocion = $("#inputIdPromocion").val();
+            const accion = (idPromocion === "" || idPromocion == 0) ? "CREATE" : "UPDATE";
 
-        $('#responsiveDataTable tbody').on('click', 'tr', function () {
-            $('#responsiveDataTable tbody tr').removeClass('selected');
-            $(this).addClass('selected');
+            const PromocionDatos = {
+                accion: accion,
+                idPromocion: idPromocion || 0,
+                tipoPromocion: $("#inputNomPromocion").val(),
+                categoriaCliente: $("#inputTipoCliente").val(),
+                codigoProducto: $("#inputArticulo").val(),
+                fechaInicio: $("#inputFechaDesde").val(),
+                fechaFin: $("#inputFechaHasta").val(),
+                bonificacion: $("#inputBonificacion").val(),
+                cantidad_desde: $("#inputCantidadDesde").val(),
+                cantidad_hasta: $("#inputCantidadHasta").val()
 
-            let idPedido = $(this).find("td:eq(0)").text().trim();
-            let res = $("#CboResponsable").val().trim();
-            let es = $("#CboEstado").val();
-            let pro = "PRECIO";
+            };
 
+            fnDinsertaPromocion(PromocionDatos);
+        } else {
+            $("#msjEspera").css('display', 'none');
+            $("#msjWarning").css('display', 'block');
+            document.getElementById('textmsjWarning').innerHTML = mensaje_validacion;
+        }
+    }
+
+    async function fnDinsertaPromocion(datos) {
+        try {
             $.ajax({
-                url: '../PedidoApr/ObtenerPedidoPorId',
-                type: 'GET',
-                data: { idPedido: idPedido, responsable: res, estado: es, proviene: pro },
+                url: '../PedidoApr/crudPromociones',
+                type: 'POST',
+                data: datos,
                 dataType: 'json',
                 success: function (response) {
+                    $("#msjEspera").css('display', 'none');
                     if (response.success) {
-                        $(".text-success").text(response.codigoPedido);
-                        $(".fs-14:contains('Coa :')").html(`<span class="me-2 text-default fw-semibold">Coa :</span>${response.coa}`);
-                        $(".fs-14:contains('Cliente :')").html(`<span class="me-2 text-default fw-semibold">Cliente :</span> ${response.cliente}`);
-                        $(".fs-14:contains('Vendedor :')").html(`<span class="me-2 text-default fw-semibold">Vendedor :</span> ${response.vendedor}`);
-                        $(".fs-14:contains('Monto Total :')").html(`<span class="me-2 text-default fw-semibold">Monto Total :</span> S/ ${parseFloat(response.total).toFixed(2)}`);
-                        $(".fs-14:contains('T. Pago:')").html(`<span class="me-2 text-default fw-semibold">T. Pago:</span> ${response.tipoPago}`);
-                        $(".fs-14:contains('F. Pedido:')").html(`<span class="me-2 text-default fw-semibold">F. Pedido:</span> ${response.fechaRegistro}`);
-                        $(".fs-14:contains('F. Entrega:')").html(`<span class="me-2 text-default fw-semibold">F. Entrega:</span> ${response.fechaEntrega}`);
-                        $(".fs-14:contains('Tipo Cliente:')").html(`<span class="me-2 text-default fw-semibold">Tipo Cliente:</span> ${response.codCategoriaCliente}`);
-                        $('#ObservacionPrInput').val(response.observacionPrecio || 'No hay observaciones');
-                        $('#IdPedidoInput').val(response.idPedido);
+                        Swal.fire('Éxito', 'Promoción procesada correctamente', 'success')
+                            .then(() => {
+                                listarPrecioPromociones();
+                                $('#staticBackdropRegistroPrecioPromocion').modal('hide'); // asegúrate que este sea el ID correcto
+                            });
 
-                        // Limpiar la variable antes de llenar nuevos valores
-                        idPedidoDetalles = [];
-                        // Limpiar la tabla de detalles
-                        let detallesPedido = '';
-                        let observaciones = []; //para listaPedidosApr en noaprobadopor
 
-                        // Recorrer los detalles del pedido y agregarlos a la tabla
-                        response.pedidoDetalle.forEach(detalle => {
+                    } else {
+                        $("#msjError").css('display', 'block');
+                        document.getElementById('textmsjErrores').innerHTML = response.message;
+                    }
+                },
+                error: function () {
+                    $("#msjEspera").css('display', 'none');
+                    $("#msjError").css('display', 'block');
+                    document.getElementById('textmsjErrores').innerHTML = "Se produjo un error al registrar la promoción.";
+                }
+            });
+        } catch (error) {
+            $("#msjEspera").css('display', 'none');
+            $("#msjError").css('display', 'block');
+            document.getElementById('textmsjErrores').innerHTML = "Error inesperado: " + error.message;
+        }
+    }
 
-                            idPedidoDetalles.push(detalle.idPedidoDetalle); // Guardar ID en la variable global
-                            if (detalle.observacion) {
-                                observaciones.push(`• ${detalle.codigo}: ${detalle.observacion}`); // Formato con código y observación
-                            }
-                            detallesPedido += `
+
+
+
+    @* SEGUIR  *@
+
+
+</script>
+
+@* NO TOCAR AQUI ABAJO, YA ESTA HECHO *@
+<script>
+        $(document).ready(function () {
+            $("#CboEstado").change(function () {
+                if ($(this).val() === "APR") {
+                    $("#CboAnio, #CboMes").closest('.col-xl-2').show();
+                } else {
+                    $("#CboAnio, #CboMes").closest('.col-xl-2').hide();
+                }
+            }).trigger("change"); // Ejecutar al cargar la página
+
+
+
+            $("#btnBuscarDetalle").click(function () {
+                // Limpiar la tabla si es DataTable
+                let table = $("#responsiveDataTable3").DataTable();
+                table.clear().draw();
+
+                // Limpiar los inputs ocultos
+                $("#IdPedidoInput, #IdPedidoLogInput").val("");
+
+                // Limpiar los textos dinámicos
+                $(".fs-14.text-muted span.text-success, .fs-14.text-muted span:not(.fw-semibold)").text("No disponible");
+
+                // Llamar a la función de consulta
+                fnConsultarPedido();
+            });
+
+
+            async function fnConsultarPedido() {
+                let estado = $("#CboEstado").val();
+                let responsable = $("#CboResponsable").val();
+                let tip = "PRECIO";
+
+                let params = {
+                    estado: estado,
+                    responsable: responsable,
+                    tipo: tip
+                };
+
+                if (estado === "PE") {
+                    params.anio = 0;
+                    params.mes = 0;
+                } else if (estado == "DES") {
+                    params.anio = 0;
+                    params.mes = 0;
+                } else {
+                    params.anio = $("#CboAnio").val();
+                    params.mes = $("#CboMes").val();
+                }
+
+                let table = $('#responsiveDataTable').DataTable();
+                table.clear().draw();
+
+                try {
+                    let response = await $.ajax({
+                        url: '../PedidoApr/listaPedidosApr',
+                        type: 'GET',
+                        data: params
+                    });
+
+                    if (response.error) {
+                        console.error(response.error);
+                        return;
+                    }
+
+                    response.idPedido.forEach((id, index) => {
+                        let row = [
+                            id, // ID
+                            response.pedido[index], // Pedido
+                            response.coa[index], // Coa
+                            response.cliente[index], // Cliente
+                            @* response.tipoPago[index], *@ // T.Pago
+                            response.vendedor[index],
+                            @* response.codCategoriaCliente[index]  *@ // Vendedor
+                            response.fechaRegistro[index] // Registrado
+                        ];
+                        table.row.add(row);
+                    });
+                    table.draw(); // Para actualizar la tabla
+
+                } catch (error) {
+                    console.error("Error en la consulta: ", error);
+                }
+            }
+
+
+            $('#responsiveDataTable tbody').on('click', 'tr', function () {
+                $('#responsiveDataTable tbody tr').removeClass('selected');
+                $(this).addClass('selected');
+
+                let idPedido = $(this).find("td:eq(0)").text().trim();
+                let res = $("#CboResponsable").val().trim();
+                let es = $("#CboEstado").val();
+                let pro = "PRECIO";
+
+                $.ajax({
+                    url: '../PedidoApr/ObtenerPedidoPorId',
+                    type: 'GET',
+                    data: { idPedido: idPedido, responsable: res, estado: es, proviene: pro },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            $(".text-success").text(response.codigoPedido);
+                            $(".fs-14:contains('Coa :')").html(`<span class="me-2 text-default fw-semibold">Coa :</span>${response.coa}`);
+                            $(".fs-14:contains('Cliente :')").html(`<span class="me-2 text-default fw-semibold">Cliente :</span> ${response.cliente}`);
+                            $(".fs-14:contains('Vendedor :')").html(`<span class="me-2 text-default fw-semibold">Vendedor :</span> ${response.vendedor}`);
+                            $(".fs-14:contains('Monto Total :')").html(`<span class="me-2 text-default fw-semibold">Monto Total :</span> S/ ${parseFloat(response.total).toFixed(2)}`);
+                            $(".fs-14:contains('T. Pago:')").html(`<span class="me-2 text-default fw-semibold">T. Pago:</span> ${response.tipoPago}`);
+                            $(".fs-14:contains('F. Pedido:')").html(`<span class="me-2 text-default fw-semibold">F. Pedido:</span> ${response.fechaRegistro}`);
+                            $(".fs-14:contains('F. Entrega:')").html(`<span class="me-2 text-default fw-semibold">F. Entrega:</span> ${response.fechaEntrega}`);
+                            $(".fs-14:contains('Tipo Cliente:')").html(`<span class="me-2 text-default fw-semibold">Tipo Cliente:</span> ${response.codCategoriaCliente}`);
+                            $('#ObservacionPrInput').val(response.observacionPrecio || 'No hay observaciones');
+                            $('#IdPedidoInput').val(response.idPedido);
+
+                            // Limpiar la variable antes de llenar nuevos valores
+                            idPedidoDetalles = [];
+                            // Limpiar la tabla de detalles
+                            let detallesPedido = '';
+                            let observaciones = []; //para listaPedidosApr en noaprobadopor
+
+                            // Recorrer los detalles del pedido y agregarlos a la tabla
+                            response.pedidoDetalle.forEach(detalle => {
+
+                                idPedidoDetalles.push(detalle.idPedidoDetalle); // Guardar ID en la variable global
+                                if (detalle.observacion) {
+                                    observaciones.push(`• ${detalle.codigo}: ${detalle.observacion}`); // Formato con código y observación
+                                }
+                                detallesPedido += `
                             <tr style="height: 100px !important;">
                                 <td>${detalle.idPedidoDetalle}</td>
                                 <td>${detalle.codigo}</td>
@@ -507,46 +1000,46 @@
                                 <td>${detalle.responsable}</td>
                                 <td>
                                     <span class="${detalle.decision === 'PE' ? 'bg-warning-transparent cssPendiente' :
-                                    detalle.decision === 'APR' ? 'bg-success-transparent cssFinalizado' :
-                                        detalle.decision === 'DES' ? 'bg-danger-transparent cssDesaprobado' : ''
-                                }">
+                                        detalle.decision === 'APR' ? 'bg-success-transparent cssFinalizado' :
+                                            detalle.decision === 'DES' ? 'bg-danger-transparent cssDesaprobado' : ''
+                                    }">
                                         ${detalle.decision === 'PE' ? 'Pendiente' :
-                                    detalle.decision === 'APR' ? 'Aprobado' :
-                                        detalle.decision === 'DES' ? 'Desaprobado' :
-                                            detalle.decision}
+                                        detalle.decision === 'APR' ? 'Aprobado' :
+                                            detalle.decision === 'DES' ? 'Desaprobado' :
+                                                detalle.decision}
                                     </span>
                                 </td>
                             </tr>
                         `;
 
-                        });
-                        $('#NoAprobadoInput').val(observaciones.length ? observaciones.join("\n") : 'No hay observaciones');
-                        // Insertar en la tabla
-                        $("#responsiveDataTable3 tbody").html(detallesPedido);
+                            });
+                            $('#NoAprobadoInput').val(observaciones.length ? observaciones.join("\n") : 'No hay observaciones');
+                            // Insertar en la tabla
+                            $("#responsiveDataTable3 tbody").html(detallesPedido);
 
 
-                        // Limpiar la sección del pedido log antes de agregar nuevos datos
-                        let pedidoLogHTML = '';
-                        response.pedidoLog.forEach((log, index) => {
-                            let icono = "bx bxs-info-circle"; // Ícono por defecto
-                            let colorClase = "text-muted"; // Clase de color por defecto
+                            // Limpiar la sección del pedido log antes de agregar nuevos datos
+                            let pedidoLogHTML = '';
+                            response.pedidoLog.forEach((log, index) => {
+                                let icono = "bx bxs-info-circle"; // Ícono por defecto
+                                let colorClase = "text-muted"; // Clase de color por defecto
 
-                            switch (log.accion) {
-                                case "APROBADO":
-                                    icono = "bx bxs-check-circle";
-                                    colorClase = "text-success";
-                                    break;
-                                case "DESAPROBADO":
-                                    icono = "bx bxs-x-circle";
-                                    colorClase = "text-danger";
-                                    break;
-                                case "UPDATE":
-                                    icono = "bx bxs-edit";
-                                    colorClase = "text-warning";
-                                    break;
-                            }
+                                switch (log.accion) {
+                                    case "APROBADO":
+                                        icono = "bx bxs-check-circle";
+                                        colorClase = "text-success";
+                                        break;
+                                    case "DESAPROBADO":
+                                        icono = "bx bxs-x-circle";
+                                        colorClase = "text-danger";
+                                        break;
+                                    case "UPDATE":
+                                        icono = "bx bxs-edit";
+                                        colorClase = "text-warning";
+                                        break;
+                                }
 
-                            pedidoLogHTML += `
+                                pedidoLogHTML += `
                             <div class="border-0 bg-transparent mb-2">
                                 <div class="d-flex">
                                     <div class="me-3">
@@ -566,34 +1059,34 @@
                                     </div>
                                 </div>
                             </div>`;
-                        });
+                            });
 
 
-                        // Insertar el HTML generado dentro del acordeón
-                        $('#basicAccordion1').html(pedidoLogHTML);
+                            // Insertar el HTML generado dentro del acordeón
+                            $('#basicAccordion1').html(pedidoLogHTML);
 
 
 
-                        let estado = $("#CboEstado").val();
-                        // Ahora puedes usar 'decision' para habilitar o deshabilitar botones
-                        if (estado !== "PE") {
-                            document.getElementById("btnAprobar").disabled = true;
-                            document.getElementById("btnDesaprobar").disabled = true;
+                            let estado = $("#CboEstado").val();
+                            // Ahora puedes usar 'decision' para habilitar o deshabilitar botones
+                            if (estado !== "PE") {
+                                document.getElementById("btnAprobar").disabled = true;
+                                document.getElementById("btnDesaprobar").disabled = true;
+                            } else {
+                                document.getElementById("btnAprobar").disabled = false;
+                                document.getElementById("btnDesaprobar").disabled = false;
+                            }
+
                         } else {
-                            document.getElementById("btnAprobar").disabled = false;
-                            document.getElementById("btnDesaprobar").disabled = false;
+                            alert("Error: " + response.message);
                         }
-
-                    } else {
-                        alert("Error: " + response.message);
+                    },
+                    error: function () {
+                        alert("Error al obtener los datos.");
                     }
-                },
-                error: function () {
-                    alert("Error al obtener los datos.");
-                }
+                });
             });
         });
-    });
 </script>
 <!-- Tus botones -->
 <script>

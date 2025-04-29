@@ -255,6 +255,7 @@
     <Compile Include="Entity\Producto.cs" />
     <Compile Include="Entity\ProductoLote.cs" />
     <Compile Include="Entity\Promocion.cs" />
+    <Compile Include="Entity\ProductoPrecio.cs" />
     <Compile Include="Entity\Stock.cs" />
     <Compile Include="Entity\Ubigeo.cs" />
     <Compile Include="Entity\Usuario.cs" />
